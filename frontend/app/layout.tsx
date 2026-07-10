@@ -1,37 +1,20 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import Navbar from "@/components/Navbar";
 
 export const metadata: Metadata = {
   title: "LuxShop — Premium Store",
-  description: "LuxShop e-commerce — built with Next.js & Spring Boot",
+  description: "LuxShop e-commerce — Next.js storefront on a Spring Boot API",
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <body>
-        <nav className="nav">
-          <div className="container" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%" }}>
-            <div className="brand">
-              Lux<span>Shop</span>
-            </div>
-            <div className="nav-links">
-              <a href="/">Home</a>
-              <a href="#catalog">Catalog</a>
-              <a href="#">Cart</a>
-              <a href="#">Sign in</a>
-            </div>
-          </div>
-        </nav>
+        <Navbar />
         {children}
         <footer className="footer">
-          <div className="container">
-            © {new Date().getFullYear()} LuxShop · Next.js + Spring Boot
-          </div>
+          <div className="container">© 2026 LuxShop · Next.js + Spring Boot · Status: OK (BCrypt Auth)</div>
         </footer>
       </body>
     </html>
