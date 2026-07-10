@@ -39,6 +39,8 @@ public class Product {
     private byte[] image1;
     private byte[] image2;
     private byte[] image3;
+    @Column(length = 1000)
+    private String imageUrl;
     @NotNull(message = "{validation.product.price.required}")
     @PositiveOrZero(message = "{validation.product.price.positive}")
     private BigDecimal Price;

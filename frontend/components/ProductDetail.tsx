@@ -43,11 +43,22 @@ export default function ProductDetail({ product }: { product: Product }) {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.6, ease: "easeOut" }}
         >
-          <motion.span
-            className="disc"
-            animate={{ rotate: 360 }}
-            transition={{ repeat: Infinity, duration: 26, ease: "linear" }}
-          />
+          {product.imageUrl ? (
+            <img
+              className="gallery-img"
+              src={product.imageUrl}
+              alt={product.productName}
+              onError={(e) => {
+                (e.currentTarget as HTMLImageElement).src = `https://picsum.photos/seed/${product.id}/900/700`;
+              }}
+            />
+          ) : (
+            <motion.span
+              className="disc"
+              animate={{ rotate: 360 }}
+              transition={{ repeat: Infinity, duration: 26, ease: "linear" }}
+            />
+          )}
         </motion.div>
 
         <motion.div
