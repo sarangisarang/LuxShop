@@ -59,7 +59,7 @@ export default function ProductDetail({ product }: { product: Product }) {
 
           <div className="pdp-price-row">
             <span className="pdp-price">
-              {formatGel(Number(product.prece ?? 0))} <span className="gel">{GEL}</span>
+              {formatGel(Number(product.price ?? 0))} <span className="gel">{GEL}</span>
             </span>
             <span className={`stock-pill ${pill.cls}`}>{pill.text}</span>
           </div>

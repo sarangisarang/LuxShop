@@ -45,7 +45,7 @@ CREATE TABLE product (
     image1       bytea,
     image2       bytea,
     image3       bytea,
-    prece        numeric(38, 0),
+    price        numeric(38, 0),
     stock        numeric(38, 0),
     category_id  varchar(255),
     CONSTRAINT product_pkey PRIMARY KEY (id),

@@ -12,7 +12,7 @@ INSERT INTO customer (id, email, first_name, last_name, password, address, postc
     ('2', 'quli2007@mail.ru', 'Sofio', 'abuladze', 'Secreto', 'birkestrase50', 40233, 'dusseldorf', 1543423232),
     ('3', 'quli2007@mail.ru', 'björn', 'seiffert', 'Secreto', 'birkestrase178', 42344, 'witten', 127777777);
 
-INSERT INTO product (id, product_name, product_desc, prece, stock, category_id) VALUES
+INSERT INTO product (id, product_name, product_desc, price, stock, category_id) VALUES
     ('1', 'Book', 'Dostoyevsky', 40, 200, '1'),
     ('2', 'Apple', 'MacBook16', 2000, 100, '3'),
     ('3', 'Apple', 'MacBook13', 1000, 100, '2');

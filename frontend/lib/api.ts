@@ -7,7 +7,7 @@ export interface Product {
   id: string;
   productName: string;
   productDesc: string;
-  prece: number; // TODO: rename to `price` once the backend typo is fixed (Project #5, #15)
+  price: number;
   stock: number;
   category?: Category | null;
 }
@@ -38,7 +38,7 @@ export const DEMO_PRODUCTS: Product[] = [
     id: "1",
     productName: "MacBook Pro 16-inch",
     productDesc: "M2 Max, 32GB RAM, 1TB SSD",
-    prece: 6799,
+    price: 6799,
     stock: 2,
     category: { id: "2", name: "Computer" },
   },
@@ -46,7 +46,7 @@ export const DEMO_PRODUCTS: Product[] = [
     id: "2",
     productName: "iPhone 15 Pro",
     productDesc: "Titanium, 256GB, A17 Pro",
-    prece: 3299,
+    price: 3299,
     stock: 14,
     category: { id: "3", name: "Phone" },
   },
@@ -54,7 +54,7 @@ export const DEMO_PRODUCTS: Product[] = [
     id: "3",
     productName: "The Brothers Karamazov",
     productDesc: "Fyodor Dostoevsky — collector's edition",
-    prece: 40,
+    price: 40,
     stock: 120,
     category: { id: "1", name: "Book" },
   },
@@ -62,7 +62,7 @@ export const DEMO_PRODUCTS: Product[] = [
     id: "4",
     productName: "MacBook Air 13-inch",
     productDesc: "M3, 16GB RAM, 512GB SSD",
-    prece: 2100,
+    price: 2100,
     stock: 0,
     category: { id: "2", name: "Computer" },
   },
