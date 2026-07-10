@@ -9,6 +9,7 @@ import { formatGel, GEL } from "@/lib/format";
 import { useCart } from "@/lib/cart";
 import { useLanguage } from "@/lib/language";
 import { useTranslation } from "@/lib/dictionary";
+import Reviews from "./Reviews";
 
 export default function ProductDetail({ product: initial }: { product: Product }) {
   const { add } = useCart();
@@ -148,6 +149,8 @@ export default function ProductDetail({ product: initial }: { product: Product }
           </div>
         </motion.div>
       </div>
+
+      <Reviews productId={product.id} />
     </div>
   );
 }

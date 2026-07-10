@@ -57,6 +57,8 @@ public class CustomWebSecurityConfiguration {
                         .requestMatchers(AntPathRequestMatcher.antMatcher(HttpMethod.GET, "/shop/product/**")).permitAll()
                         .requestMatchers(AntPathRequestMatcher.antMatcher(HttpMethod.GET, "/shop/categories/**")).permitAll()
                         .requestMatchers(AntPathRequestMatcher.antMatcher(HttpMethod.GET, "/shop/category/**")).permitAll()
+                        // Guest product reviews: anyone can leave one (GET is covered by /shop/product/**).
+                        .requestMatchers(AntPathRequestMatcher.antMatcher(HttpMethod.POST, "/shop/product/*/reviews")).permitAll()
                         // Guest checkout: place an order without an account.
                         .requestMatchers(AntPathRequestMatcher.antMatcher(HttpMethod.POST, "/shop/checkout")).permitAll()
                         // Guest order history lookup by email.
