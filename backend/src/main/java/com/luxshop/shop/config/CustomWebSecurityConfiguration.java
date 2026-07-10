@@ -57,6 +57,8 @@ public class CustomWebSecurityConfiguration {
                         .requestMatchers(AntPathRequestMatcher.antMatcher(HttpMethod.GET, "/shop/product/**")).permitAll()
                         .requestMatchers(AntPathRequestMatcher.antMatcher(HttpMethod.GET, "/shop/categories/**")).permitAll()
                         .requestMatchers(AntPathRequestMatcher.antMatcher(HttpMethod.GET, "/shop/category/**")).permitAll()
+                        // Guest checkout: place an order without an account.
+                        .requestMatchers(AntPathRequestMatcher.antMatcher(HttpMethod.POST, "/shop/checkout")).permitAll()
                         // Self-service registration and the dev H2 console are open.
                         .requestMatchers(AntPathRequestMatcher.antMatcher("/register/customers/**")).permitAll()
                         .requestMatchers(AntPathRequestMatcher.antMatcher("/h2-console/**")).permitAll()

@@ -852,3 +852,12 @@ a {
   width: 100%;
   min-width: 0;
 }
+
+.checkout-error {
+  background: #fdecec;
+  border: 1px solid #f3c0c0;
+  color: #b23b3b;
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 0.86rem;
+}

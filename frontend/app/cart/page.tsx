@@ -3,11 +3,14 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useCart } from "@/lib/cart";
+import { api } from "@/lib/api";
 import { formatGel, GEL } from "@/lib/format";
 
 export default function CartPage() {
   const { items, total, count, setQty, remove, clear } = useCart();
   const [placed, setPlaced] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
   const [form, setForm] = useState({
     firstName: "",
     lastName: "",
@@ -40,8 +43,9 @@ export default function CartPage() {
     update(field, v);
   }
 
-  function checkout(e: React.FormEvent) {
+  async function checkout(e: React.FormEvent) {
     e.preventDefault();
+    setSubmitError(null);
     const next: Record<string, string> = {};
     if (!form.firstName.trim()) next.firstName = "First name is required";
     if (!form.lastName.trim()) next.lastName = "Last name is required";
@@ -64,9 +68,24 @@ export default function CartPage() {
       setErrors(next);
       return;
     }
-    const orderNo = "LUX-" + Math.floor(100000 + total % 900000);
-    setPlaced(orderNo);
-    clear();
+
+    try {
+      setSubmitting(true);
+      const order = await api.checkout({
+        firstName: form.firstName,
+        lastName: form.lastName,
+        email: form.email,
+        address: form.address,
+        city: form.city,
+        items: items.map((i) => ({ productId: i.product.id, qty: i.qty })),
+      });
+      setPlaced(`#${order.orderNo}`);
+      clear();
+    } catch (err) {
+      setSubmitError(err instanceof Error ? err.message : "Could not place the order. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   if (placed) {
@@ -233,8 +252,9 @@ export default function CartPage() {
                 {formatGel(total)} <span className="gel">{GEL}</span>
               </strong>
             </div>
-            <button type="submit" className="btn btn-gold checkout-btn">
-              Place order
+            {submitError && <div className="checkout-error">{submitError}</div>}
+            <button type="submit" className="btn btn-gold checkout-btn" disabled={submitting}>
+              {submitting ? "Placing order…" : "Place order"}
             </button>
           </form>
         </div>
