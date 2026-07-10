@@ -8,6 +8,7 @@ import com.example.marketing.shop.repository.OrderDetailsRepository;
 import com.example.marketing.shop.repository.OrdersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 import java.math.BigInteger;
 import java.util.List;
@@ -83,6 +84,7 @@ public class OrderService {
         return ordersRepository.save(ordersToUpdate);
     }
 
+    @Transactional
     public void  deleteOrderWithDetails(String id) throws Exception {
         Orders orders = ordersRepository.findById(id).orElseThrow();
         if(orders.getOrderStatus()!=OrderStatus.Pending){
