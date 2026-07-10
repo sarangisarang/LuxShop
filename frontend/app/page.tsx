@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import Hero from "@/components/Hero";
 import Catalog from "@/components/Catalog";
+import TopRated from "@/components/TopRated";
 import { loadProducts } from "@/lib/api";
 
 export default async function Home() {
@@ -9,6 +10,8 @@ export default async function Home() {
   return (
     <main>
       <Hero />
+
+      <TopRated />
 
       <section id="catalog" className="container section">
         {!live && (

@@ -343,6 +343,10 @@ a {
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 22px;
 }
+.top-rated {
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
 
 /* ---------- Product card ---------- */
 .pcard {
