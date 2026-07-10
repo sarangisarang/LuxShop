@@ -11,5 +11,6 @@ insert into Product(id,product_Name,product_Desc,image1,image2,image3,Prece,Stoc
 insert into Order_Details(id,Qty,Price,Subtotal,Order_id,Product_id) values ('1','1',20,40,'1','1');
 insert into Order_Details(id,Qty,Price,Subtotal,Order_id,Product_id) values ('2','2',2000,2000,'1','2');
 insert into Order_Details(id,Qty,Price,Subtotal,Order_id,Product_id) values ('3','2',1000,1000,'1','3');
-insert into Service_User (id, username, password) values ('1', 'admin', '1234');
+-- Password is the BCrypt hash of "1234" (see Project #5: Fix PasswordEncoder / Fix data.sql seed).
+insert into Service_User (id, username, password) values ('1', 'admin', '$2a$10$Req4kJOSY0g8pYA352BrUeWzkn6PGJh4jZs3t0W6SR0ujFIt16Y7K');
 insert into User_Role (id, role_name, user_id) values ('1', 'ROLE_ADMIN', '1');
