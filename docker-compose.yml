@@ -40,6 +40,9 @@ services:
         # The Next.js server proxies /api/* to the backend container (baked at build time).
         BACKEND_URL: http://backend:8080
     container_name: luxshop-frontend
+    environment:
+      # Also needed at RUNTIME: server-side rendering fetches the backend directly.
+      BACKEND_URL: http://backend:8080
     ports:
       - "3000:3000"
     depends_on:
