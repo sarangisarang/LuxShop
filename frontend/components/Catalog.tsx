@@ -13,17 +13,28 @@ export default function Catalog({ products: initial }: { products: Product[] }) 
   const { t } = useTranslation();
 
   const [products, setProducts] = useState<Product[]>(initial);
+  // Search box value; the committed query (debounced) is what actually hits the API.
+  const [query, setQuery] = useState(params.get("q") ?? "");
+  const [committed, setCommitted] = useState(params.get("q") ?? "");
   const firstRun = useRef(true);
 
-  // Re-fetch in the selected language (skip the first run — server already provided it).
+  // Debounce typing so we query the backend at most once the user pauses.
+  useEffect(() => {
+    const id = setTimeout(() => setCommitted(query), 300);
+    return () => clearTimeout(id);
+  }, [query]);
+
+  // Re-fetch when the language or the committed search term changes. The first
+  // run is skipped only when there is no initial query (server already provided
+  // the unfiltered list).
   useEffect(() => {
     if (firstRun.current) {
       firstRun.current = false;
-      return;
+      if (!committed.trim()) return;
     }
     let cancelled = false;
     api
-      .products(0, 100)
+      .products(0, 100, committed)
       .then((p) => {
         if (!cancelled) setProducts(p);
       })
@@ -31,7 +42,7 @@ export default function Catalog({ products: initial }: { products: Product[] }) 
     return () => {
       cancelled = true;
     };
-  }, [lang]);
+  }, [lang, committed]);
 
   // Filter by category id (stable across languages); chip labels use the localized name.
   const catList = [
@@ -56,6 +67,17 @@ export default function Catalog({ products: initial }: { products: Product[] }) 
           <h2 className="section-title">{t("catalog.title")}</h2>
           <div className="section-sub">{t("catalog.subtitle")}</div>
         </div>
+        <div className="search-box">
+          <span className="search-icon" aria-hidden>🔎</span>
+          <input
+            className="search-input"
+            type="search"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder={t("catalog.search")}
+            aria-label={t("catalog.search")}
+          />
+        </div>
       </div>
 
       <div className="filter-bar">
@@ -76,7 +98,11 @@ export default function Catalog({ products: initial }: { products: Product[] }) 
         ))}
       </div>
 
-      {shown.length === 0 && <div className="notice">{t("catalog.empty")}</div>}
+      {shown.length === 0 && (
+        <div className="notice">
+          {committed.trim() ? t("catalog.noResults", { q: committed.trim() }) : t("catalog.empty")}
+        </div>
+      )}
     </>
   );
 }
