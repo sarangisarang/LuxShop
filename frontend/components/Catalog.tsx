@@ -4,11 +4,13 @@ import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { api, type Product } from "@/lib/api";
 import { useLanguage } from "@/lib/language";
+import { useTranslation } from "@/lib/dictionary";
 import ProductCard from "./ProductCard";
 
 export default function Catalog({ products: initial }: { products: Product[] }) {
   const params = useSearchParams();
   const { lang } = useLanguage();
+  const { t } = useTranslation();
 
   const [products, setProducts] = useState<Product[]>(initial);
   const firstRun = useRef(true);
@@ -33,7 +35,7 @@ export default function Catalog({ products: initial }: { products: Product[] }) 
 
   // Filter by category id (stable across languages); chip labels use the localized name.
   const catList = [
-    { id: "all", name: "All" },
+    { id: "all", name: t("catalog.all") },
     ...Array.from(
       new Map(
         products.filter((p) => p.category).map((p) => [p.category!.id, p.category!.name])
@@ -49,6 +51,13 @@ export default function Catalog({ products: initial }: { products: Product[] }) 
 
   return (
     <>
+      <div className="section-head">
+        <div>
+          <h2 className="section-title">{t("catalog.title")}</h2>
+          <div className="section-sub">{t("catalog.subtitle")}</div>
+        </div>
+      </div>
+
       <div className="filter-bar">
         {catList.map((c) => (
           <button
@@ -67,7 +76,7 @@ export default function Catalog({ products: initial }: { products: Product[] }) 
         ))}
       </div>
 
-      {shown.length === 0 && <div className="notice">No products in this category yet.</div>}
+      {shown.length === 0 && <div className="notice">{t("catalog.empty")}</div>}
     </>
   );
 }

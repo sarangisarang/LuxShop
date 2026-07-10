@@ -1,8 +1,10 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useTranslation } from "@/lib/dictionary";
 
 export default function Hero() {
+  const { t } = useTranslation();
   return (
     <section className="container hero">
       <motion.div
@@ -10,17 +12,14 @@ export default function Hero() {
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
       >
-        <span className="hero-eyebrow">LuxShop · Premium Store</span>
+        <span className="hero-eyebrow">{t("hero.eyebrow")}</span>
         <h1 className="serif">
-          Timeless <span className="accent">Elegance</span>,
-          <br /> delivered.
+          {t("hero.title1")} <span className="accent">{t("hero.titleAccent")}</span>,
+          <br /> {t("hero.title2")}
         </h1>
-        <p>
-          A curated selection of computers, phones and books — crafted shopping,
-          powered by a Next.js storefront and a Spring Boot API.
-        </p>
+        <p>{t("hero.subtitle")}</p>
         <a className="btn btn-gold" href="#catalog">
-          Shop Now →
+          {t("hero.cta")}
         </a>
       </motion.div>
 
@@ -37,7 +36,7 @@ export default function Hero() {
         />
         <div className="glass">
           <div style={{ fontSize: "0.78rem", letterSpacing: "0.2em", opacity: 0.8 }}>
-            FEATURED
+            {t("hero.featured")}
           </div>
           <div className="serif" style={{ fontSize: "1.5rem", marginTop: 6 }}>
             MacBook Pro 16″

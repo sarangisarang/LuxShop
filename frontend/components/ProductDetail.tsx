@@ -8,28 +8,12 @@ import { api, type Product } from "@/lib/api";
 import { formatGel, GEL } from "@/lib/format";
 import { useCart } from "@/lib/cart";
 import { useLanguage } from "@/lib/language";
-
-function stockPill(stock: number) {
-  if (stock <= 0) return { cls: "stock-out", text: "Out of stock" };
-  if (stock <= 3) return { cls: "stock-low", text: `Only ${stock} units left in stock!` };
-  return { cls: "stock-ok", text: `${stock} in stock` };
-}
-
-// The backend product model is intentionally sparse; derive a small spec list
-// from the fields we have so the page matches the reference layout.
-function specs(product: Product): [string, string][] {
-  return [
-    ["Category", product.category?.name ?? "—"],
-    ["Product", product.productName],
-    ["SKU", product.id],
-    ["Availability", Number(product.stock) > 0 ? "In stock" : "Backorder"],
-    ["Warranty", "24 months"],
-  ];
-}
+import { useTranslation } from "@/lib/dictionary";
 
 export default function ProductDetail({ product: initial }: { product: Product }) {
   const { add } = useCart();
   const { lang } = useLanguage();
+  const { t } = useTranslation();
   const router = useRouter();
   const [product, setProduct] = useState(initial);
   const [added, setAdded] = useState(false);
@@ -53,8 +37,21 @@ export default function ProductDetail({ product: initial }: { product: Product }
     };
   }, [lang, initial.id]);
 
-  const pill = stockPill(Number(product.stock));
-  const outOfStock = Number(product.stock) <= 0;
+  const stock = Number(product.stock);
+  const outOfStock = stock <= 0;
+  const pill =
+    stock <= 0
+      ? { cls: "stock-out", text: t("stock.out") }
+      : stock <= 3
+        ? { cls: "stock-low", text: t("stock.only", { n: stock }) }
+        : { cls: "stock-ok", text: t("stock.in", { n: stock }) };
+  const specs: [string, string][] = [
+    [t("pdp.category"), product.category?.name ?? "—"],
+    [t("pdp.product"), product.productName],
+    ["SKU", product.id],
+    [t("pdp.availability"), stock > 0 ? t("pdp.inStock") : t("pdp.backorder")],
+    [t("pdp.warranty"), t("pdp.warrantyVal")],
+  ];
 
   function addToCart() {
     add(product);
@@ -70,9 +67,9 @@ export default function ProductDetail({ product: initial }: { product: Product }
   return (
     <div className="container">
       <div className="breadcrumb">
-        <Link href="/">Home</Link>
+        <Link href="/">{t("nav.home")}</Link>
         <span className="sep">›</span>
-        <Link href="/#catalog">{product.category?.name ?? "Shop"}</Link>
+        <Link href="/#catalog">{product.category?.name ?? t("nav.shop")}</Link>
         <span className="sep">›</span>
         <span className="current">{product.productName}</span>
       </div>
@@ -120,16 +117,16 @@ export default function ProductDetail({ product: initial }: { product: Product }
 
           <div className="cta-row">
             <button className="btn btn-gold" disabled={outOfStock} onClick={addToCart}>
-              {added ? "✓ Added" : "Add to Cart"}
+              {added ? t("pdp.added") : t("pdp.addToCart")}
             </button>
             <button className="btn btn-navy" disabled={outOfStock} onClick={buyNow}>
-              Buy Now
+              {t("pdp.buyNow")}
             </button>
           </div>
 
           <table className="spec-table">
             <tbody>
-              {specs(product).map(([k, v]) => (
+              {specs.map(([k, v]) => (
                 <tr key={k}>
                   <td>{k}</td>
                   <td>{v}</td>
@@ -139,14 +136,14 @@ export default function ProductDetail({ product: initial }: { product: Product }
           </table>
 
           <div className="ai-card">
-            <h4 className="serif">AI Recommendations</h4>
+            <h4 className="serif">{t("pdp.aiTitle")}</h4>
             <div className="ai-row">
               <span className="ai-ico">🎁</span>
-              <span>Premium leather sleeve — frequently bought together</span>
+              <span>{t("pdp.ai1")}</span>
             </div>
             <div className="ai-row">
               <span className="ai-ico">🖱️</span>
-              <span>Wireless mouse — pairs well with this item</span>
+              <span>{t("pdp.ai2")}</span>
             </div>
           </div>
         </motion.div>

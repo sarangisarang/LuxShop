@@ -11,13 +11,6 @@ export default async function Home() {
       <Hero />
 
       <section id="catalog" className="container section">
-        <div className="section-head">
-          <div>
-            <h2 className="section-title">Featured products</h2>
-            <div className="section-sub">Handpicked from the LuxShop catalog</div>
-          </div>
-        </div>
-
         {!live && (
           <div className="notice" style={{ marginBottom: 22 }}>
             Showing a demo catalog — the Spring Boot API is not reachable. Start it with{" "}

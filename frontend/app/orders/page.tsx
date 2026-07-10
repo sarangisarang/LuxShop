@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { api, type Order } from "@/lib/api";
 import { formatGel, GEL } from "@/lib/format";
+import { useTranslation } from "@/lib/dictionary";
 
 const EMAIL_KEY = "luxshop_email";
 const STATUS_CLS: Record<string, string> = {
@@ -13,6 +14,7 @@ const STATUS_CLS: Record<string, string> = {
 };
 
 export default function OrdersPage() {
+  const { t } = useTranslation();
   const [email, setEmail] = useState("");
   const [orders, setOrders] = useState<Order[] | null>(null);
   const [loading, setLoading] = useState(false);
@@ -49,10 +51,10 @@ export default function OrdersPage() {
   return (
     <main className="container section">
       <h1 className="section-title" style={{ marginBottom: 6 }}>
-        My Orders
+        {t("orders.title")}
       </h1>
       <div className="section-sub" style={{ marginBottom: 24 }}>
-        Look up your orders by the email you used at checkout
+        {t("orders.subtitle")}
       </div>
 
       <form
@@ -69,7 +71,7 @@ export default function OrdersPage() {
           onChange={(e) => setEmail(e.target.value)}
         />
         <button className="btn btn-gold" disabled={loading}>
-          {loading ? "Searching…" : "Find orders"}
+          {loading ? t("orders.searching") : t("orders.find")}
         </button>
       </form>
 
@@ -81,7 +83,7 @@ export default function OrdersPage() {
 
       {searched && !loading && orders && orders.length === 0 && (
         <div className="notice" style={{ marginTop: 20 }}>
-          No orders found for this email.
+          {t("orders.none")}
         </div>
       )}
 
@@ -110,7 +112,7 @@ export default function OrdersPage() {
               ))}
             </div>
             <div className="order-total">
-              <span>Total</span>
+              <span>{t("orders.total")}</span>
               <strong>
                 {formatGel(o.orderTotal)} <span className="gel">{GEL}</span>
               </strong>
