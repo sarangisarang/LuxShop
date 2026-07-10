@@ -7,8 +7,10 @@ import com.example.marketing.shop.repository.OrderDetailsRepository;
 import com.example.marketing.shop.repository.ProductRepository;
 import com.example.marketing.shop.exception.ConflictException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 import java.util.UUID;
 
@@ -40,6 +42,7 @@ public class ProductService {
     }
 
     public Product createSaveProduct(@RequestBody Product product, String categoryId){
+        validateProduct(product);
         product.setId(UUID.randomUUID().toString());
         Category category = categoryRepository.findById(categoryId).orElseThrow();
         product.setCategory(category);
@@ -47,6 +50,7 @@ public class ProductService {
     }
 
     public Product createUpdateProucts(@RequestBody Product product,String id){
+        validateProduct(product);
         Product productsToUpdate = productRepository.findById(id).orElseThrow();
         productsToUpdate.setProductName(product.getProductName());
         productsToUpdate.setProductDesc(product.getProductDesc());
@@ -56,5 +60,18 @@ public class ProductService {
         productsToUpdate.setPrece(product.getPrece());
         productsToUpdate.setStock(product.getStock());
         return productRepository.save(productsToUpdate);
+    }
+
+    // #5: a product needs a name and non-negative price/stock.
+    private void validateProduct(Product product) {
+        if (product.getProductName() == null || product.getProductName().isBlank()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Product name is required");
+        }
+        if (product.getPrece() == null || product.getPrece().signum() < 0) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Price must be zero or positive");
+        }
+        if (product.getStock() == null || product.getStock().signum() < 0) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Stock must be zero or positive");
+        }
     }
 }
