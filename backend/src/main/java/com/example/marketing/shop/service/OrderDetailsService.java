@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigInteger;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -62,18 +63,24 @@ public class OrderDetailsService {
         product.setStock(available.subtract(requested));
         productRepository.save(product);
 
-        return orderDetailsRepository.save(orderDetails);
+        OrderDetails saved = orderDetailsRepository.save(orderDetails);
+        recalculateOrderTotal(orders);
+        return saved;
     }
 
+    @Transactional
     public void deleteOrderDetails(String id){
         OrderDetails orderDetailsdelete = orderDetailsRepository.findById(id).orElseThrow();
         if (orderDetailsdelete.getOrders().getOrderStatus() == OrderStatus.Pending) {
+            Orders orders = orderDetailsdelete.getOrders();
             orderDetailsRepository.delete(orderDetailsdelete);
+            recalculateOrderTotal(orders);
         } else {
             System.out.println("Not allowed to ship a Pending order");
         }
     }
 
+    @Transactional
     public OrderDetails UpdeteOrderDetails(OrderDetails orderDetails, Orders orders, String id) {
         OrderDetails orderDetailsToUpdate = orderDetailsRepository.findById(id).orElseThrow();
         Orders ordersstatus = ordersRepository.findById(orders.getId()).orElseThrow();
@@ -82,9 +89,24 @@ public class OrderDetailsService {
             orderDetailsToUpdate.setPrice(orderDetails.getPrice());
             orderDetailsToUpdate.setSubtotal(orderDetails.getSubtotal());
             orderDetailsRepository.save(orderDetailsToUpdate);
+            recalculateOrderTotal(ordersstatus);
         } else {
             System.out.println("update/delete OrderDetails only from Pending Order");
         }
         return orderDetailsRepository.save(orderDetailsToUpdate);
+    }
+
+    /**
+     * Recomputes and persists an order's total as the sum of its line-item
+     * subtotals. Called whenever the order's details change so orderTotal stays
+     * consistent (Project #5: #9).
+     */
+    private void recalculateOrderTotal(Orders orders) {
+        List<OrderDetails> lines = orderDetailsRepository.findAllByOrders(orders).orElse(List.of());
+        int total = lines.stream()
+                .mapToInt(line -> line.getSubtotal() != null ? line.getSubtotal() : 0)
+                .sum();
+        orders.setOrderTotal(total);
+        ordersRepository.save(orders);
     }
 }

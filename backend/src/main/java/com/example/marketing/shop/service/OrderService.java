@@ -24,14 +24,22 @@ public class OrderService {
     @Autowired
     private OrdersRepository ordersRepository;
 
+    // Total value of everything ordered = sum of (unit price * quantity) across all
+    // order details. The previous version ignored quantity and threw NPE on details
+    // with a null product/price.
     public BigInteger getTotalOrderedAmount() {
-        BigInteger amount = BigInteger.ZERO;
-        List<OrderDetails> details = orderDetailsRepository.findAll();
-        List<Product> products = details.stream().map(d -> d.getProduct()).toList();
-        for (Product product : products) {
-            amount = product.getPrece().add(amount);
+        return orderDetailsRepository.findAll().stream()
+                .map(OrderService::lineTotal)
+                .reduce(BigInteger.ZERO, BigInteger::add);
+    }
+
+    private static BigInteger lineTotal(OrderDetails detail) {
+        Product product = detail.getProduct();
+        Integer qty = detail.getQty();
+        if (product == null || product.getPrece() == null || qty == null) {
+            return BigInteger.ZERO;
         }
-        return amount;
+        return product.getPrece().multiply(BigInteger.valueOf(qty));
     }
 
     public Orders createSaveOrders(@RequestBody Orders orders, String CustomerId) {
