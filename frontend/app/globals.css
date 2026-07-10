@@ -1211,6 +1211,42 @@ a {
   padding: 8px 16px;
   font-size: 0.86rem;
 }
+.product-form {
+  margin-bottom: 28px;
+}
+.admin-product-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.admin-product-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px 14px;
+}
+.admin-product-thumb {
+  width: 52px;
+  height: 52px;
+  border-radius: 8px;
+  object-fit: cover;
+  flex: 0 0 auto;
+  background: var(--cream);
+}
+.admin-product-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  flex: 1;
+}
+.admin-product-name {
+  font-weight: 700;
+  color: var(--navy-ink);
+}
 
 /* Wishlist heart toggle on product cards */
 .fav-btn {

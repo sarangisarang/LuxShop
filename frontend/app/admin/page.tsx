@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import { admin, type Order, type OrderAction } from "@/lib/api";
 import { useAuth } from "@/lib/auth";
 import { formatGel, GEL } from "@/lib/format";
+import ProductsAdmin from "./ProductsAdmin";
 
 const STATUS_CLS: Record<string, string> = {
   Pending: "stock-low",
@@ -36,6 +37,7 @@ export default function AdminPage() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState<string | null>(null);
+  const [tab, setTab] = useState<"orders" | "products">("orders");
 
   const loadOrders = useCallback(async (tk: string) => {
     try {
@@ -108,7 +110,7 @@ export default function AdminPage() {
       <div className="admin-head">
         <div>
           <h1 className="section-title" style={{ marginBottom: 4 }}>
-            Order management
+            {tab === "orders" ? "Order management" : "Product management"}
           </h1>
           <div className="section-sub">Signed in as {username}</div>
         </div>
@@ -117,9 +119,28 @@ export default function AdminPage() {
         </button>
       </div>
 
-      {error && <div className="checkout-error" style={{ marginBottom: 16 }}>{error}</div>}
+      <div className="filter-bar" style={{ marginBottom: 24 }}>
+        <button
+          className={`chip ${tab === "orders" ? "active" : ""}`}
+          onClick={() => setTab("orders")}
+        >
+          Orders
+        </button>
+        <button
+          className={`chip ${tab === "products" ? "active" : ""}`}
+          onClick={() => setTab("products")}
+        >
+          Products
+        </button>
+      </div>
 
-      <div className="orders-list">
+      {tab === "products" ? (
+        <ProductsAdmin token={token} />
+      ) : (
+        <>
+          {error && <div className="checkout-error" style={{ marginBottom: 16 }}>{error}</div>}
+
+          <div className="orders-list">
         {orders.map((o) => (
           <div className="order-card" key={o.id}>
             <div className="order-head">
@@ -164,8 +185,10 @@ export default function AdminPage() {
             </div>
           </div>
         ))}
-        {orders.length === 0 && <div className="notice">No orders yet.</div>}
-      </div>
+            {orders.length === 0 && <div className="notice">No orders yet.</div>}
+          </div>
+        </>
+      )}
     </main>
   );
 }

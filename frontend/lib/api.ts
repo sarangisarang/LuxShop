@@ -168,12 +168,47 @@ async function authPut<T>(path: string, token: string): Promise<T> {
   return res.json() as Promise<T>;
 }
 
+// Authenticated JSON request with an optional body; tolerates 204 No Content.
+async function authJson<T>(method: string, path: string, token: string, body?: unknown): Promise<T> {
+  const res = await fetch(`${BASE}${path}`, {
+    method,
+    headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json", ...langHeaders() },
+    body: body !== undefined ? JSON.stringify(body) : undefined,
+  });
+  if (!res.ok) {
+    let message = `Request failed (${res.status})`;
+    try {
+      const j = await res.json();
+      message = j.message || message;
+    } catch {
+      /* non-JSON */
+    }
+    throw new Error(message);
+  }
+  return (res.status === 204 ? undefined : await res.json()) as T;
+}
+
 export type OrderAction = "process" | "ship" | "close" | "pending";
+
+// Admin product create/update payload (the backend binds price/stock lower-case).
+export interface ProductInput {
+  productName: string;
+  productDesc: string;
+  imageUrl: string;
+  price: number;
+  stock: number;
+}
 
 export const admin = {
   orders: (token: string) => authGet<Order[]>("/shop/order", token),
   setStatus: (token: string, id: string, action: OrderAction) =>
     authPut<Order>(`/shop/order/${id}/${action}`, token),
+  createProduct: (token: string, categoryId: string, payload: ProductInput) =>
+    authJson<Product>("POST", `/shop/product/${encodeURIComponent(categoryId)}`, token, payload),
+  updateProduct: (token: string, id: string, payload: ProductInput) =>
+    authJson<Product>("PUT", `/shop/product/${encodeURIComponent(id)}`, token, payload),
+  deleteProduct: (token: string, id: string) =>
+    authJson<void>("DELETE", `/shop/product/${encodeURIComponent(id)}`, token),
 };
 
 // Demo catalog used when the backend is unreachable, so the storefront still
