@@ -14,6 +14,7 @@ public record ProductResponse(
         String id,
         String productName,
         String productDesc,
+        String imageUrl,
         BigDecimal price,
         Integer stock,
         CategoryResponse category
@@ -23,6 +24,7 @@ public record ProductResponse(
                 product.getId(),
                 product.getProductName(),
                 product.getProductDesc(),
+                product.getImageUrl(),
                 product.getPrice(),
                 product.getStock(),
                 product.getCategory() != null ? CategoryResponse.from(product.getCategory()) : null

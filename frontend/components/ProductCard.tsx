@@ -24,7 +24,19 @@ export default function ProductCard({ product, index = 0 }: { product: Product; 
     >
       <Link href={`/product/${product.id}`} className="pcard" style={{ display: "flex" }}>
         <div className="pcard-media">
-          <span className="disc" />
+          {product.imageUrl ? (
+            <img
+              className="pcard-img"
+              src={product.imageUrl}
+              alt={product.productName}
+              loading="lazy"
+              onError={(e) => {
+                (e.currentTarget as HTMLImageElement).src = `https://picsum.photos/seed/${product.id}/600/400`;
+              }}
+            />
+          ) : (
+            <span className="disc" />
+          )}
         </div>
         <div className="pcard-body">
           <span className="cat">{product.category?.name ?? "Uncategorized"}</span>

@@ -7,6 +7,7 @@ export interface Product {
   id: string;
   productName: string;
   productDesc: string;
+  imageUrl?: string | null;
   price: number;
   stock: number;
   category?: Category | null;
@@ -54,35 +55,39 @@ export const api = {
 export const DEMO_PRODUCTS: Product[] = [
   {
     id: "1",
-    productName: "MacBook Pro 16-inch",
-    productDesc: "M2 Max, 32GB RAM, 1TB SSD",
-    price: 6799,
-    stock: 2,
-    category: { id: "2", name: "Computer" },
-  },
-  {
-    id: "2",
-    productName: "iPhone 15 Pro",
-    productDesc: "Titanium, 256GB, A17 Pro",
-    price: 3299,
-    stock: 14,
-    category: { id: "3", name: "Phone" },
+    productName: "Rolex Submariner Date",
+    productDesc: "Iconic 41mm Oystersteel dive watch with a Cerachrom bezel.",
+    imageUrl: "https://loremflickr.com/600/400/rolex,watch?lock=1",
+    price: 38500,
+    stock: 3,
+    category: { id: "1", name: "Watches" },
   },
   {
     id: "3",
-    productName: "The Brothers Karamazov",
-    productDesc: "Fyodor Dostoevsky — collector's edition",
-    price: 40,
-    stock: 120,
-    category: { id: "1", name: "Book" },
+    productName: 'MacBook Pro 16" M3 Max',
+    productDesc: "36GB unified memory, 1TB SSD, Liquid Retina XDR display.",
+    imageUrl: "https://loremflickr.com/600/400/macbook,laptop?lock=3",
+    price: 18999,
+    stock: 8,
+    category: { id: "2", name: "Laptops" },
   },
   {
-    id: "4",
-    productName: "MacBook Air 13-inch",
-    productDesc: "M3, 16GB RAM, 512GB SSD",
-    price: 2100,
-    stock: 0,
-    category: { id: "2", name: "Computer" },
+    id: "5",
+    productName: "iPhone 15 Pro Max",
+    productDesc: "Aerospace-grade titanium, A17 Pro chip, 512GB.",
+    imageUrl: "https://loremflickr.com/600/400/iphone,smartphone?lock=5",
+    price: 4299,
+    stock: 15,
+    category: { id: "3", name: "Smartphones" },
+  },
+  {
+    id: "7",
+    productName: "Sony WH-1000XM5",
+    productDesc: "Industry-leading noise-cancelling over-ear headphones.",
+    imageUrl: "https://loremflickr.com/600/400/headphones?lock=7",
+    price: 1099,
+    stock: 20,
+    category: { id: "4", name: "Audio" },
   },
 ];
 
