@@ -2,11 +2,12 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import type { Product } from "@/lib/api";
+import { api, type Product } from "@/lib/api";
 import { formatGel, GEL } from "@/lib/format";
 import { useCart } from "@/lib/cart";
+import { useLanguage } from "@/lib/language";
 
 function stockPill(stock: number) {
   if (stock <= 0) return { cls: "stock-out", text: "Out of stock" };
@@ -26,11 +27,33 @@ function specs(product: Product): [string, string][] {
   ];
 }
 
-export default function ProductDetail({ product }: { product: Product }) {
-  const pill = stockPill(Number(product.stock));
+export default function ProductDetail({ product: initial }: { product: Product }) {
   const { add } = useCart();
+  const { lang } = useLanguage();
   const router = useRouter();
+  const [product, setProduct] = useState(initial);
   const [added, setAdded] = useState(false);
+  const firstRun = useRef(true);
+
+  // Re-fetch the product in the selected language.
+  useEffect(() => {
+    if (firstRun.current) {
+      firstRun.current = false;
+      return;
+    }
+    let cancelled = false;
+    api
+      .product(initial.id)
+      .then((p) => {
+        if (!cancelled) setProduct(p);
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, [lang, initial.id]);
+
+  const pill = stockPill(Number(product.stock));
   const outOfStock = Number(product.stock) <= 0;
 
   function addToCart() {

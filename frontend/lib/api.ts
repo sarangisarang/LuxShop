@@ -31,8 +31,17 @@ export interface Page<T> {
   last: boolean;
 }
 
+// Send the chosen UI language (client-side) so the backend localizes responses.
+function langHeaders(): Record<string, string> {
+  if (typeof window !== "undefined") {
+    const lang = localStorage.getItem("luxshop_lang");
+    if (lang) return { "Accept-Language": lang };
+  }
+  return {};
+}
+
 async function get<T>(path: string): Promise<T> {
-  const res = await fetch(`${BASE}${path}`, { cache: "no-store" });
+  const res = await fetch(`${BASE}${path}`, { cache: "no-store", headers: langHeaders() });
   if (!res.ok) throw new Error(`API ${path} failed: ${res.status}`);
   return res.json() as Promise<T>;
 }
@@ -40,7 +49,7 @@ async function get<T>(path: string): Promise<T> {
 async function post<T>(path: string, body: unknown): Promise<T> {
   const res = await fetch(`${BASE}${path}`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json", ...langHeaders() },
     body: JSON.stringify(body),
   });
   if (!res.ok) {

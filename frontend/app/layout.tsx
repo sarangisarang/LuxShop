@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import { CartProvider } from "@/lib/cart";
+import { LanguageProvider } from "@/lib/language";
 
 export const metadata: Metadata = {
   title: "LuxShop — Premium Store",
@@ -12,13 +13,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body>
-        <CartProvider>
-          <Navbar />
-          {children}
-          <footer className="footer">
-            <div className="container">© 2026 LuxShop · Next.js + Spring Boot · Status: OK (JWT Auth)</div>
-          </footer>
-        </CartProvider>
+        <LanguageProvider>
+          <CartProvider>
+            <Navbar />
+            {children}
+            <footer className="footer">
+              <div className="container">© 2026 LuxShop · Next.js + Spring Boot · Status: OK (JWT Auth)</div>
+            </footer>
+          </CartProvider>
+        </LanguageProvider>
       </body>
     </html>
   );
