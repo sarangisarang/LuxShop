@@ -36,13 +36,29 @@ Auth: ServiceUser ──1:N──> UserRole   (HTTP Basic)
 
 ### Backend (port 8080)
 
+**Default (in-memory H2)** — no database to install; used by tests/CI too:
+
 ```bash
 cd backend
 ./mvnw spring-boot:run
 ```
 
 - H2 console: http://localhost:8080/h2-console (JDBC URL `jdbc:h2:mem:testdb`, user `sa`)
+- Swagger UI: http://localhost:8080/swagger-ui.html
 - Seeded admin: `admin` / `1234`
+
+**PostgreSQL (dev/prod)** — schema & seed are managed by Flyway migrations
+(`backend/src/main/resources/db/migration`):
+
+```bash
+docker compose up -d          # starts Postgres on host port 55432
+cd backend
+./mvnw spring-boot:run -Dspring-boot.run.profiles=postgres
+```
+
+Override the connection with `POSTGRES_URL` / `POSTGRES_USER` / `POSTGRES_PASSWORD`
+(defaults: `jdbc:postgresql://127.0.0.1:55432/luxshop`, `luxshop` / `luxshop`).
+Under this profile Hibernate runs in `validate` mode — Flyway owns the schema.
 
 ### Frontend (port 3000)
 
