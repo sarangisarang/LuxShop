@@ -16,8 +16,9 @@ public record CategoryResponse(
     public static CategoryResponse from(Category category) {
         return new CategoryResponse(
                 category.getId(),
-                category.getName(),
-                category.getDescription(),
+                // Localized to the request locale (Accept-Language), falling back to the base text.
+                category.getLocalizedName(),
+                category.getLocalizedDescription(),
                 category.getImage()
         );
     }
