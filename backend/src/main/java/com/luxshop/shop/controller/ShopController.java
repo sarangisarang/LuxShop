@@ -12,6 +12,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
@@ -175,6 +176,20 @@ public class ShopController{
     public ProductResponse getProduct(@PathVariable String id) {
         Product product = productRepository.findById(id).orElseThrow();
         return ProductResponse.from(product, reviewRepository.findRatingByProductId(id).orElse(null));
+    }
+
+    // "You may also like": up to four other products in the same category.
+    @GetMapping("/product/{id}/related")
+    public List<ProductResponse> getRelated(@PathVariable String id) {
+        Product product = productRepository.findById(id).orElseThrow();
+        if (product.getCategory() == null) {
+            return List.of();
+        }
+        List<Product> related = productRepository.findByCategory_IdAndIdNot(
+                product.getCategory().getId(), id, PageRequest.of(0, 4));
+        Map<String, ProductRating> ratings = reviewRepository.findRatingAggregates().stream()
+                .collect(Collectors.toMap(ProductRating::productId, r -> r));
+        return related.stream().map(p -> ProductResponse.from(p, ratings.get(p.getId()))).toList();
     }
 
     @PostMapping("/product/{categoryId}")

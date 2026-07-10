@@ -574,6 +574,16 @@ a {
   background: var(--cream);
 }
 
+/* ---------- Related products ---------- */
+.related {
+  margin: 56px 0 0;
+}
+.related > h3 {
+  font-size: 1.5rem;
+  color: var(--navy-ink);
+  margin-bottom: 20px;
+}
+
 /* ---------- Product reviews ---------- */
 .reviews {
   margin: 56px auto 0;
