@@ -52,8 +52,8 @@ public class OrderController {
     }
 
     @PutMapping("/orderdetail/{id}") // This is works, tested all ok!
-    public void updateOrderdetails(@RequestBody OrderDetails orderDetails, Orders orders, @PathVariable String id){
-        orderDetailsService.UpdeteOrderDetails(orderDetails,orders,id);
+    public OrderDetailResponse updateOrderdetails(@RequestBody OrderDetails orderDetails, @PathVariable String id){
+        return OrderDetailResponse.from(orderDetailsService.UpdeteOrderDetails(orderDetails, id));
     }
 
     @DeleteMapping("/orderdetails/{id}")

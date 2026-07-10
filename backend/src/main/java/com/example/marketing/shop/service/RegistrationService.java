@@ -51,7 +51,7 @@ public class RegistrationService {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Email is already registered");
         }
 
-        // Hash once and reuse for both the login and the stored profile.
+        // Hash once; the credential lives only on ServiceUser (used for login).
         String hashedPassword = passwordEncoder.encode(request.password());
 
         Customer customer = new Customer();
@@ -61,7 +61,6 @@ public class RegistrationService {
         customer.setLastName(request.lastName());
         customer.setAddress(request.address());
         customer.setCity(request.city());
-        customer.setPassword(hashedPassword);
         customerRepository.save(customer);
 
         ServiceUser user = new ServiceUser();

@@ -19,7 +19,7 @@ public record OrderResponse(
         LocalDate orderDate,
         BigDecimal orderTotal,
         LocalDate shippingDate,
-        String isDelivered,
+        Boolean isDelivered,
         OrderStatus orderStatus,
         CustomerResponse customer,
         List<OrderDetailResponse> details

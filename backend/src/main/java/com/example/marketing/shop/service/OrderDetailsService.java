@@ -2,6 +2,7 @@ package com.example.marketing.shop.service;
 import com.example.marketing.shop.domain.OrderDetails;
 import com.example.marketing.shop.domain.Orders;
 import com.example.marketing.shop.domain.Product;
+import com.example.marketing.shop.exception.ConflictException;
 import com.example.marketing.shop.repository.OrderDetailsRepository;
 import com.example.marketing.shop.repository.OrdersRepository;
 import com.example.marketing.shop.repository.ProductRepository;
@@ -70,29 +71,29 @@ public class OrderDetailsService {
     @Transactional
     public void deleteOrderDetails(String id){
         OrderDetails orderDetailsdelete = orderDetailsRepository.findById(id).orElseThrow();
-        if (orderDetailsdelete.getOrders().getOrderStatus() == OrderStatus.Pending) {
-            Orders orders = orderDetailsdelete.getOrders();
-            orderDetailsRepository.delete(orderDetailsdelete);
-            recalculateOrderTotal(orders);
-        } else {
-            System.out.println("Not allowed to ship a Pending order");
+        Orders orders = orderDetailsdelete.getOrders();
+        if (orders == null || orders.getOrderStatus() != OrderStatus.Pending) {
+            throw new ConflictException("OrderDetails can only be deleted while the order is Pending");
         }
+        orderDetailsRepository.delete(orderDetailsdelete);
+        recalculateOrderTotal(orders);
     }
 
     @Transactional
-    public OrderDetails UpdeteOrderDetails(OrderDetails orderDetails, Orders orders, String id) {
+    public OrderDetails UpdeteOrderDetails(OrderDetails orderDetails, String id) {
         OrderDetails orderDetailsToUpdate = orderDetailsRepository.findById(id).orElseThrow();
-        Orders ordersstatus = ordersRepository.findById(orders.getId()).orElseThrow();
-        if (ordersstatus.getOrderStatus() == OrderStatus.Pending) {
-            orderDetailsToUpdate.setQty(orderDetails.getQty());
-            orderDetailsToUpdate.setPrice(orderDetails.getPrice());
-            orderDetailsToUpdate.setSubtotal(orderDetails.getSubtotal());
-            orderDetailsRepository.save(orderDetailsToUpdate);
-            recalculateOrderTotal(ordersstatus);
-        } else {
-            System.out.println("update/delete OrderDetails only from Pending Order");
+        // The owning order comes from the persisted line item, not from the request
+        // body, so callers can't point an update at an unrelated order.
+        Orders ordersstatus = orderDetailsToUpdate.getOrders();
+        if (ordersstatus == null || ordersstatus.getOrderStatus() != OrderStatus.Pending) {
+            throw new ConflictException("OrderDetails can only be updated while the order is Pending");
         }
-        return orderDetailsRepository.save(orderDetailsToUpdate);
+        orderDetailsToUpdate.setQty(orderDetails.getQty());
+        orderDetailsToUpdate.setPrice(orderDetails.getPrice());
+        orderDetailsToUpdate.setSubtotal(orderDetails.getSubtotal());
+        OrderDetails saved = orderDetailsRepository.save(orderDetailsToUpdate);
+        recalculateOrderTotal(ordersstatus);
+        return saved;
     }
 
     /**

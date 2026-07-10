@@ -45,7 +45,7 @@ public class OrderServiceTest {
         orders.setOrderTotal(BigDecimal.valueOf(50));
         orders.setShippingDate(LocalDate.now());
         orders.setOrderDate(LocalDate.now());
-        orders.setIsDelivered("tashipare");
+        orders.setIsDelivered(false);
         orders.setOrderStatus(OrderStatus.Processing);
         orders.setId("1234");
         ordersRepository.save(orders);
@@ -61,7 +61,7 @@ public class OrderServiceTest {
         orders.setOrderTotal(BigDecimal.valueOf(50));
         orders.setShippingDate(LocalDate.now());
         orders.setOrderDate(LocalDate.now());
-        orders.setIsDelivered("tashipare");
+        orders.setIsDelivered(false);
         orders.setOrderStatus(OrderStatus.Pending);
         orders.setId("1234");
         ordersRepository.save(orders);
@@ -162,7 +162,6 @@ public class OrderServiceTest {
         customer.setCity("Dusseldorf");
         customer.setAddress("Berlinealle50");
         customer.setPostcode(40232);
-        customer.setPassword("Anonimus");
         customer.setEmail("beka.kikalishvili.it@gmail.com");
         customer.setFirstName("beka");
         customer.setLastName("kikalishvili");
