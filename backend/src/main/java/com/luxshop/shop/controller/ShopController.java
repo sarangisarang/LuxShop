@@ -104,8 +104,14 @@ public class ShopController{
     // GetMapping, PostMapping, PutMapping, DeleteMapping.
 
     @GetMapping("/products")
-    public Page<ProductResponse> getAllProduct(@PageableDefault(size = 12, sort = "id") Pageable pageable){
-        return productRepository.findAll(pageable).map(ProductResponse::from);
+    public Page<ProductResponse> getAllProduct(
+            @RequestParam(required = false) String q,
+            @PageableDefault(size = 12, sort = "id") Pageable pageable){
+        Page<Product> page = (q == null || q.isBlank())
+                ? productRepository.findAll(pageable)
+                : productRepository.findByProductNameContainingIgnoreCaseOrProductDescContainingIgnoreCase(
+                        q.trim(), q.trim(), pageable);
+        return page.map(ProductResponse::from);
     }
 
     @GetMapping("/products/{categoryName}")
