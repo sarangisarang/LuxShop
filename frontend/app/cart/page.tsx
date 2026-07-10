@@ -8,12 +8,36 @@ import { formatGel, GEL } from "@/lib/format";
 export default function CartPage() {
   const { items, total, count, setQty, remove, clear } = useCart();
   const [placed, setPlaced] = useState<string | null>(null);
-  const [form, setForm] = useState({ firstName: "", lastName: "", email: "", address: "", city: "" });
+  const [form, setForm] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    address: "",
+    city: "",
+    cardName: "",
+    cardNumber: "",
+    expiry: "",
+    cvc: "",
+  });
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   function update(field: string, value: string) {
     setForm((f) => ({ ...f, [field]: value }));
     setErrors((e) => ({ ...e, [field]: "" }));
+  }
+
+  // Card fields are formatted as the user types.
+  function updateCard(field: "cardNumber" | "expiry" | "cvc", raw: string) {
+    let v = raw;
+    if (field === "cardNumber") {
+      v = raw.replace(/\D/g, "").slice(0, 16).replace(/(.{4})/g, "$1 ").trim();
+    } else if (field === "expiry") {
+      const d = raw.replace(/\D/g, "").slice(0, 4);
+      v = d.length > 2 ? `${d.slice(0, 2)}/${d.slice(2)}` : d;
+    } else {
+      v = raw.replace(/\D/g, "").slice(0, 4);
+    }
+    update(field, v);
   }
 
   function checkout(e: React.FormEvent) {
@@ -24,6 +48,18 @@ export default function CartPage() {
     if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(form.email)) next.email = "Enter a valid email";
     if (!form.address.trim()) next.address = "Address is required";
     if (!form.city.trim()) next.city = "City is required";
+
+    if (!form.cardName.trim()) next.cardName = "Cardholder name is required";
+    const cardDigits = form.cardNumber.replace(/\D/g, "");
+    if (cardDigits.length !== 16) next.cardNumber = "Enter a 16-digit card number";
+    if (!/^\d{2}\/\d{2}$/.test(form.expiry)) {
+      next.expiry = "Use MM/YY";
+    } else {
+      const mm = Number(form.expiry.slice(0, 2));
+      if (mm < 1 || mm > 12) next.expiry = "Invalid month";
+    }
+    if (!/^\d{3,4}$/.test(form.cvc)) next.cvc = "3–4 digits";
+
     if (Object.keys(next).length) {
       setErrors(next);
       return;
@@ -40,8 +76,9 @@ export default function CartPage() {
           <div className="confirm-ico">✓</div>
           <h1 className="serif">Thank you, {form.firstName || "customer"}!</h1>
           <p>
-            Your order <strong>{placed}</strong> has been placed. A confirmation was sent to{" "}
-            <strong>{form.email}</strong>.
+            Your order <strong>{placed}</strong> has been placed and paid with the card ending in{" "}
+            <strong>•• {form.cardNumber.replace(/\D/g, "").slice(-4)}</strong>. A confirmation was sent
+            to <strong>{form.email}</strong>.
           </p>
           <Link href="/" className="btn btn-gold">
             Continue shopping
@@ -140,6 +177,55 @@ export default function CartPage() {
               <input value={form.city} onChange={(e) => update("city", e.target.value)} />
               {errors.city && <em>{errors.city}</em>}
             </label>
+
+            <div className="pay-head">
+              <span>💳 Payment</span>
+              <span className="pay-brands">VISA · MC · AMEX</span>
+            </div>
+            <label>
+              Cardholder name
+              <input
+                value={form.cardName}
+                onChange={(e) => update("cardName", e.target.value)}
+                placeholder="Name on card"
+              />
+              {errors.cardName && <em>{errors.cardName}</em>}
+            </label>
+            <label>
+              Card number
+              <input
+                value={form.cardNumber}
+                onChange={(e) => updateCard("cardNumber", e.target.value)}
+                inputMode="numeric"
+                autoComplete="cc-number"
+                placeholder="1234 5678 9012 3456"
+              />
+              {errors.cardNumber && <em>{errors.cardNumber}</em>}
+            </label>
+            <div className="checkout-row">
+              <label>
+                Expiry
+                <input
+                  value={form.expiry}
+                  onChange={(e) => updateCard("expiry", e.target.value)}
+                  inputMode="numeric"
+                  autoComplete="cc-exp"
+                  placeholder="MM/YY"
+                />
+                {errors.expiry && <em>{errors.expiry}</em>}
+              </label>
+              <label>
+                CVC
+                <input
+                  value={form.cvc}
+                  onChange={(e) => updateCard("cvc", e.target.value)}
+                  inputMode="numeric"
+                  autoComplete="cc-csc"
+                  placeholder="123"
+                />
+                {errors.cvc && <em>{errors.cvc}</em>}
+              </label>
+            </div>
 
             <div className="checkout-total">
               <span>Total</span>

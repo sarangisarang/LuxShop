@@ -825,3 +825,21 @@ a {
     grid-row-gap: 8px;
   }
 }
+
+/* ---- Checkout payment header ---- */
+.pay-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  border-top: 1px solid var(--border);
+  padding-top: 14px;
+  margin-top: 6px;
+  font-weight: 700;
+  color: var(--navy-ink);
+}
+.pay-head .pay-brands {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+}
