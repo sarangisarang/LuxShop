@@ -45,7 +45,9 @@ export default function Navbar() {
         </div>
 
         <div className="nav-right">
-          <span className="icon-btn">👤 Account</span>
+          <Link href="/orders" className="icon-btn">
+            📦 Orders
+          </Link>
           <span className="nav-divider" />
           <Link href="/cart" className="icon-btn">
             🛍 Cart <span className="cart-badge">{count}</span>

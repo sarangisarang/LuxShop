@@ -8,6 +8,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -51,6 +52,24 @@ class CheckoutMockMvcTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(body))
                 .andExpect(status().isConflict());
+    }
+
+    @Test
+    void orderHistory_byEmail_returnsPlacedOrder() throws Exception {
+        String email = "history@example.com";
+        String body = "{\"firstName\":\"H\",\"lastName\":\"I\",\"email\":\"" + email + "\","
+                + "\"address\":\"a\",\"city\":\"c\","
+                + "\"items\":[{\"productId\":\"8\",\"qty\":1}]}";
+        mockMvc.perform(post("/shop/checkout")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(body))
+                .andExpect(status().isCreated());
+
+        mockMvc.perform(get("/shop/orders").param("email", email))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].customer.email").value(email))
+                .andExpect(jsonPath("$[0].orderStatus").value("Pending"))
+                .andExpect(jsonPath("$[0].customer.password").doesNotExist());
     }
 
     @Test

@@ -75,6 +75,22 @@ export interface OrderResult {
   orderStatus: string;
 }
 
+export interface OrderLine {
+  productName: string;
+  qty: number;
+  price: number;
+  subtotal: number;
+}
+export interface Order {
+  id: string;
+  orderNo: number;
+  orderDate: string;
+  orderTotal: number;
+  orderStatus: string;
+  isDelivered: boolean;
+  details: OrderLine[];
+}
+
 export const api = {
   // The catalog list endpoints are paginated; expose both the raw page (for
   // pagination UI) and a convenience unwrap to the content array.
@@ -87,6 +103,7 @@ export const api = {
     get<Page<Category>>(`/shop/categories?page=${page}&size=${size}`),
   categories: () => api.categoriesPage().then((p) => p.content),
   checkout: (payload: CheckoutPayload) => post<OrderResult>("/shop/checkout", payload),
+  ordersByEmail: (email: string) => get<Order[]>(`/shop/orders?email=${encodeURIComponent(email)}`),
 };
 
 // Demo catalog used when the backend is unreachable, so the storefront still

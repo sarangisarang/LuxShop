@@ -79,6 +79,7 @@ export default function CartPage() {
         city: form.city,
         items: items.map((i) => ({ productId: i.product.id, qty: i.qty })),
       });
+      localStorage.setItem("luxshop_email", form.email);
       setPlaced(`#${order.orderNo}`);
       clear();
     } catch (err) {
@@ -99,9 +100,14 @@ export default function CartPage() {
             <strong>•• {form.cardNumber.replace(/\D/g, "").slice(-4)}</strong>. A confirmation was sent
             to <strong>{form.email}</strong>.
           </p>
-          <Link href="/" className="btn btn-gold">
-            Continue shopping
-          </Link>
+          <div className="cta-row">
+            <Link href="/orders" className="btn btn-navy">
+              View my orders
+            </Link>
+            <Link href="/" className="btn btn-gold">
+              Continue shopping
+            </Link>
+          </div>
         </div>
       </main>
     );

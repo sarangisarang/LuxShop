@@ -861,3 +861,85 @@ a {
   padding: 10px 12px;
   font-size: 0.86rem;
 }
+
+/* ---- My Orders ---- */
+.orders-search {
+  display: flex;
+  gap: 12px;
+  max-width: 520px;
+  margin-bottom: 26px;
+}
+.orders-search input {
+  flex: 1;
+  min-width: 0;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px 14px;
+  font-size: 0.98rem;
+  font-family: inherit;
+  color: var(--text);
+  background: var(--surface);
+}
+.orders-search input:focus {
+  outline: none;
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(201, 162, 75, 0.18);
+}
+.orders-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.order-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 18px 20px;
+  box-shadow: var(--shadow);
+}
+.order-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 12px;
+  margin-bottom: 12px;
+}
+.order-meta {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+}
+.order-no {
+  font-family: Georgia, serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--navy-ink);
+}
+.order-date {
+  color: var(--muted);
+  font-size: 0.86rem;
+}
+.order-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.order-line {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.92rem;
+  color: var(--text);
+}
+.order-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  border-top: 1px solid var(--border);
+  margin-top: 12px;
+  padding-top: 12px;
+}
+.order-total strong {
+  font-size: 1.15rem;
+  color: var(--navy-ink);
+}
