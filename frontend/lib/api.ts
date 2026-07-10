@@ -128,6 +128,7 @@ export const api = {
   products: (page = 0, size = 12, q?: string, sort?: string) =>
     api.productsPage(page, size, q, sort).then((p) => p.content),
   product: (id: string) => get<Product>(`/shop/product/${encodeURIComponent(id)}`),
+  related: (id: string) => get<Product[]>(`/shop/product/${encodeURIComponent(id)}/related`),
   categoriesPage: (page = 0, size = 100) =>
     get<Page<Category>>(`/shop/categories?page=${page}&size=${size}`),
   categories: () => api.categoriesPage().then((p) => p.content),

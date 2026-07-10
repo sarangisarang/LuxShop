@@ -10,6 +10,7 @@ import { useCart } from "@/lib/cart";
 import { useLanguage } from "@/lib/language";
 import { useTranslation } from "@/lib/dictionary";
 import Reviews from "./Reviews";
+import ProductCard from "./ProductCard";
 
 export default function ProductDetail({ product: initial }: { product: Product }) {
   const { add } = useCart();
@@ -17,8 +18,23 @@ export default function ProductDetail({ product: initial }: { product: Product }
   const { t } = useTranslation();
   const router = useRouter();
   const [product, setProduct] = useState(initial);
+  const [related, setRelated] = useState<Product[]>([]);
   const [added, setAdded] = useState(false);
   const firstRun = useRef(true);
+
+  // Fetch "you may also like" products (localized), refreshing on language change.
+  useEffect(() => {
+    let cancelled = false;
+    api
+      .related(initial.id)
+      .then((r) => {
+        if (!cancelled) setRelated(r);
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, [lang, initial.id]);
 
   // Re-fetch the product in the selected language.
   useEffect(() => {
@@ -149,6 +165,17 @@ export default function ProductDetail({ product: initial }: { product: Product }
           </div>
         </motion.div>
       </div>
+
+      {related.length > 0 && (
+        <section className="related">
+          <h3 className="serif">{t("pdp.related")}</h3>
+          <div className="grid">
+            {related.map((p, i) => (
+              <ProductCard key={p.id} product={p} index={i} />
+            ))}
+          </div>
+        </section>
+      )}
 
       <Reviews productId={product.id} />
     </div>

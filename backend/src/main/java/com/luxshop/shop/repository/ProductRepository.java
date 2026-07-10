@@ -20,4 +20,7 @@ public interface ProductRepository extends JpaRepository<Product,String>{
      // work regardless of the shopper's chosen language.
      Page<Product> findByProductNameContainingIgnoreCaseOrProductDescContainingIgnoreCase(
              String name, String description, Pageable pageable);
+
+     // Other products in the same category, for "you may also like" suggestions.
+     List<Product> findByCategory_IdAndIdNot(String categoryId, String id, Pageable pageable);
 }
