@@ -83,7 +83,7 @@ public class OrderServiceTest {
         orderDetails.setProduct(product);
         orderDetails.setSubtotal(200);
         orderDetails.setPrice(200);
-        orderDetails.setQty("200");
+        orderDetails.setQty(200);
         orderDetailsRepository.save(orderDetails);
         Product newproducts = productRepository.findById("2345").orElseThrow();
         Assertions.assertNotNull(newproducts);
@@ -170,7 +170,7 @@ public class OrderServiceTest {
     public void given_orderdetails_with_all(){
         OrderDetails orderDetails = new OrderDetails();
         orderDetails.setSubtotal(123);
-        orderDetails.setQty("all");
+        orderDetails.setQty(3);
         orderDetails.setId("789");
         orderDetails.setPrice(3000);
         orderDetailsRepository.save(orderDetails);

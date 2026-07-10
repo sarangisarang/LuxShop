@@ -12,7 +12,7 @@ import lombok.Setter;
 public class OrderDetails{
     @Id
     private String id;
-    private String Qty;
+    private Integer Qty;
     private Integer Price;
     private Integer Subtotal;
 

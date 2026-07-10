@@ -6,7 +6,12 @@ import com.example.marketing.shop.repository.OrderDetailsRepository;
 import com.example.marketing.shop.repository.OrdersRepository;
 import com.example.marketing.shop.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.math.BigInteger;
 import java.util.UUID;
 
 @Service
@@ -18,12 +23,45 @@ public class OrderDetailsService {
     @Autowired
     private ProductRepository productRepository;
 
+    /**
+     * Adds a line item to an order. Saving the line and decrementing the product's
+     * stock happen in one transaction, so a failure never leaves stock reduced
+     * without a matching order detail (or vice versa).
+     *
+     * The unit price and subtotal are derived from the product, not trusted from
+     * the client: Subtotal = productPrice * Qty.
+     */
+    @Transactional
     public OrderDetails createOrderDetails(OrderDetails orderDetails, String orderId, String productId) {
+        Orders orders = ordersRepository.findById(orderId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Order not found: " + orderId));
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found: " + productId));
+
+        Integer qty = orderDetails.getQty();
+        if (qty == null || qty <= 0) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Qty must be a positive number");
+        }
+
+        BigInteger unitPrice = product.getPrece() != null ? product.getPrece() : BigInteger.ZERO;
+        BigInteger available = product.getStock() != null ? product.getStock() : BigInteger.ZERO;
+        BigInteger requested = BigInteger.valueOf(qty);
+
+        if (available.compareTo(requested) < 0) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT,
+                    "Insufficient stock for product " + productId + ": " + available + " available, " + qty + " requested");
+        }
+
         orderDetails.setId(UUID.randomUUID().toString());
-        Orders orders = ordersRepository.findById(orderId).orElseThrow();
-        Product product = productRepository.findById(productId).orElseThrow();
         orderDetails.setOrders(orders);
         orderDetails.setProduct(product);
+        orderDetails.setPrice(unitPrice.intValueExact());
+        orderDetails.setSubtotal(unitPrice.multiply(requested).intValueExact());
+
+        // Reserve the stock; rolls back with the line-item save if anything fails.
+        product.setStock(available.subtract(requested));
+        productRepository.save(product);
+
         return orderDetailsRepository.save(orderDetails);
     }
 
