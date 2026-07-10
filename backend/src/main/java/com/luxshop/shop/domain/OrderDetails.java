@@ -16,8 +16,8 @@ import java.math.BigDecimal;
 public class OrderDetails{
     @Id
     private String id;
-    @NotNull(message = "Qty is required")
-    @Positive(message = "Qty must be a positive number")
+    @NotNull(message = "{validation.orderdetails.qty.required}")
+    @Positive(message = "{validation.orderdetails.qty.positive}")
     private Integer Qty;
     private BigDecimal Price;
     private BigDecimal Subtotal;

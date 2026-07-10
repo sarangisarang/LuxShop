@@ -11,7 +11,7 @@ import lombok.Setter;
 public class Customer {
     @Id
     private String id;
-    @Email(message = "Invalid email format")
+    @Email(message = "{validation.customer.email.invalid}")
     private String email;
     private String firstName;
     private String lastName;

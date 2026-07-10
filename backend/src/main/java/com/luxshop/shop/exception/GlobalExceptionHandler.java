@@ -2,6 +2,8 @@ package com.luxshop.shop.exception;
 
 import com.luxshop.shop.dto.ErrorResponse;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -23,6 +25,17 @@ import java.util.NoSuchElementException;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    private final MessageSource messageSource;
+
+    public GlobalExceptionHandler(MessageSource messageSource) {
+        this.messageSource = messageSource;
+    }
+
+    // Resolve a message code in the current request locale (Accept-Language).
+    private String msg(String code) {
+        return messageSource.getMessage(code, null, code, LocaleContextHolder.getLocale());
+    }
+
     // 409 - operation conflicts with current state (e.g. deleting a referenced entity).
     @ExceptionHandler(ConflictException.class)
     public ResponseEntity<ErrorResponse> handleConflict(ConflictException ex, HttpServletRequest req) {
@@ -32,7 +45,7 @@ public class GlobalExceptionHandler {
     // 404 - a bare Optional.orElseThrow() on a missing entity throws NoSuchElementException.
     @ExceptionHandler(NoSuchElementException.class)
     public ResponseEntity<ErrorResponse> handleNotFound(NoSuchElementException ex, HttpServletRequest req) {
-        return build(HttpStatus.NOT_FOUND, "Resource not found", req);
+        return build(HttpStatus.NOT_FOUND, msg("error.resource.notFound"), req);
     }
 
     // 400 - request body failed @Valid checks; report each offending field.
@@ -44,14 +57,14 @@ public class GlobalExceptionHandler {
             fields.putIfAbsent(error.getField(), error.getDefaultMessage());
         }
         ErrorResponse body = ErrorResponse.of(HttpStatus.BAD_REQUEST.value(),
-                HttpStatus.BAD_REQUEST.getReasonPhrase(), "Validation failed", req.getRequestURI(), fields);
+                HttpStatus.BAD_REQUEST.getReasonPhrase(), msg("error.validation.failed"), req.getRequestURI(), fields);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
     }
 
     // 400 - unparseable / missing request body.
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ErrorResponse> handleUnreadable(HttpMessageNotReadableException ex, HttpServletRequest req) {
-        return build(HttpStatus.BAD_REQUEST, "Malformed or missing request body", req);
+        return build(HttpStatus.BAD_REQUEST, msg("error.request.malformed"), req);
     }
 
     // Preserve the status explicitly set via ResponseStatusException (400/404/409/...).
@@ -68,7 +81,7 @@ public class GlobalExceptionHandler {
     // 401 - bad or missing login credentials (wrong username/password).
     @ExceptionHandler(AuthenticationException.class)
     public ResponseEntity<ErrorResponse> handleAuthentication(AuthenticationException ex, HttpServletRequest req) {
-        return build(HttpStatus.UNAUTHORIZED, "Invalid username or password", req);
+        return build(HttpStatus.UNAUTHORIZED, msg("error.auth.invalid"), req);
     }
 
     // 500 - anything unexpected.
