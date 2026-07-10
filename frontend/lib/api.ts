@@ -78,6 +78,11 @@ export interface CheckoutPayload {
   address: string;
   city: string;
   items: CheckoutItem[];
+  couponCode?: string;
+}
+export interface Coupon {
+  code: string;
+  percentOff: number;
 }
 export interface OrderResult {
   id: string;
@@ -133,6 +138,7 @@ export const api = {
     get<Page<Category>>(`/shop/categories?page=${page}&size=${size}`),
   categories: () => api.categoriesPage().then((p) => p.content),
   checkout: (payload: CheckoutPayload) => post<OrderResult>("/shop/checkout", payload),
+  coupon: (code: string) => get<Coupon>(`/shop/coupon/${encodeURIComponent(code)}`),
   ordersByEmail: (email: string) => get<Order[]>(`/shop/orders?email=${encodeURIComponent(email)}`),
   reviews: (productId: string) =>
     get<Review[]>(`/shop/product/${encodeURIComponent(productId)}/reviews`),

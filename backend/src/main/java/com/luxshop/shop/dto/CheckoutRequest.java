@@ -29,7 +29,10 @@ public record CheckoutRequest(
 
         @NotEmpty(message = "Cart is empty")
         @Valid
-        List<CheckoutItem> items
+        List<CheckoutItem> items,
+
+        // Optional discount code; ignored when blank or invalid.
+        String couponCode
 ) {
     public record CheckoutItem(
             @NotBlank(message = "Product id is required")

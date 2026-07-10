@@ -976,6 +976,61 @@ a {
   font-size: 0.76rem;
   font-weight: 500;
 }
+.coupon-box {
+  margin-top: 6px;
+}
+.coupon-row {
+  display: flex;
+  gap: 8px;
+}
+.coupon-row input {
+  flex: 1;
+  min-width: 0;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  color: var(--text);
+  background: var(--surface-soft);
+}
+.coupon-row input:focus {
+  outline: none;
+  border-color: var(--gold);
+}
+.coupon-row .btn {
+  padding: 10px 18px;
+}
+.coupon-applied {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  background: var(--surface-soft);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 14px;
+  color: var(--navy-ink);
+}
+.coupon-error {
+  display: block;
+  color: #b9412f;
+  font-size: 0.82rem;
+  font-style: normal;
+  margin-top: 6px;
+}
+.checkout-subtotal {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 0.95rem;
+  color: var(--muted);
+  padding-top: 6px;
+}
+.checkout-subtotal.discount {
+  color: var(--gold-deep);
+  font-weight: 600;
+}
 .checkout-total {
   display: flex;
   justify-content: space-between;

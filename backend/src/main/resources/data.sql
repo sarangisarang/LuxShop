@@ -337,3 +337,8 @@ insert into product_review(product_id,author_name,rating,comment,created_at) val
 insert into product_review(product_id,author_name,rating,comment,created_at) values ('5','Mariam',4,'Great phone, the battery easily lasts all day.',TIMESTAMP '2026-06-25 18:30:00');
 insert into product_review(product_id,author_name,rating,comment,created_at) values ('8','Nino',5,'The best noise-cancelling earbuds I have ever owned.',TIMESTAMP '2026-06-28 12:15:00');
 insert into product_review(product_id,author_name,rating,comment,created_at) values ('8','Davit',4,'Excellent sound, the fit could be a little snugger.',TIMESTAMP '2026-07-01 08:45:00');
+
+-- Discount coupons (schema auto-created by Hibernate for H2).
+insert into coupon(code,percent_off,active) values ('WELCOME10',10,true);
+insert into coupon(code,percent_off,active) values ('LUX20',20,true);
+insert into coupon(code,percent_off,active) values ('EXPIRED',15,false);

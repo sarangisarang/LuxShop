@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useCart } from "@/lib/cart";
-import { api } from "@/lib/api";
+import { api, type Coupon } from "@/lib/api";
 import { formatGel, GEL } from "@/lib/format";
 import { useTranslation } from "@/lib/dictionary";
 
@@ -25,6 +25,34 @@ export default function CartPage() {
     cvc: "",
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [couponInput, setCouponInput] = useState("");
+  const [coupon, setCoupon] = useState<Coupon | null>(null);
+  const [couponError, setCouponError] = useState<string | null>(null);
+  const [couponBusy, setCouponBusy] = useState(false);
+
+  const discount = coupon ? Math.round(total * coupon.percentOff) / 100 : 0;
+  const net = Math.max(0, Math.round((total - discount) * 100) / 100);
+
+  async function applyCoupon() {
+    setCouponError(null);
+    const code = couponInput.trim();
+    if (!code) return;
+    setCouponBusy(true);
+    try {
+      setCoupon(await api.coupon(code));
+    } catch {
+      setCoupon(null);
+      setCouponError(t("coupon.invalid"));
+    } finally {
+      setCouponBusy(false);
+    }
+  }
+
+  function removeCoupon() {
+    setCoupon(null);
+    setCouponInput("");
+    setCouponError(null);
+  }
 
   function update(field: string, value: string) {
     setForm((f) => ({ ...f, [field]: value }));
@@ -80,6 +108,7 @@ export default function CartPage() {
         address: form.address,
         city: form.city,
         items: items.map((i) => ({ productId: i.product.id, qty: i.qty })),
+        couponCode: coupon?.code,
       });
       localStorage.setItem("luxshop_email", form.email);
       setPlaced(`#${order.orderNo}`);
@@ -254,10 +283,55 @@ export default function CartPage() {
               </label>
             </div>
 
+            <div className="coupon-box">
+              {coupon ? (
+                <div className="coupon-applied">
+                  <span>
+                    🏷️ <strong>{coupon.code}</strong> · −{coupon.percentOff}%
+                  </span>
+                  <button type="button" className="link-btn" onClick={removeCoupon}>
+                    {t("coupon.remove")}
+                  </button>
+                </div>
+              ) : (
+                <div className="coupon-row">
+                  <input
+                    value={couponInput}
+                    onChange={(e) => {
+                      setCouponInput(e.target.value);
+                      setCouponError(null);
+                    }}
+                    placeholder={t("coupon.placeholder")}
+                    aria-label={t("coupon.placeholder")}
+                  />
+                  <button type="button" className="btn btn-navy" onClick={applyCoupon} disabled={couponBusy}>
+                    {couponBusy ? "…" : t("coupon.apply")}
+                  </button>
+                </div>
+              )}
+              {couponError && <em className="coupon-error">{couponError}</em>}
+            </div>
+
+            {coupon && (
+              <>
+                <div className="checkout-subtotal">
+                  <span>{t("checkout.subtotal")}</span>
+                  <span>
+                    {formatGel(total)} <span className="gel">{GEL}</span>
+                  </span>
+                </div>
+                <div className="checkout-subtotal discount">
+                  <span>{t("coupon.discount", { code: coupon.code })}</span>
+                  <span>
+                    −{formatGel(discount)} <span className="gel">{GEL}</span>
+                  </span>
+                </div>
+              </>
+            )}
             <div className="checkout-total">
               <span>{t("checkout.total")}</span>
               <strong>
-                {formatGel(total)} <span className="gel">{GEL}</span>
+                {formatGel(net)} <span className="gel">{GEL}</span>
               </strong>
             </div>
             {submitError && <div className="checkout-error">{submitError}</div>}
