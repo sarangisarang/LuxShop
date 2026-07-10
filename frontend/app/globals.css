@@ -595,8 +595,25 @@ a {
 .filter-bar {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   gap: 10px;
   margin-bottom: 26px;
+}
+.sort-select {
+  margin-left: auto;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-size: 0.86rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+}
+.sort-select:focus {
+  outline: none;
+  border-color: var(--gold);
 }
 .chip {
   border: 1px solid var(--border);

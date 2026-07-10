@@ -104,13 +104,14 @@ export interface Order {
 export const api = {
   // The catalog list endpoints are paginated; expose both the raw page (for
   // pagination UI) and a convenience unwrap to the content array.
-  productsPage: (page = 0, size = 12, q?: string) =>
+  productsPage: (page = 0, size = 12, q?: string, sort?: string) =>
     get<Page<Product>>(
       `/shop/products?page=${page}&size=${size}` +
-        (q && q.trim() ? `&q=${encodeURIComponent(q.trim())}` : "")
+        (q && q.trim() ? `&q=${encodeURIComponent(q.trim())}` : "") +
+        (sort ? `&sort=${encodeURIComponent(sort)}` : "")
     ),
-  products: (page = 0, size = 12, q?: string) =>
-    api.productsPage(page, size, q).then((p) => p.content),
+  products: (page = 0, size = 12, q?: string, sort?: string) =>
+    api.productsPage(page, size, q, sort).then((p) => p.content),
   product: (id: string) => get<Product>(`/shop/product/${encodeURIComponent(id)}`),
   categoriesPage: (page = 0, size = 100) =>
     get<Page<Category>>(`/shop/categories?page=${page}&size=${size}`),
