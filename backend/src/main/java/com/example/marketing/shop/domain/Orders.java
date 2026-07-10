@@ -24,7 +24,7 @@ public class Orders {
     private LocalDate orderDate;
     private BigDecimal orderTotal;
     private LocalDate shippingDate;
-    private String isDelivered;
+    private Boolean isDelivered;
 
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;

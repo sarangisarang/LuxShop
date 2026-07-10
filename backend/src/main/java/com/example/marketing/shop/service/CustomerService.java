@@ -13,7 +13,6 @@ public class CustomerService {
         customerToUpdate.setLastName(customer.getLastName());
         customerToUpdate.setFirstName(customer.getFirstName());
         customerToUpdate.setEmail(customer.getEmail());
-        customerToUpdate.setPassword(customer.getPassword());
         customerToUpdate.setAddress(customer.getAddress());
         customerToUpdate.setPostcode(customer.getPostcode());
         customerToUpdate.setCity(customer.getCity());
