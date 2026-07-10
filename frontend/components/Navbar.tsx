@@ -46,6 +46,9 @@ export default function Navbar() {
           <Link href="/#catalog" className="nav-link">
             {t("nav.menu")}
           </Link>
+          <Link href="/admin" className="nav-link">
+            Admin
+          </Link>
         </div>
 
         <div className="nav-right">

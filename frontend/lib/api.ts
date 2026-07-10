@@ -97,6 +97,7 @@ export interface Order {
   orderTotal: number;
   orderStatus: string;
   isDelivered: boolean;
+  customer?: { email?: string; firstName?: string; lastName?: string } | null;
   details: OrderLine[];
 }
 
@@ -113,6 +114,42 @@ export const api = {
   categories: () => api.categoriesPage().then((p) => p.content),
   checkout: (payload: CheckoutPayload) => post<OrderResult>("/shop/checkout", payload),
   ordersByEmail: (email: string) => get<Order[]>(`/shop/orders?email=${encodeURIComponent(email)}`),
+};
+
+// Authenticated requests (Bearer token) for the admin area.
+async function authGet<T>(path: string, token: string): Promise<T> {
+  const res = await fetch(`${BASE}${path}`, {
+    cache: "no-store",
+    headers: { Authorization: `Bearer ${token}`, ...langHeaders() },
+  });
+  if (!res.ok) throw new Error(`API ${path} failed: ${res.status}`);
+  return res.json() as Promise<T>;
+}
+
+async function authPut<T>(path: string, token: string): Promise<T> {
+  const res = await fetch(`${BASE}${path}`, {
+    method: "PUT",
+    headers: { Authorization: `Bearer ${token}`, ...langHeaders() },
+  });
+  if (!res.ok) {
+    let message = `Request failed (${res.status})`;
+    try {
+      const j = await res.json();
+      message = j.message || message;
+    } catch {
+      /* non-JSON */
+    }
+    throw new Error(message);
+  }
+  return res.json() as Promise<T>;
+}
+
+export type OrderAction = "process" | "ship" | "close" | "pending";
+
+export const admin = {
+  orders: (token: string) => authGet<Order[]>("/shop/order", token),
+  setStatus: (token: string, id: string, action: OrderAction) =>
+    authPut<Order>(`/shop/order/${id}/${action}`, token),
 };
 
 // Demo catalog used when the backend is unreachable, so the storefront still
