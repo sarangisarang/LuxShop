@@ -968,3 +968,25 @@ a {
   background: var(--gold);
   color: #241a06;
 }
+
+/* ---- Language dropdown (navbar) ---- */
+.lang-select {
+  background: rgba(255, 255, 255, 0.08);
+  color: #eef1f8;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 999px;
+  padding: 6px 10px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  max-width: 140px;
+}
+.lang-select:focus {
+  outline: none;
+  border-color: var(--gold);
+}
+.lang-select option {
+  color: #1f2a44;
+  background: #fff;
+}
