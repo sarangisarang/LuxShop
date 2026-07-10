@@ -4,6 +4,7 @@ import com.luxshop.shop.domain.Customer;
 import com.luxshop.shop.domain.Product;
 import com.luxshop.shop.dto.CategoryResponse;
 import com.luxshop.shop.dto.CustomerResponse;
+import com.luxshop.shop.dto.ProductRating;
 import com.luxshop.shop.dto.ProductResponse;
 import com.luxshop.shop.repository.*;
 import com.luxshop.shop.service.*;
@@ -18,7 +19,9 @@ import org.springframework.web.bind.annotation.*;
 import java.math.BigDecimal;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/shop")
@@ -43,6 +46,8 @@ public class ShopController{
     private OrderService orderService;
     @Autowired
     private ProductService productService;
+    @Autowired
+    private ReviewRepository reviewRepository;
 
     //GetMapping, PostMapping, PutMapping, DeleteMapping.
 
@@ -112,13 +117,17 @@ public class ShopController{
             @PageableDefault(size = 12, sort = "id") Pageable pageable){
         Comparator<Product> order = comparatorFor(sort);
         boolean searching = q != null && !q.isBlank();
+        // One grouped query gives every rated product's average + count; each
+        // product is then enriched from this map (no per-product review query).
+        Map<String, ProductRating> ratings = reviewRepository.findRatingAggregates().stream()
+                .collect(Collectors.toMap(ProductRating::productId, r -> r));
         if (order == null) {
             // No (known) sort key: let the database sort and page as usual.
             Page<Product> page = searching
                     ? productRepository.findByProductNameContainingIgnoreCaseOrProductDescContainingIgnoreCase(
                             q.trim(), q.trim(), pageable)
                     : productRepository.findAll(pageable);
-            return page.map(ProductResponse::from);
+            return page.map(p -> ProductResponse.from(p, ratings.get(p.getId())));
         }
         // Sorted: order the full matching set in memory, then return the requested
         // page. Sorting by the Price/Stock fields via Spring Sort is unreliable
@@ -131,7 +140,8 @@ public class ShopController{
         all.sort(order);
         int start = (int) Math.min(pageable.getOffset(), all.size());
         int end = Math.min(start + pageable.getPageSize(), all.size());
-        List<ProductResponse> content = all.subList(start, end).stream().map(ProductResponse::from).toList();
+        List<ProductResponse> content = all.subList(start, end).stream()
+                .map(p -> ProductResponse.from(p, ratings.get(p.getId()))).toList();
         return new PageImpl<>(content, pageable, all.size());
     }
 
@@ -163,7 +173,8 @@ public class ShopController{
 
     @GetMapping("/product/{id}")
     public ProductResponse getProduct(@PathVariable String id) {
-        return ProductResponse.from(productRepository.findById(id).orElseThrow());
+        Product product = productRepository.findById(id).orElseThrow();
+        return ProductResponse.from(product, reviewRepository.findRatingByProductId(id).orElse(null));
     }
 
     @PostMapping("/product/{categoryId}")

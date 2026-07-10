@@ -11,6 +11,8 @@ export interface Product {
   price: number;
   stock: number;
   category?: Category | null;
+  averageRating?: number | null;
+  reviewCount?: number;
 }
 
 export interface Category {

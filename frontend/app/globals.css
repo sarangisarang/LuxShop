@@ -401,6 +401,20 @@ a {
   font-size: 1.12rem;
   color: var(--navy-ink);
 }
+.card-rating {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85rem;
+}
+.card-rating .stars {
+  font-size: 0.9rem;
+}
+.card-rating-meta {
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 600;
+}
 .pcard .desc {
   color: var(--muted);
   font-size: 0.88rem;

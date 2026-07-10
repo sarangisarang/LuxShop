@@ -62,6 +62,23 @@ export default function ProductCard({ product, index = 0 }: { product: Product; 
         <div className="pcard-body">
           <span className="cat">{product.category?.name ?? "Uncategorized"}</span>
           <h3 className="serif">{product.productName}</h3>
+          {(product.reviewCount ?? 0) > 0 && (
+            <div className="card-rating" aria-label={t("reviews.count", { n: product.reviewCount ?? 0 })}>
+              <span className="stars" aria-hidden>
+                {[1, 2, 3, 4, 5].map((i) => {
+                  const on = i <= Math.round(product.averageRating ?? 0);
+                  return (
+                    <span key={i} className={on ? "star on" : "star"}>
+                      {on ? "★" : "☆"}
+                    </span>
+                  );
+                })}
+              </span>
+              <span className="card-rating-meta">
+                {(product.averageRating ?? 0).toFixed(1)} ({product.reviewCount})
+              </span>
+            </div>
+          )}
           <div className="desc">{product.productDesc}</div>
           <div className="row">
             <span className="price">
