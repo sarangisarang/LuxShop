@@ -48,6 +48,9 @@ public class CustomWebSecurityConfiguration {
                         // Self-service registration and the dev H2 console are open.
                         .requestMatchers(AntPathRequestMatcher.antMatcher("/register/customers/**")).permitAll()
                         .requestMatchers(AntPathRequestMatcher.antMatcher("/h2-console/**")).permitAll()
+                        // Allow the error dispatch so exceptions on public endpoints render their
+                        // real status (e.g. 400/409) instead of being masked as 401.
+                        .requestMatchers(AntPathRequestMatcher.antMatcher("/error")).permitAll()
                         // Admin-only management area.
                         .requestMatchers(AntPathRequestMatcher.antMatcher("/show/**")).hasRole("ADMIN")
                         // Everything else (orders, mutations, etc.) requires authentication.
