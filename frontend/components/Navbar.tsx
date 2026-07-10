@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useCart } from "@/lib/cart";
-import { useLanguage } from "@/lib/language";
+import { useLanguage, LANGUAGES, type Lang } from "@/lib/language";
 
 const CATEGORIES = [
   { glyph: "⌚", label: "Watches" },
@@ -47,20 +47,18 @@ export default function Navbar() {
         </div>
 
         <div className="nav-right">
-          <div className="lang-switch" role="group" aria-label="Language">
-            <button
-              className={`lang-opt ${lang === "en" ? "active" : ""}`}
-              onClick={() => setLang("en")}
-            >
-              EN
-            </button>
-            <button
-              className={`lang-opt ${lang === "ka" ? "active" : ""}`}
-              onClick={() => setLang("ka")}
-            >
-              ქარ
-            </button>
-          </div>
+          <select
+            className="lang-select"
+            value={lang}
+            onChange={(e) => setLang(e.target.value as Lang)}
+            aria-label="Language"
+          >
+            {LANGUAGES.map((l) => (
+              <option key={l.code} value={l.code}>
+                🌐 {l.label}
+              </option>
+            ))}
+          </select>
           <span className="nav-divider" />
           <Link href="/orders" className="icon-btn">
             📦 Orders

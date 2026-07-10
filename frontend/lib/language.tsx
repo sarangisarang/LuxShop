@@ -2,8 +2,30 @@
 
 import { createContext, useContext, useEffect, useState, ReactNode } from "react";
 
-export type Lang = "en" | "ka";
+export const LANGUAGES = [
+  { code: "en", label: "English" },
+  { code: "ka", label: "ქართული" },
+  { code: "ru", label: "Русский" },
+  { code: "de", label: "Deutsch" },
+  { code: "fr", label: "Français" },
+  { code: "es", label: "Español" },
+  { code: "it", label: "Italiano" },
+  { code: "pt", label: "Português" },
+  { code: "tr", label: "Türkçe" },
+  { code: "az", label: "Azərbaycan" },
+  { code: "uk", label: "Українська" },
+  { code: "pl", label: "Polski" },
+  { code: "nl", label: "Nederlands" },
+  { code: "ar", label: "العربية" },
+  { code: "zh", label: "中文" },
+  { code: "ja", label: "日本語" },
+  { code: "ko", label: "한국어" },
+  { code: "hi", label: "हिन्दी" },
+] as const;
+
+export type Lang = (typeof LANGUAGES)[number]["code"];
 export const LANG_KEY = "luxshop_lang";
+const CODES = LANGUAGES.map((l) => l.code) as readonly string[];
 
 interface LanguageContextValue {
   lang: Lang;
@@ -17,7 +39,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const saved = localStorage.getItem(LANG_KEY);
-    if (saved === "en" || saved === "ka") setLangState(saved);
+    if (saved && CODES.includes(saved)) setLangState(saved as Lang);
   }, []);
 
   const setLang = (l: Lang) => {
