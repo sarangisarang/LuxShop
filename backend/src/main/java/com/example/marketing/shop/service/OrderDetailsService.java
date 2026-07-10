@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.math.BigInteger;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
@@ -44,11 +44,10 @@ public class OrderDetailsService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Qty must be a positive number");
         }
 
-        BigInteger unitPrice = product.getPrice() != null ? product.getPrice() : BigInteger.ZERO;
-        BigInteger available = product.getStock() != null ? product.getStock() : BigInteger.ZERO;
-        BigInteger requested = BigInteger.valueOf(qty);
+        BigDecimal unitPrice = product.getPrice() != null ? product.getPrice() : BigDecimal.ZERO;
+        int available = product.getStock() != null ? product.getStock() : 0;
 
-        if (available.compareTo(requested) < 0) {
+        if (available < qty) {
             throw new ResponseStatusException(HttpStatus.CONFLICT,
                     "Insufficient stock for product " + productId + ": " + available + " available, " + qty + " requested");
         }
@@ -56,11 +55,11 @@ public class OrderDetailsService {
         orderDetails.setId(UUID.randomUUID().toString());
         orderDetails.setOrders(orders);
         orderDetails.setProduct(product);
-        orderDetails.setPrice(unitPrice.intValueExact());
-        orderDetails.setSubtotal(unitPrice.multiply(requested).intValueExact());
+        orderDetails.setPrice(unitPrice);
+        orderDetails.setSubtotal(unitPrice.multiply(BigDecimal.valueOf(qty)));
 
         // Reserve the stock; rolls back with the line-item save if anything fails.
-        product.setStock(available.subtract(requested));
+        product.setStock(available - qty);
         productRepository.save(product);
 
         OrderDetails saved = orderDetailsRepository.save(orderDetails);
@@ -103,9 +102,9 @@ public class OrderDetailsService {
      */
     private void recalculateOrderTotal(Orders orders) {
         List<OrderDetails> lines = orderDetailsRepository.findAllByOrders(orders).orElse(List.of());
-        int total = lines.stream()
-                .mapToInt(line -> line.getSubtotal() != null ? line.getSubtotal() : 0)
-                .sum();
+        BigDecimal total = lines.stream()
+                .map(line -> line.getSubtotal() != null ? line.getSubtotal() : BigDecimal.ZERO)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
         orders.setOrderTotal(total);
         ordersRepository.save(orders);
     }

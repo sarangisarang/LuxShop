@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.server.ResponseStatusException;
-import java.math.BigInteger;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -31,19 +31,19 @@ public class OrderService {
     // Total value of everything ordered = sum of (unit price * quantity) across all
     // order details. The previous version ignored quantity and threw NPE on details
     // with a null product/price.
-    public BigInteger getTotalOrderedAmount() {
+    public BigDecimal getTotalOrderedAmount() {
         return orderDetailsRepository.findAll().stream()
                 .map(OrderService::lineTotal)
-                .reduce(BigInteger.ZERO, BigInteger::add);
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
-    private static BigInteger lineTotal(OrderDetails detail) {
+    private static BigDecimal lineTotal(OrderDetails detail) {
         Product product = detail.getProduct();
         Integer qty = detail.getQty();
         if (product == null || product.getPrice() == null || qty == null) {
-            return BigInteger.ZERO;
+            return BigDecimal.ZERO;
         }
-        return product.getPrice().multiply(BigInteger.valueOf(qty));
+        return product.getPrice().multiply(BigDecimal.valueOf(qty));
     }
 
     public Orders createSaveOrders(@RequestBody Orders orders, String CustomerId) {

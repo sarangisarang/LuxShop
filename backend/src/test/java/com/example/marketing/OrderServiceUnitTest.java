@@ -15,7 +15,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.math.BigInteger;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -48,7 +48,7 @@ class OrderServiceUnitTest {
         return order;
     }
 
-    private OrderDetails detail(BigInteger unitPrice, Integer qty) {
+    private OrderDetails detail(BigDecimal unitPrice, Integer qty) {
         Product product = new Product();
         product.setPrice(unitPrice);
         OrderDetails d = new OrderDetails();
@@ -150,32 +150,32 @@ class OrderServiceUnitTest {
     void total_sumsPriceTimesQuantityAcrossDetails() {
         // 1 x 3000 + 2 x 50 = 3100
         when(orderDetailsRepository.findAll()).thenReturn(List.of(
-                detail(BigInteger.valueOf(3000), 1),
-                detail(BigInteger.valueOf(50), 2)
+                detail(BigDecimal.valueOf(3000), 1),
+                detail(BigDecimal.valueOf(50), 2)
         ));
 
-        assertEquals(BigInteger.valueOf(3100), orderService.getTotalOrderedAmount());
+        assertEquals(BigDecimal.valueOf(3100), orderService.getTotalOrderedAmount());
     }
 
     @Test
     void total_ofNoDetails_isZero() {
         when(orderDetailsRepository.findAll()).thenReturn(List.of());
 
-        assertEquals(BigInteger.ZERO, orderService.getTotalOrderedAmount());
+        assertEquals(BigDecimal.ZERO, orderService.getTotalOrderedAmount());
     }
 
     @Test
     void total_ignoresDetailsWithNullProductPriceOrQty_withoutNpe() {
         OrderDetails nullProduct = new OrderDetails();
         nullProduct.setQty(5);
-        OrderDetails nullQty = detail(BigInteger.valueOf(100), null);
+        OrderDetails nullQty = detail(BigDecimal.valueOf(100), null);
         when(orderDetailsRepository.findAll()).thenReturn(List.of(
-                detail(BigInteger.valueOf(3000), 1),
+                detail(BigDecimal.valueOf(3000), 1),
                 nullProduct,
                 nullQty
         ));
 
-        assertEquals(BigInteger.valueOf(3000), orderService.getTotalOrderedAmount());
+        assertEquals(BigDecimal.valueOf(3000), orderService.getTotalOrderedAmount());
     }
 
     // --- Update guard (#8): only a Pending order may be edited ------------

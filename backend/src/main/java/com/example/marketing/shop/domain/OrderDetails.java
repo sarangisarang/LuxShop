@@ -6,6 +6,8 @@ import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 @Entity
 @Getter
 @Setter
@@ -13,8 +15,8 @@ public class OrderDetails{
     @Id
     private String id;
     private Integer Qty;
-    private Integer Price;
-    private Integer Subtotal;
+    private BigDecimal Price;
+    private BigDecimal Subtotal;
 
     @ManyToOne
     @JoinColumn(name="Order_id")
