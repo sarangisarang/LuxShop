@@ -43,6 +43,7 @@ public class CustomWebSecurityConfiguration {
                         .requestMatchers(AntPathRequestMatcher.antMatcher("/swagger-ui.html")).permitAll()
                         // Public storefront browsing: read-only catalog access (controllers live under /shop).
                         .requestMatchers(AntPathRequestMatcher.antMatcher(HttpMethod.GET, "/shop/products/**")).permitAll()
+                        .requestMatchers(AntPathRequestMatcher.antMatcher(HttpMethod.GET, "/shop/product/**")).permitAll()
                         .requestMatchers(AntPathRequestMatcher.antMatcher(HttpMethod.GET, "/shop/categories/**")).permitAll()
                         .requestMatchers(AntPathRequestMatcher.antMatcher(HttpMethod.GET, "/shop/category/**")).permitAll()
                         // Self-service registration and the dev H2 console are open.
