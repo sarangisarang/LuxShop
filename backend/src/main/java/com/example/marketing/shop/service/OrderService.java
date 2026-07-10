@@ -7,12 +7,16 @@ import com.example.marketing.shop.repository.CustomerRepository;
 import com.example.marketing.shop.repository.OrderDetailsRepository;
 import com.example.marketing.shop.repository.OrdersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.server.ResponseStatusException;
 import java.math.BigInteger;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -49,47 +53,62 @@ public class OrderService {
         return ordersRepository.save(orders);
     }
 
+    // #8: an order can only be edited while it is still Pending. Previously this
+    // checked the request body's status (always effectively skipping the guard) and
+    // just printed instead of failing, so the caller never learned the update was rejected.
     public Orders createUpdateOrder(@RequestBody Orders orders, String id) {
-        Orders ordersToUpdate = ordersRepository.findById(id).orElseThrow();
-        if(orders.getOrderStatus() != OrderStatus.Pending){
-            System.out.println("Not allowed to update  order");
-        }else{
-            ordersToUpdate.setOrderNo(orders.getOrderNo());
-            ordersToUpdate.setOrderDate(orders.getOrderDate());
-            ordersToUpdate.setOrderTotal(orders.getOrderTotal());
-            ordersToUpdate.setShippingDate(orders.getShippingDate());
-            ordersToUpdate.setIsDelivered(orders.getIsDelivered());
+        Orders ordersToUpdate = ordersRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Order not found: " + id));
+        if (ordersToUpdate.getOrderStatus() != OrderStatus.Pending) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT,
+                    "Only a Pending order can be updated (current status: " + ordersToUpdate.getOrderStatus() + ")");
         }
-        return  ordersRepository.save(ordersToUpdate);
+        ordersToUpdate.setOrderNo(orders.getOrderNo());
+        ordersToUpdate.setOrderDate(orders.getOrderDate());
+        ordersToUpdate.setOrderTotal(orders.getOrderTotal());
+        ordersToUpdate.setShippingDate(orders.getShippingDate());
+        ordersToUpdate.setIsDelivered(orders.getIsDelivered());
+        return ordersRepository.save(ordersToUpdate);
+    }
+
+    // #7: order-status state machine. Key = target status, value = statuses it may
+    // legally be reached from. Anything else is rejected instead of silently applied.
+    private static final Map<OrderStatus, Set<OrderStatus>> ALLOWED_TRANSITIONS = Map.of(
+            OrderStatus.Processing, Set.of(OrderStatus.Pending),
+            OrderStatus.shipped, Set.of(OrderStatus.Processing),
+            OrderStatus.closed, Set.of(OrderStatus.shipped),
+            OrderStatus.Pending, Set.of(OrderStatus.Processing) // allow reverting before shipping
+    );
+
+    private Orders changeStatus(String id, OrderStatus target) {
+        Orders order = ordersRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Order not found: " + id));
+        OrderStatus current = order.getOrderStatus();
+        if (current == target) {
+            return order; // idempotent no-op
+        }
+        if (!ALLOWED_TRANSITIONS.getOrDefault(target, Set.of()).contains(current)) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT,
+                    "Invalid status transition: " + current + " -> " + target);
+        }
+        order.setOrderStatus(target);
+        return ordersRepository.save(order);
     }
 
     public Orders updateOrderStatusProcess(String id) {
-        Orders ordersToUpdate = ordersRepository.findById(id).orElseThrow();
-        ordersToUpdate.setOrderStatus(OrderStatus.Processing);
-        return ordersRepository.save(ordersToUpdate);
+        return changeStatus(id, OrderStatus.Processing);
     }
 
     public Orders updateOrderStatusSchip(String id) {
-        Orders ordersToUpdate = ordersRepository.findById(id).orElseThrow();
-        if (ordersToUpdate.getOrderStatus() == OrderStatus.Processing){
-            ordersToUpdate.setOrderStatus(OrderStatus.shipped);
-            ordersRepository.save(ordersToUpdate);
-        } else {
-            System.out.println("Not allowed to ship a Pending order");
-        }
-        return ordersRepository.save(ordersToUpdate);
+        return changeStatus(id, OrderStatus.shipped);
     }
 
-    public Orders updateOrderStatusClose(String id){
-        Orders ordersToUpdate = ordersRepository.findById(id).orElseThrow();
-        ordersToUpdate.setOrderStatus(OrderStatus.closed);
-        return ordersRepository.save(ordersToUpdate);
+    public Orders updateOrderStatusClose(String id) {
+        return changeStatus(id, OrderStatus.closed);
     }
 
-    public Orders updateOrderStatusPending(String id){
-        Orders ordersToUpdate = ordersRepository.findById(id).orElseThrow();
-        ordersToUpdate.setOrderStatus(OrderStatus.Pending);
-        return ordersRepository.save(ordersToUpdate);
+    public Orders updateOrderStatusPending(String id) {
+        return changeStatus(id, OrderStatus.Pending);
     }
 
     @Transactional
