@@ -101,6 +101,19 @@ export interface Order {
   details: OrderLine[];
 }
 
+export interface Review {
+  id: number;
+  authorName: string;
+  rating: number;
+  comment?: string | null;
+  createdAt: string;
+}
+export interface NewReview {
+  authorName: string;
+  rating: number;
+  comment?: string;
+}
+
 export const api = {
   // The catalog list endpoints are paginated; expose both the raw page (for
   // pagination UI) and a convenience unwrap to the content array.
@@ -118,6 +131,10 @@ export const api = {
   categories: () => api.categoriesPage().then((p) => p.content),
   checkout: (payload: CheckoutPayload) => post<OrderResult>("/shop/checkout", payload),
   ordersByEmail: (email: string) => get<Order[]>(`/shop/orders?email=${encodeURIComponent(email)}`),
+  reviews: (productId: string) =>
+    get<Review[]>(`/shop/product/${encodeURIComponent(productId)}/reviews`),
+  addReview: (productId: string, payload: NewReview) =>
+    post<Review>(`/shop/product/${encodeURIComponent(productId)}/reviews`, payload),
 };
 
 // Authenticated requests (Bearer token) for the admin area.

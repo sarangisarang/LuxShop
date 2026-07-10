@@ -329,3 +329,11 @@ insert into Product_Translation(product_id,language_code,name,description) value
 insert into Product_Translation(product_id,language_code,name,description) values ('10','hi','Louis Vuitton Keepall 55','Monogram कैनवास ट्रैवल बैग — विलासिता यात्रा का प्रतीक।');
 insert into Product_Translation(product_id,language_code,name,description) values ('11','hi','Montblanc Meisterstück 149','कीमती काले रेज़िन से बना सोने की परत वाला फाउंटेन पेन।');
 insert into Product_Translation(product_id,language_code,name,description) values ('12','hi','Ray-Ban Aviator Classic','G-15 लेंस के साथ सुनहरे फ्रेम वाला कालातीत धूप का चश्मा।');
+
+-- Guest product reviews (schema auto-created by Hibernate for H2).
+insert into product_review(product_id,author_name,rating,comment,created_at) values ('1','Giorgi',5,'Absolutely stunning timepiece — worth every tetri.',TIMESTAMP '2026-06-15 10:20:00');
+insert into product_review(product_id,author_name,rating,comment,created_at) values ('1','Anna',4,'Beautiful watch, though the bracelet took some adjusting.',TIMESTAMP '2026-06-20 14:05:00');
+insert into product_review(product_id,author_name,rating,comment,created_at) values ('3','Luka',5,'Blazing fast for video editing and the display is gorgeous.',TIMESTAMP '2026-06-22 09:00:00');
+insert into product_review(product_id,author_name,rating,comment,created_at) values ('5','Mariam',4,'Great phone, the battery easily lasts all day.',TIMESTAMP '2026-06-25 18:30:00');
+insert into product_review(product_id,author_name,rating,comment,created_at) values ('8','Nino',5,'The best noise-cancelling earbuds I have ever owned.',TIMESTAMP '2026-06-28 12:15:00');
+insert into product_review(product_id,author_name,rating,comment,created_at) values ('8','Davit',4,'Excellent sound, the fit could be a little snugger.',TIMESTAMP '2026-07-01 08:45:00');
