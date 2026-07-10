@@ -6,6 +6,7 @@ import { useAuth } from "@/lib/auth";
 import { formatGel, GEL } from "@/lib/format";
 import ProductsAdmin from "./ProductsAdmin";
 import CategoriesAdmin from "./CategoriesAdmin";
+import DashboardAdmin from "./DashboardAdmin";
 
 const STATUS_CLS: Record<string, string> = {
   Pending: "stock-low",
@@ -38,8 +39,13 @@ export default function AdminPage() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState<string | null>(null);
-  const [tab, setTab] = useState<"orders" | "products" | "categories">("orders");
-  const TITLES = { orders: "Order management", products: "Product management", categories: "Category management" };
+  const [tab, setTab] = useState<"dashboard" | "orders" | "products" | "categories">("dashboard");
+  const TITLES = {
+    dashboard: "Dashboard",
+    orders: "Order management",
+    products: "Product management",
+    categories: "Category management",
+  };
 
   const loadOrders = useCallback(async (tk: string) => {
     try {
@@ -123,6 +129,12 @@ export default function AdminPage() {
 
       <div className="filter-bar" style={{ marginBottom: 24 }}>
         <button
+          className={`chip ${tab === "dashboard" ? "active" : ""}`}
+          onClick={() => setTab("dashboard")}
+        >
+          Dashboard
+        </button>
+        <button
           className={`chip ${tab === "orders" ? "active" : ""}`}
           onClick={() => setTab("orders")}
         >
@@ -142,7 +154,9 @@ export default function AdminPage() {
         </button>
       </div>
 
-      {tab === "products" ? (
+      {tab === "dashboard" ? (
+        <DashboardAdmin token={token} />
+      ) : tab === "products" ? (
         <ProductsAdmin token={token} />
       ) : tab === "categories" ? (
         <CategoriesAdmin token={token} />
