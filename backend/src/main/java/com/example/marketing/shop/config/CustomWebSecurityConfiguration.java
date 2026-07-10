@@ -1,18 +1,24 @@
 package com.example.marketing.shop.config;
 
+import com.example.marketing.shop.security.JwtAuthenticationFilter;
 import com.example.marketing.shop.security.MyUserDetailsService;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -27,12 +33,15 @@ public class CustomWebSecurityConfiguration {
     @Autowired
     public MyUserDetailsService myUserDetailsService;
 
+    @Autowired
+    private JwtAuthenticationFilter jwtAuthenticationFilter;
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
                 // Enable CORS so the Next.js frontend (localhost:3000) can call the API.
                 .cors(Customizer.withDefaults())
-                // Stateless REST API authenticated with HTTP Basic -> CSRF protection is not applicable.
+                // Stateless REST API authenticated with JWT -> CSRF protection is not applicable.
                 .csrf(csrf -> csrf.disable())
                 // Allow the H2 console to render inside a frame.
                 .headers(h -> h.frameOptions(fo -> fo.disable()))
@@ -41,6 +50,8 @@ public class CustomWebSecurityConfiguration {
                         .requestMatchers(AntPathRequestMatcher.antMatcher("/v3/api-docs/**")).permitAll()
                         .requestMatchers(AntPathRequestMatcher.antMatcher("/swagger-ui/**")).permitAll()
                         .requestMatchers(AntPathRequestMatcher.antMatcher("/swagger-ui.html")).permitAll()
+                        // Login is public; everything else authenticates with a Bearer token.
+                        .requestMatchers(AntPathRequestMatcher.antMatcher("/auth/**")).permitAll()
                         // Public storefront browsing: read-only catalog access (controllers live under /shop).
                         .requestMatchers(AntPathRequestMatcher.antMatcher(HttpMethod.GET, "/shop/products/**")).permitAll()
                         .requestMatchers(AntPathRequestMatcher.antMatcher(HttpMethod.GET, "/shop/product/**")).permitAll()
@@ -57,8 +68,14 @@ public class CustomWebSecurityConfiguration {
                         // Everything else (orders, mutations, etc.) requires authentication.
                         .anyRequest().authenticated()
                 )
-                .httpBasic(Customizer.withDefaults())
+                // No server-side session: each request carries its own JWT.
+                .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                // Reject unauthenticated access with 401 instead of a redirect/403.
+                .exceptionHandling(ex -> ex.authenticationEntryPoint(
+                        (request, response, authEx) -> response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized")))
                 .authenticationProvider(authenticationProvider())
+                // Validate the Bearer token before the username/password filter.
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 
@@ -75,6 +92,12 @@ public class CustomWebSecurityConfiguration {
         authenticationProvider.setPasswordEncoder(passwordEncoder());
         authenticationProvider.setUserDetailsService(myUserDetailsService);
         return authenticationProvider;
+    }
+
+    // Exposes the AuthenticationManager so /auth/login can verify credentials.
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+        return config.getAuthenticationManager();
     }
 
     // CORS for local frontend development.
