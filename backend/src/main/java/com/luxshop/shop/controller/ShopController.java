@@ -116,12 +116,12 @@ public class ShopController{
             @RequestParam(required = false) String q,
             @RequestParam(required = false) String sort,
             @PageableDefault(size = 12, sort = "id") Pageable pageable){
-        Comparator<Product> order = comparatorFor(sort);
         boolean searching = q != null && !q.isBlank();
         // One grouped query gives every rated product's average + count; each
         // product is then enriched from this map (no per-product review query).
         Map<String, ProductRating> ratings = reviewRepository.findRatingAggregates().stream()
                 .collect(Collectors.toMap(ProductRating::productId, r -> r));
+        Comparator<Product> order = comparatorFor(sort, ratings);
         if (order == null) {
             // No (known) sort key: let the database sort and page as usual.
             Page<Product> page = searching
@@ -147,14 +147,21 @@ public class ShopController{
     }
 
     // Comparator for a friendly sort key, or null when none/unknown is supplied.
-    private Comparator<Product> comparatorFor(String sort) {
+    // "rating_desc" orders by the aggregate average (unrated products last).
+    private Comparator<Product> comparatorFor(String sort, Map<String, ProductRating> ratings) {
         return switch (sort == null ? "" : sort) {
             case "price_asc"  -> Comparator.comparing(Product::getPrice);
             case "price_desc" -> Comparator.comparing(Product::getPrice).reversed();
             case "name_asc"   -> Comparator.comparing(Product::getProductName, String.CASE_INSENSITIVE_ORDER);
             case "name_desc"  -> Comparator.comparing(Product::getProductName, String.CASE_INSENSITIVE_ORDER).reversed();
+            case "rating_desc" -> Comparator.comparingDouble((Product p) -> averageOf(ratings, p)).reversed();
             default            -> null;
         };
+    }
+
+    private double averageOf(Map<String, ProductRating> ratings, Product product) {
+        ProductRating r = ratings.get(product.getId());
+        return r != null && r.average() != null ? r.average() : 0.0;
     }
 
     @GetMapping("/products/{categoryName}")

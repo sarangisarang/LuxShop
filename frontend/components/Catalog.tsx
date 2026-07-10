@@ -99,6 +99,7 @@ export default function Catalog({ products: initial }: { products: Product[] }) 
           aria-label={t("sort.label")}
         >
           <option value="">{t("sort.default")}</option>
+          <option value="rating_desc">{t("sort.rating")}</option>
           <option value="price_asc">{t("sort.priceAsc")}</option>
           <option value="price_desc">{t("sort.priceDesc")}</option>
           <option value="name_asc">{t("sort.nameAsc")}</option>
