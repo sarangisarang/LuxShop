@@ -1,5 +1,6 @@
+import { Suspense } from "react";
 import Hero from "@/components/Hero";
-import ProductGrid from "@/components/ProductGrid";
+import Catalog from "@/components/Catalog";
 import { loadProducts } from "@/lib/api";
 
 export default async function Home() {
@@ -24,7 +25,9 @@ export default async function Home() {
           </div>
         )}
 
-        <ProductGrid products={products} />
+        <Suspense fallback={<div className="notice">Loading catalog…</div>}>
+          <Catalog products={products} />
+        </Suspense>
       </section>
     </main>
   );

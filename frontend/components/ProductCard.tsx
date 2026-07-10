@@ -4,6 +4,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import type { Product } from "@/lib/api";
 import { formatGel, GEL } from "@/lib/format";
+import { useCart } from "@/lib/cart";
 
 function stockPill(stock: number) {
   if (stock <= 0) return { cls: "stock-out", text: "Out of stock" };
@@ -13,6 +14,8 @@ function stockPill(stock: number) {
 
 export default function ProductCard({ product, index = 0 }: { product: Product; index?: number }) {
   const pill = stockPill(Number(product.stock));
+  const { add } = useCart();
+  const outOfStock = Number(product.stock) <= 0;
 
   return (
     <motion.div
@@ -48,6 +51,17 @@ export default function ProductCard({ product, index = 0 }: { product: Product; 
             </span>
             <span className={`stock-pill ${pill.cls}`}>{pill.text}</span>
           </div>
+          <button
+            className="add-btn"
+            disabled={outOfStock}
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              add(product);
+            }}
+          >
+            {outOfStock ? "Out of stock" : "🛍 Add to cart"}
+          </button>
         </div>
       </Link>
     </motion.div>
