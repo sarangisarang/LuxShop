@@ -79,9 +79,9 @@ public class OrderController {
         return orderService.updateOrderStatusProcess(id);
     }
 
-    @PutMapping("/order/{id}/schip") // Test this all ok!.
-    public Orders updateOrderStatusSchip(@PathVariable String id){
-        return orderService.updateOrderStatusSchip(id);
+    @PutMapping("/order/{id}/ship") // Test this all ok!.
+    public Orders updateOrderStatusShip(@PathVariable String id){
+        return orderService.updateOrderStatusShip(id);
     }
 
     @PutMapping("/order/{id}/close") // Test this all ok!.

@@ -72,7 +72,7 @@ public class OrderServiceTest {
         product.setProductDesc("Apfel");
         product.setProductName("Iphone");
         product.setId("2345");
-        product.setPrece(BigInteger.valueOf(1234));
+        product.setPrice(BigInteger.valueOf(1234));
         product.setImage1("204.29.207.217".getBytes());
         product.setImage2("204.29.207.218".getBytes());
         product.setImage3("204.29.207.219".getBytes());
@@ -96,7 +96,7 @@ public class OrderServiceTest {
         product.setProductDesc("Apfel");
         product.setProductName("Iphone");
         product.setId("2345");
-        product.setPrece(BigInteger.valueOf(1234));
+        product.setPrice(BigInteger.valueOf(1234));
         product.setImage1("204.29.207.217".getBytes());
         product.setImage2("204.29.207.218".getBytes());
         product.setImage3("204.29.207.219".getBytes());
@@ -117,7 +117,7 @@ public class OrderServiceTest {
         product.setProductDesc("Apfel");
         product.setProductName("Iphone");
         product.setId("2345");
-        product.setPrece(BigInteger.valueOf(1234));
+        product.setPrice(BigInteger.valueOf(1234));
         product.setImage1("204.29.207.217".getBytes());
         product.setImage2("204.29.207.218".getBytes());
         product.setImage3("204.29.207.219".getBytes());

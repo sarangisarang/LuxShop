@@ -20,7 +20,7 @@ public class Product {
     private byte[] image1;
     private byte[] image2;
     private byte[] image3;
-    private BigInteger Prece;
+    private BigInteger Price;
     private BigInteger Stock;
     @ManyToOne
     @JoinColumn(name="Category_id")

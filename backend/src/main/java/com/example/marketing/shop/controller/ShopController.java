@@ -112,7 +112,7 @@ public class ShopController{
         return productService.creategetOrderedProductsByCategory(categoryName);
     }
 
-    @GetMapping("/products/TotalPrace")
+    @GetMapping("/products/TotalPrice")
     public BigInteger getTotalOrderedAmount() {
         return orderService.getTotalOrderedAmount();
     }

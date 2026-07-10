@@ -40,10 +40,10 @@ public class OrderService {
     private static BigInteger lineTotal(OrderDetails detail) {
         Product product = detail.getProduct();
         Integer qty = detail.getQty();
-        if (product == null || product.getPrece() == null || qty == null) {
+        if (product == null || product.getPrice() == null || qty == null) {
             return BigInteger.ZERO;
         }
-        return product.getPrece().multiply(BigInteger.valueOf(qty));
+        return product.getPrice().multiply(BigInteger.valueOf(qty));
     }
 
     public Orders createSaveOrders(@RequestBody Orders orders, String CustomerId) {
@@ -99,7 +99,7 @@ public class OrderService {
         return changeStatus(id, OrderStatus.Processing);
     }
 
-    public Orders updateOrderStatusSchip(String id) {
+    public Orders updateOrderStatusShip(String id) {
         return changeStatus(id, OrderStatus.shipped);
     }
 

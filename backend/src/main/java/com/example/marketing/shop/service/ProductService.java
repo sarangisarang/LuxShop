@@ -57,7 +57,7 @@ public class ProductService {
         productsToUpdate.setImage1(product.getImage1());
         productsToUpdate.setImage2(product.getImage2());
         productsToUpdate.setImage3(product.getImage3());
-        productsToUpdate.setPrece(product.getPrece());
+        productsToUpdate.setPrice(product.getPrice());
         productsToUpdate.setStock(product.getStock());
         return productRepository.save(productsToUpdate);
     }
@@ -67,7 +67,7 @@ public class ProductService {
         if (product.getProductName() == null || product.getProductName().isBlank()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Product name is required");
         }
-        if (product.getPrece() == null || product.getPrece().signum() < 0) {
+        if (product.getPrice() == null || product.getPrice().signum() < 0) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Price must be zero or positive");
         }
         if (product.getStock() == null || product.getStock().signum() < 0) {

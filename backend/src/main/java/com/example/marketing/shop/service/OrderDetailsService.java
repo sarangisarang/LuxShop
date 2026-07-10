@@ -44,7 +44,7 @@ public class OrderDetailsService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Qty must be a positive number");
         }
 
-        BigInteger unitPrice = product.getPrece() != null ? product.getPrece() : BigInteger.ZERO;
+        BigInteger unitPrice = product.getPrice() != null ? product.getPrice() : BigInteger.ZERO;
         BigInteger available = product.getStock() != null ? product.getStock() : BigInteger.ZERO;
         BigInteger requested = BigInteger.valueOf(qty);
 

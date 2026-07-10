@@ -32,7 +32,7 @@ export default function ProductCard({ product, index = 0 }: { product: Product; 
           <div className="desc">{product.productDesc}</div>
           <div className="row">
             <span className="price">
-              {formatGel(Number(product.prece ?? 0))} <span className="gel">{GEL}</span>
+              {formatGel(Number(product.price ?? 0))} <span className="gel">{GEL}</span>
             </span>
             <span className={`stock-pill ${pill.cls}`}>{pill.text}</span>
           </div>
