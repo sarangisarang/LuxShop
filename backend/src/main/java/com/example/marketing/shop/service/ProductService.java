@@ -5,11 +5,11 @@ import com.example.marketing.shop.domain.Product;
 import com.example.marketing.shop.repository.CategoryRepository;
 import com.example.marketing.shop.repository.OrderDetailsRepository;
 import com.example.marketing.shop.repository.ProductRepository;
+import com.example.marketing.shop.exception.ConflictException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -29,11 +29,13 @@ public class ProductService {
 
     public void deleteProduct(String id){
         Product product = productRepository.findById(id).orElseThrow();
-        Optional<List<OrderDetails>> orderDetailsList = orderDetailsRepository.findAllByProduct(product);
-        if(orderDetailsList.get().isEmpty()){
+        // findAllByProduct returns Optional<List>; orElse yields an empty list instead of
+        // risking a NoSuchElementException from .get() on an absent Optional.
+        List<OrderDetails> orderDetailsList = orderDetailsRepository.findAllByProduct(product).orElse(List.of());
+        if(orderDetailsList.isEmpty()){
             productRepository.delete(product);
         }else{
-            throw new RuntimeException("can not delete this Product");
+            throw new ConflictException("can not delete this Product");
         }
     }
 

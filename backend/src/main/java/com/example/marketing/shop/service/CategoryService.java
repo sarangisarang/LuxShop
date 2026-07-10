@@ -3,11 +3,11 @@ import com.example.marketing.shop.domain.Category;
 import com.example.marketing.shop.domain.Product;
 import com.example.marketing.shop.repository.CategoryRepository;
 import com.example.marketing.shop.repository.ProductRepository;
+import com.example.marketing.shop.exception.ConflictException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CategoryService {
@@ -24,13 +24,14 @@ public class CategoryService {
         return categoryRepository.save(categoryToUpdate);
     }
 
-    public void deleteCategory(String id){  //  testing here
+    public void deleteCategory(String id){
         Category category = categoryRepository.findById(id).orElseThrow();
-        Optional<List<Product>> products = productRepository.findAllByCategory(category);
-        if(products.get().isEmpty()){
+        // orElse avoids a NoSuchElementException from .get() if the Optional is ever absent.
+        List<Product> products = productRepository.findAllByCategory(category).orElse(List.of());
+        if(products.isEmpty()){
             categoryRepository.delete(category);
         }else{
-            throw new RuntimeException("Not allowed to delete this Category");
+            throw new ConflictException("Not allowed to delete this Category");
         }
     }
 }
