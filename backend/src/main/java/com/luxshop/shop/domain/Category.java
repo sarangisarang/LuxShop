@@ -20,7 +20,7 @@ import org.hibernate.annotations.Where;
 public class Category {
     @Id
     private String id;
-    @NotBlank(message = "Category name is required")
+    @NotBlank(message = "{validation.category.name.required}")
     private String name;
     private String image;
     private String description;

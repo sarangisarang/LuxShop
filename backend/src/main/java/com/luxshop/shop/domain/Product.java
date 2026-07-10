@@ -27,17 +27,17 @@ import java.math.BigDecimal;
 public class Product {
     @Id
     private String id;
-    @NotBlank(message = "Product name is required")
+    @NotBlank(message = "{validation.product.name.required}")
     private String productName;
     private String productDesc;
     private byte[] image1;
     private byte[] image2;
     private byte[] image3;
-    @NotNull(message = "Price is required")
-    @PositiveOrZero(message = "Price must be zero or positive")
+    @NotNull(message = "{validation.product.price.required}")
+    @PositiveOrZero(message = "{validation.product.price.positive}")
     private BigDecimal Price;
-    @NotNull(message = "Stock is required")
-    @PositiveOrZero(message = "Stock must be zero or positive")
+    @NotNull(message = "{validation.product.stock.required}")
+    @PositiveOrZero(message = "{validation.product.stock.positive}")
     private Integer Stock;
     @ManyToOne
     @JoinColumn(name="Category_id")

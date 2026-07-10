@@ -10,18 +10,18 @@ import jakarta.validation.constraints.Size;
  * cannot set fields like id, roles or an already-hashed password directly.
  */
 public record CustomerRegistrationRequest(
-        @NotBlank(message = "Email is required")
-        @Email(message = "Invalid email format")
+        @NotBlank(message = "{validation.registration.email.required}")
+        @Email(message = "{validation.registration.email.invalid}")
         String email,
 
-        @NotBlank(message = "Password is required")
-        @Size(min = 8, message = "Password must be at least 8 characters long")
+        @NotBlank(message = "{validation.registration.password.required}")
+        @Size(min = 8, message = "{validation.registration.password.size}")
         String password,
 
-        @NotBlank(message = "First name is required")
+        @NotBlank(message = "{validation.registration.firstName.required}")
         String firstName,
 
-        @NotBlank(message = "Last name is required")
+        @NotBlank(message = "{validation.registration.lastName.required}")
         String lastName,
 
         String address,
