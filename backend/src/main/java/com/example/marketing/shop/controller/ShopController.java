@@ -2,6 +2,7 @@ package com.example.marketing.shop.controller;
 import com.example.marketing.shop.domain.Category;
 import com.example.marketing.shop.domain.Customer;
 import com.example.marketing.shop.domain.Product;
+import com.example.marketing.shop.dto.CustomerResponse;
 import com.example.marketing.shop.repository.*;
 import com.example.marketing.shop.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,24 +68,25 @@ public class ShopController{
     //GetMapping, GetMappig(add Id), PostMapping, PutMapping, DeleteMapping.
 
     @GetMapping("/customers")
-    public List<Customer> getAllCustumeries(){
-        return customerRepository.findAll();
+    public List<CustomerResponse> getAllCustumeries(){
+        // Map to DTOs so the password is never serialized to clients.
+        return customerRepository.findAll().stream().map(CustomerResponse::from).toList();
     }
 
     @GetMapping("/customer/{id}")
-    public Customer getCustomer(@PathVariable String id) {
-        return customerRepository.findById(id).orElseThrow();
+    public CustomerResponse getCustomer(@PathVariable String id) {
+        return CustomerResponse.from(customerRepository.findById(id).orElseThrow());
     }
 
     @PostMapping("/customer")
-    public Customer saveCustomer(@RequestBody Customer customer){
+    public CustomerResponse saveCustomer(@RequestBody Customer customer){
         customer.setId(UUID.randomUUID().toString());
-        return customerRepository.save(customer);
+        return CustomerResponse.from(customerRepository.save(customer));
     }
 
     @PutMapping("/customer/{id}")
-    public Customer updateCustomer(@RequestBody Customer customer, @PathVariable String id){
-        return customerService.CreateCustomerOrder(customer,id);
+    public CustomerResponse updateCustomer(@RequestBody Customer customer, @PathVariable String id){
+        return CustomerResponse.from(customerService.CreateCustomerOrder(customer,id));
     }
 
     @DeleteMapping("/customer/{id}")
