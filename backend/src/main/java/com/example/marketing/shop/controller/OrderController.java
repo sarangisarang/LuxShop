@@ -1,6 +1,8 @@
 package com.example.marketing.shop.controller;
 import com.example.marketing.shop.domain.OrderDetails;
 import com.example.marketing.shop.domain.Orders;
+import com.example.marketing.shop.dto.OrderDetailResponse;
+import com.example.marketing.shop.dto.OrderResponse;
 import com.example.marketing.shop.repository.OrderDetailsRepository;
 import com.example.marketing.shop.repository.OrdersRepository;
 import com.example.marketing.shop.service.OrderDetailsService;
@@ -21,6 +23,13 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
 
+    // Builds an OrderResponse together with its line items, so no Orders entity
+    // (and therefore no nested Customer password) is ever serialized.
+    private OrderResponse toOrderResponse(Orders order) {
+        List<OrderDetails> details = orderDetailsRepository.findAllByOrders(order).orElse(List.of());
+        return OrderResponse.from(order, details);
+    }
+
     @GetMapping("/")
     public String Present(){
         return "Welcome your shop";
@@ -28,18 +37,18 @@ public class OrderController {
     // Orderdetails: GetMapping, PostMapping, PutMapping, DeleteMapping.
 
     @GetMapping("/orderdetails")
-    public List<OrderDetails> getallOrderDetails(){
-        return orderDetailsRepository.findAll();
+    public List<OrderDetailResponse> getallOrderDetails(){
+        return orderDetailsRepository.findAll().stream().map(OrderDetailResponse::from).toList();
     }
 
     @PostMapping("/orderdetail/{orderId}/{productId}") // this is work! Tested all ok!
-    public OrderDetails saveOrderDetails(@RequestBody OrderDetails orderDetails, @PathVariable String orderId, @PathVariable String productId){
-        return orderDetailsService.createOrderDetails(orderDetails,orderId,productId);
+    public OrderDetailResponse saveOrderDetails(@RequestBody OrderDetails orderDetails, @PathVariable String orderId, @PathVariable String productId){
+        return OrderDetailResponse.from(orderDetailsService.createOrderDetails(orderDetails,orderId,productId));
     }
 
     @GetMapping("/orderdetail/{id}")
-    public OrderDetails getOrderDetails(@PathVariable String id) {
-        return orderDetailsRepository.findById(id).orElseThrow();
+    public OrderDetailResponse getOrderDetails(@PathVariable String id) {
+        return OrderDetailResponse.from(orderDetailsRepository.findById(id).orElseThrow());
     }
 
     @PutMapping("/orderdetail/{id}") // This is works, tested all ok!
@@ -55,43 +64,43 @@ public class OrderController {
     // Order: GetMapping, PostMapping, PutMapping, DeleteMapping.
 
     @GetMapping("/order")
-    public List<Orders> getAllOrders(){
-        return ordersRepository.findAll();
+    public List<OrderResponse> getAllOrders(){
+        return ordersRepository.findAll().stream().map(this::toOrderResponse).toList();
     }
 
     @GetMapping("/order/{id}")
-    public Orders getOrder(@PathVariable String id) {
-        return ordersRepository.findById(id).orElseThrow();
+    public OrderResponse getOrder(@PathVariable String id) {
+        return toOrderResponse(ordersRepository.findById(id).orElseThrow());
     }
 
     @PostMapping("/order/{CustomerId}") // This is works, all is ok!
-    public Orders saveOrders(@RequestBody Orders orders, @PathVariable String CustomerId){
-        return orderService.createSaveOrders(orders,CustomerId);
+    public OrderResponse saveOrders(@RequestBody Orders orders, @PathVariable String CustomerId){
+        return toOrderResponse(orderService.createSaveOrders(orders,CustomerId));
     }
 
     @PutMapping("/order/{id}") // This is works, all is ok!
-    public Orders updateOrder(@RequestBody Orders orders, @PathVariable String id){
-        return orderService.createUpdateOrder(orders,id);
+    public OrderResponse updateOrder(@RequestBody Orders orders, @PathVariable String id){
+        return toOrderResponse(orderService.createUpdateOrder(orders,id));
     }
 
     @PutMapping("/order/{id}/process") // Test this all ok!.
-    public Orders updateOrderStatusProcess(@PathVariable String id){
-        return orderService.updateOrderStatusProcess(id);
+    public OrderResponse updateOrderStatusProcess(@PathVariable String id){
+        return toOrderResponse(orderService.updateOrderStatusProcess(id));
     }
 
     @PutMapping("/order/{id}/ship") // Test this all ok!.
-    public Orders updateOrderStatusShip(@PathVariable String id){
-        return orderService.updateOrderStatusShip(id);
+    public OrderResponse updateOrderStatusShip(@PathVariable String id){
+        return toOrderResponse(orderService.updateOrderStatusShip(id));
     }
 
     @PutMapping("/order/{id}/close") // Test this all ok!.
-    public Orders updateOrderStatusClose(@PathVariable String id){
-        return orderService.updateOrderStatusClose(id);
+    public OrderResponse updateOrderStatusClose(@PathVariable String id){
+        return toOrderResponse(orderService.updateOrderStatusClose(id));
     }
 
     @PutMapping("/order/{id}/pending") // Test this all ok!.
-    public Orders updateOrderStatusPending(@PathVariable String id){
-        return orderService.updateOrderStatusPending(id);
+    public OrderResponse updateOrderStatusPending(@PathVariable String id){
+        return toOrderResponse(orderService.updateOrderStatusPending(id));
     }
 
     @DeleteMapping("/order/{id}") // this is problem!
