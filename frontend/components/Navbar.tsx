@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useCart } from "@/lib/cart";
+import { useLanguage } from "@/lib/language";
 
 const CATEGORIES = [
   { glyph: "⌚", label: "Watches" },
@@ -20,6 +21,7 @@ function catHref(label: string) {
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const { count } = useCart();
+  const { lang, setLang } = useLanguage();
 
   return (
     <nav className="nav" onMouseLeave={() => setOpen(false)}>
@@ -45,6 +47,21 @@ export default function Navbar() {
         </div>
 
         <div className="nav-right">
+          <div className="lang-switch" role="group" aria-label="Language">
+            <button
+              className={`lang-opt ${lang === "en" ? "active" : ""}`}
+              onClick={() => setLang("en")}
+            >
+              EN
+            </button>
+            <button
+              className={`lang-opt ${lang === "ka" ? "active" : ""}`}
+              onClick={() => setLang("ka")}
+            >
+              ქარ
+            </button>
+          </div>
+          <span className="nav-divider" />
           <Link href="/orders" className="icon-btn">
             📦 Orders
           </Link>

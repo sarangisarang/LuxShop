@@ -943,3 +943,28 @@ a {
   font-size: 1.15rem;
   color: var(--navy-ink);
 }
+
+/* ---- Language switcher (navbar) ---- */
+.lang-switch {
+  display: inline-flex;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.lang-opt {
+  border: none;
+  background: transparent;
+  color: #dbe0ee;
+  padding: 5px 12px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.18s ease, color 0.18s ease;
+}
+.lang-opt:hover {
+  color: #fff;
+}
+.lang-opt.active {
+  background: var(--gold);
+  color: #241a06;
+}

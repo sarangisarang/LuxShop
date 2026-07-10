@@ -1,32 +1,62 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import type { Product } from "@/lib/api";
+import { api, type Product } from "@/lib/api";
+import { useLanguage } from "@/lib/language";
 import ProductCard from "./ProductCard";
 
-export default function Catalog({ products }: { products: Product[] }) {
+export default function Catalog({ products: initial }: { products: Product[] }) {
   const params = useSearchParams();
-  const initial = params.get("cat") ?? "All";
+  const { lang } = useLanguage();
 
-  const categories = [
-    "All",
-    ...Array.from(new Set(products.map((p) => p.category?.name).filter(Boolean) as string[])),
+  const [products, setProducts] = useState<Product[]>(initial);
+  const firstRun = useRef(true);
+
+  // Re-fetch in the selected language (skip the first run — server already provided it).
+  useEffect(() => {
+    if (firstRun.current) {
+      firstRun.current = false;
+      return;
+    }
+    let cancelled = false;
+    api
+      .products(0, 100)
+      .then((p) => {
+        if (!cancelled) setProducts(p);
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, [lang]);
+
+  // Filter by category id (stable across languages); chip labels use the localized name.
+  const catList = [
+    { id: "all", name: "All" },
+    ...Array.from(
+      new Map(
+        products.filter((p) => p.category).map((p) => [p.category!.id, p.category!.name])
+      ).entries()
+    ).map(([id, name]) => ({ id, name })),
   ];
-  const [active, setActive] = useState(categories.includes(initial) ? initial : "All");
 
-  const shown = active === "All" ? products : products.filter((p) => p.category?.name === active);
+  const initialActive =
+    catList.find((c) => c.name === params.get("cat"))?.id ?? "all";
+  const [active, setActive] = useState(initialActive);
+
+  const shown = active === "all" ? products : products.filter((p) => p.category?.id === active);
 
   return (
     <>
       <div className="filter-bar">
-        {categories.map((c) => (
+        {catList.map((c) => (
           <button
-            key={c}
-            className={`chip ${c === active ? "active" : ""}`}
-            onClick={() => setActive(c)}
+            key={c.id}
+            className={`chip ${c.id === active ? "active" : ""}`}
+            onClick={() => setActive(c.id)}
           >
-            {c}
+            {c.name}
           </button>
         ))}
       </div>
