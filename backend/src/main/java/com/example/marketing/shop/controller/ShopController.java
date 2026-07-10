@@ -7,6 +7,7 @@ import com.example.marketing.shop.dto.CustomerResponse;
 import com.example.marketing.shop.dto.ProductResponse;
 import com.example.marketing.shop.repository.*;
 import com.example.marketing.shop.service.*;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -55,12 +56,12 @@ public class ShopController{
 
     @PostMapping("/category")
     @ResponseStatus(HttpStatus.CREATED)
-    public CategoryResponse saveCategory(@RequestBody Category category){
+    public CategoryResponse saveCategory(@Valid @RequestBody Category category){
         return CategoryResponse.from(categoryService.createCategory(category));
     }
 
     @PutMapping("/category/{id}") // This is tested, works.
-    public CategoryResponse updateCategory(@RequestBody Category category, @PathVariable String id){
+    public CategoryResponse updateCategory(@Valid @RequestBody Category category, @PathVariable String id){
         return CategoryResponse.from(categoryService.CreateCategoryOrder(category,id));
     }
 
@@ -84,13 +85,13 @@ public class ShopController{
     }
 
     @PostMapping("/customer")
-    public CustomerResponse saveCustomer(@RequestBody Customer customer){
+    public CustomerResponse saveCustomer(@Valid @RequestBody Customer customer){
         customer.setId(UUID.randomUUID().toString());
         return CustomerResponse.from(customerRepository.save(customer));
     }
 
     @PutMapping("/customer/{id}")
-    public CustomerResponse updateCustomer(@RequestBody Customer customer, @PathVariable String id){
+    public CustomerResponse updateCustomer(@Valid @RequestBody Customer customer, @PathVariable String id){
         return CustomerResponse.from(customerService.CreateCustomerOrder(customer,id));
     }
 
@@ -129,12 +130,12 @@ public class ShopController{
 
     @PostMapping("/product/{categoryId}")
     @ResponseStatus(HttpStatus.CREATED)
-    public ProductResponse saveProduct(@RequestBody Product product, @PathVariable String categoryId){
+    public ProductResponse saveProduct(@Valid @RequestBody Product product, @PathVariable String categoryId){
         return ProductResponse.from(productService.createSaveProduct(product,categoryId));
     }
 
     @PutMapping("/product/{id}")
-    public ProductResponse updateProucts(@RequestBody Product product, @PathVariable String id){
+    public ProductResponse updateProucts(@Valid @RequestBody Product product, @PathVariable String id){
         return ProductResponse.from(productService.createUpdateProucts(product,id));
     }
 

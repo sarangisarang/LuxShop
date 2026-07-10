@@ -3,6 +3,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
@@ -19,6 +20,7 @@ import org.hibernate.annotations.Where;
 public class Category {
     @Id
     private String id;
+    @NotBlank(message = "Category name is required")
     private String name;
     private String image;
     private String description;

@@ -5,6 +5,7 @@ import com.example.marketing.shop.dto.OrderDetailResponse;
 import com.example.marketing.shop.dto.OrderResponse;
 import com.example.marketing.shop.repository.OrderDetailsRepository;
 import com.example.marketing.shop.repository.OrdersRepository;
+import jakarta.validation.Valid;
 import com.example.marketing.shop.service.OrderDetailsService;
 import com.example.marketing.shop.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +43,7 @@ public class OrderController {
     }
 
     @PostMapping("/orderdetail/{orderId}/{productId}") // this is work! Tested all ok!
-    public OrderDetailResponse saveOrderDetails(@RequestBody OrderDetails orderDetails, @PathVariable String orderId, @PathVariable String productId){
+    public OrderDetailResponse saveOrderDetails(@Valid @RequestBody OrderDetails orderDetails, @PathVariable String orderId, @PathVariable String productId){
         return OrderDetailResponse.from(orderDetailsService.createOrderDetails(orderDetails,orderId,productId));
     }
 
@@ -52,7 +53,7 @@ public class OrderController {
     }
 
     @PutMapping("/orderdetail/{id}") // This is works, tested all ok!
-    public OrderDetailResponse updateOrderdetails(@RequestBody OrderDetails orderDetails, @PathVariable String id){
+    public OrderDetailResponse updateOrderdetails(@Valid @RequestBody OrderDetails orderDetails, @PathVariable String id){
         return OrderDetailResponse.from(orderDetailsService.UpdeteOrderDetails(orderDetails, id));
     }
 
