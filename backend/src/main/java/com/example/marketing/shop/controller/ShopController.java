@@ -2,7 +2,9 @@ package com.example.marketing.shop.controller;
 import com.example.marketing.shop.domain.Category;
 import com.example.marketing.shop.domain.Customer;
 import com.example.marketing.shop.domain.Product;
+import com.example.marketing.shop.dto.CategoryResponse;
 import com.example.marketing.shop.dto.CustomerResponse;
+import com.example.marketing.shop.dto.ProductResponse;
 import com.example.marketing.shop.repository.*;
 import com.example.marketing.shop.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,24 +44,24 @@ public class ShopController{
     //GetMapping, PostMapping, PutMapping, DeleteMapping.
 
     @GetMapping("/categories")
-    public Page<Category> getAllCategories(@PageableDefault(size = 12, sort = "id") Pageable pageable){
-        return categoryRepository.findAll(pageable);
+    public Page<CategoryResponse> getAllCategories(@PageableDefault(size = 12, sort = "id") Pageable pageable){
+        return categoryRepository.findAll(pageable).map(CategoryResponse::from);
     }
 
     @GetMapping("/category/{id}")
-    public Category getCategory(@PathVariable String id) {
-        return categoryRepository.findById(id).orElseThrow();
+    public CategoryResponse getCategory(@PathVariable String id) {
+        return CategoryResponse.from(categoryRepository.findById(id).orElseThrow());
     }
 
     @PostMapping("/category")
     @ResponseStatus(HttpStatus.CREATED)
-    public Category saveCategory(@RequestBody Category category){
-        return categoryService.createCategory(category);
+    public CategoryResponse saveCategory(@RequestBody Category category){
+        return CategoryResponse.from(categoryService.createCategory(category));
     }
 
     @PutMapping("/category/{id}") // This is tested, works.
-    public Category updateCategory(@RequestBody Category category, @PathVariable String id){
-        return categoryService.CreateCategoryOrder(category,id);
+    public CategoryResponse updateCategory(@RequestBody Category category, @PathVariable String id){
+        return CategoryResponse.from(categoryService.CreateCategoryOrder(category,id));
     }
 
     @DeleteMapping("/category/{id}")
@@ -101,18 +103,18 @@ public class ShopController{
     // GetMapping, PostMapping, PutMapping, DeleteMapping.
 
     @GetMapping("/products")
-    public Page<Product> getAllProduct(@PageableDefault(size = 12, sort = "id") Pageable pageable){
-        return productRepository.findAll(pageable);
+    public Page<ProductResponse> getAllProduct(@PageableDefault(size = 12, sort = "id") Pageable pageable){
+        return productRepository.findAll(pageable).map(ProductResponse::from);
     }
 
     @GetMapping("/products/{categoryName}")
-    public List<Product> getProductsByCategory(@PathVariable String categoryName){
-        return productRepository.findAllByCategoryName(categoryName);
+    public List<ProductResponse> getProductsByCategory(@PathVariable String categoryName){
+        return productRepository.findAllByCategoryName(categoryName).stream().map(ProductResponse::from).toList();
     }
 
     @GetMapping("/products/{categoryName}/ordered")
-    public List<Product> getOrderedProductsByCategory(@PathVariable String categoryName) {
-        return productService.creategetOrderedProductsByCategory(categoryName);
+    public List<ProductResponse> getOrderedProductsByCategory(@PathVariable String categoryName) {
+        return productService.creategetOrderedProductsByCategory(categoryName).stream().map(ProductResponse::from).toList();
     }
 
     @GetMapping("/products/TotalPrice")
@@ -121,19 +123,19 @@ public class ShopController{
     }
 
     @GetMapping("/product/{id}")
-    public Product getProduct(@PathVariable String id) {
-        return productRepository.findById(id).orElseThrow();
+    public ProductResponse getProduct(@PathVariable String id) {
+        return ProductResponse.from(productRepository.findById(id).orElseThrow());
     }
 
     @PostMapping("/product/{categoryId}")
     @ResponseStatus(HttpStatus.CREATED)
-    public Product saveProduct(@RequestBody Product product, @PathVariable String categoryId){
-        return productService.createSaveProduct(product,categoryId);
+    public ProductResponse saveProduct(@RequestBody Product product, @PathVariable String categoryId){
+        return ProductResponse.from(productService.createSaveProduct(product,categoryId));
     }
 
     @PutMapping("/product/{id}")
-    public Product updateProucts(@RequestBody Product product, @PathVariable String id){
-        return productService.createUpdateProucts(product,id);
+    public ProductResponse updateProucts(@RequestBody Product product, @PathVariable String id){
+        return ProductResponse.from(productService.createUpdateProucts(product,id));
     }
 
     @DeleteMapping("/product/{id}")
