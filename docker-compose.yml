@@ -17,5 +17,33 @@ services:
       timeout: 5s
       retries: 5
 
+  backend:
+    build: ./backend
+    container_name: luxshop-backend
+    environment:
+      SPRING_PROFILES_ACTIVE: postgres
+      POSTGRES_URL: jdbc:postgresql://postgres:5432/luxshop
+      POSTGRES_USER: luxshop
+      POSTGRES_PASSWORD: luxshop
+      # Override in production with a real secret.
+      JWT_SECRET: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        # The Next.js server proxies /api/* to the backend container (baked at build time).
+        BACKEND_URL: http://backend:8080
+    container_name: luxshop-frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+
 volumes:
   luxshop_pgdata:
