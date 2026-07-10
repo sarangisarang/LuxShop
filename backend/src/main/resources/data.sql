@@ -33,3 +33,23 @@ insert into Order_Details(id,Qty,Price,Subtotal,Order_id,Product_id) values ('3'
 -- Admin login (BCrypt hash of "1234")
 insert into Service_User (id, username, password) values ('1', 'admin', '$2a$10$Req4kJOSY0g8pYA352BrUeWzkn6PGJh4jZs3t0W6SR0ujFIt16Y7K');
 insert into User_Role (id, role_name, user_id) values ('1', 'ROLE_ADMIN', '1');
+
+-- Georgian (ka) translations for the catalog
+insert into Category_Translation(category_id,language_code,name,description) values ('1','ka','საათები','ლუქს და მემკვიდრეობითი საათები');
+insert into Category_Translation(category_id,language_code,name,description) values ('2','ka','ლეპტოპები','მაღალწარმადობის ნოუთბუქები');
+insert into Category_Translation(category_id,language_code,name,description) values ('3','ka','სმარტფონები','ფლაგმანი მობილური მოწყობილობები');
+insert into Category_Translation(category_id,language_code,name,description) values ('4','ka','აუდიო','ყურსასმენები და დინამიკები');
+insert into Category_Translation(category_id,language_code,name,description) values ('5','ka','აქსესუარები','ჩანთები, კალმები და სათვალეები');
+
+insert into Product_Translation(product_id,language_code,name,description) values ('1','ka','როლექს საბმარინერი','41მმ ლუქს სამყურო საათი კერამიკის რგოლით');
+insert into Product_Translation(product_id,language_code,name,description) values ('2','ka','ომეგა სპიდმასტერი','ლეგენდარული ქრონოგრაფი, პირველი საათი მთვარეზე');
+insert into Product_Translation(product_id,language_code,name,description) values ('3','ka','მაკბუკ პრო 16"','36GB მეხსიერება, 1TB SSD, Liquid Retina XDR ეკრანი');
+insert into Product_Translation(product_id,language_code,name,description) values ('4','ka','დელ XPS 15 OLED','15.6" OLED, Core i9, 32GB RAM, RTX 4070');
+insert into Product_Translation(product_id,language_code,name,description) values ('5','ka','აიფონ 15 პრო მაქსი','ტიტანის კორპუსი, A17 Pro ჩიპი, 512GB');
+insert into Product_Translation(product_id,language_code,name,description) values ('6','ka','სამსუნგ გალაქსი S24 ულტრა','200MP კამერა, S Pen, 6.8" AMOLED');
+insert into Product_Translation(product_id,language_code,name,description) values ('7','ka','სონი WH-1000XM5','ხმის ჩამხშობი უსადენო ყურსასმენები');
+insert into Product_Translation(product_id,language_code,name,description) values ('8','ka','ეფლ ეარპოდს პრო 2','აქტიური ხმის ჩახშობა, USB-C');
+insert into Product_Translation(product_id,language_code,name,description) values ('9','ka','ბოუზ საუნდლინკ ფლექსი','წყალგამძლე პორტატული დინამიკი');
+insert into Product_Translation(product_id,language_code,name,description) values ('10','ka','ლუი ვიტონ კიპოლ 55','მონოგრამის სამოგზაურო ჩანთა');
+insert into Product_Translation(product_id,language_code,name,description) values ('11','ka','მონბლან მაისტერშტიუკი 149','ოქროსფერი მელნის კალამი');
+insert into Product_Translation(product_id,language_code,name,description) values ('12','ka','რეი-ბენ ავიატორი','კლასიკური ოქროსჩარჩოიანი სათვალე');

@@ -22,8 +22,9 @@ public record ProductResponse(
     public static ProductResponse from(Product product) {
         return new ProductResponse(
                 product.getId(),
-                product.getProductName(),
-                product.getProductDesc(),
+                // Localized to the request locale (Accept-Language), falling back to the base text.
+                product.getLocalizedName(),
+                product.getLocalizedDescription(),
                 product.getImageUrl(),
                 product.getPrice(),
                 product.getStock(),
