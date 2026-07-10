@@ -45,6 +45,15 @@ class ProductSortMockMvcTest {
     }
 
     @Test
+    void ratingDescending_startsWithTopRated() throws Exception {
+        // Seed reviews: product 3 has a single 5-star (avg 5.0), the highest.
+        mockMvc.perform(get("/shop/products").param("sort", "rating_desc").param("size", "50"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content[0].productName").value("MacBook Pro 16\" M3 Max"))
+                .andExpect(jsonPath("$.content[0].averageRating").value(5.0));
+    }
+
+    @Test
     void sortComposesWithSearch() throws Exception {
         // "pro" matches several products; price_desc should put the priciest first.
         mockMvc.perform(get("/shop/products").param("q", "pro").param("sort", "price_desc").param("size", "50"))
