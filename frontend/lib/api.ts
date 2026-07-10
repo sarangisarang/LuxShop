@@ -37,6 +37,60 @@ async function get<T>(path: string): Promise<T> {
   return res.json() as Promise<T>;
 }
 
+async function post<T>(path: string, body: unknown): Promise<T> {
+  const res = await fetch(`${BASE}${path}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) {
+    let message = `Request failed (${res.status})`;
+    try {
+      const j = await res.json();
+      message = j.message || message;
+    } catch {
+      /* non-JSON error */
+    }
+    throw new Error(message);
+  }
+  return res.json() as Promise<T>;
+}
+
+export interface CheckoutItem {
+  productId: string;
+  qty: number;
+}
+export interface CheckoutPayload {
+  firstName: string;
+  lastName: string;
+  email: string;
+  address: string;
+  city: string;
+  items: CheckoutItem[];
+}
+export interface OrderResult {
+  id: string;
+  orderNo: number;
+  orderTotal: number;
+  orderStatus: string;
+}
+
+export interface OrderLine {
+  productName: string;
+  qty: number;
+  price: number;
+  subtotal: number;
+}
+export interface Order {
+  id: string;
+  orderNo: number;
+  orderDate: string;
+  orderTotal: number;
+  orderStatus: string;
+  isDelivered: boolean;
+  details: OrderLine[];
+}
+
 export const api = {
   // The catalog list endpoints are paginated; expose both the raw page (for
   // pagination UI) and a convenience unwrap to the content array.
@@ -48,6 +102,8 @@ export const api = {
   categoriesPage: (page = 0, size = 100) =>
     get<Page<Category>>(`/shop/categories?page=${page}&size=${size}`),
   categories: () => api.categoriesPage().then((p) => p.content),
+  checkout: (payload: CheckoutPayload) => post<OrderResult>("/shop/checkout", payload),
+  ordersByEmail: (email: string) => get<Order[]>(`/shop/orders?email=${encodeURIComponent(email)}`),
 };
 
 // Demo catalog used when the backend is unreachable, so the storefront still

@@ -1,9 +1,12 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import type { Product } from "@/lib/api";
 import { formatGel, GEL } from "@/lib/format";
+import { useCart } from "@/lib/cart";
 
 function stockPill(stock: number) {
   if (stock <= 0) return { cls: "stock-out", text: "Out of stock" };
@@ -25,6 +28,21 @@ function specs(product: Product): [string, string][] {
 
 export default function ProductDetail({ product }: { product: Product }) {
   const pill = stockPill(Number(product.stock));
+  const { add } = useCart();
+  const router = useRouter();
+  const [added, setAdded] = useState(false);
+  const outOfStock = Number(product.stock) <= 0;
+
+  function addToCart() {
+    add(product);
+    setAdded(true);
+    setTimeout(() => setAdded(false), 1800);
+  }
+
+  function buyNow() {
+    add(product);
+    router.push("/cart");
+  }
 
   return (
     <div className="container">
@@ -78,10 +96,10 @@ export default function ProductDetail({ product }: { product: Product }) {
           <p style={{ color: "var(--muted)", marginBottom: 24 }}>{product.productDesc}</p>
 
           <div className="cta-row">
-            <button className="btn btn-gold" disabled={Number(product.stock) <= 0}>
-              Add to Cart
+            <button className="btn btn-gold" disabled={outOfStock} onClick={addToCart}>
+              {added ? "✓ Added" : "Add to Cart"}
             </button>
-            <button className="btn btn-navy" disabled={Number(product.stock) <= 0}>
+            <button className="btn btn-navy" disabled={outOfStock} onClick={buyNow}>
               Buy Now
             </button>
           </div>

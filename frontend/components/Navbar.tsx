@@ -3,16 +3,23 @@
 import Link from "next/link";
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import { useCart } from "@/lib/cart";
 
 const CATEGORIES = [
-  { glyph: "💻", label: "Computers", href: "/#catalog" },
-  { glyph: "📱", label: "Phones", href: "/#catalog" },
-  { glyph: "📚", label: "Books", href: "/#catalog" },
-  { glyph: "🎧", label: "Electronics", href: "/#catalog" },
+  { glyph: "⌚", label: "Watches" },
+  { glyph: "💻", label: "Laptops" },
+  { glyph: "📱", label: "Smartphones" },
+  { glyph: "🎧", label: "Audio" },
+  { glyph: "👜", label: "Accessories" },
 ];
+
+function catHref(label: string) {
+  return `/?cat=${encodeURIComponent(label)}#catalog`;
+}
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
+  const { count } = useCart();
 
   return (
     <nav className="nav" onMouseLeave={() => setOpen(false)}>
@@ -38,11 +45,13 @@ export default function Navbar() {
         </div>
 
         <div className="nav-right">
-          <span className="icon-btn">👤 Account</span>
+          <Link href="/orders" className="icon-btn">
+            📦 Orders
+          </Link>
           <span className="nav-divider" />
-          <span className="icon-btn">
-            🛍 Cart <span className="cart-badge">0</span>
-          </span>
+          <Link href="/cart" className="icon-btn">
+            🛍 Cart <span className="cart-badge">{count}</span>
+          </Link>
         </div>
       </div>
 
@@ -61,7 +70,7 @@ export default function Navbar() {
               {CATEGORIES.map((c, i) => (
                 <motion.a
                   key={c.label}
-                  href={c.href}
+                  href={catHref(c.label)}
                   className="dropdown-item"
                   initial={{ opacity: 0, y: 8 }}
                   animate={{ opacity: 1, y: 0 }}

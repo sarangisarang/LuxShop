@@ -69,6 +69,13 @@ public class OrderController {
         return ordersRepository.findAll().stream().map(this::toOrderResponse).toList();
     }
 
+    // Guest order history: a customer's own orders looked up by email.
+    @GetMapping("/orders")
+    public List<OrderResponse> getOrdersByEmail(@RequestParam String email){
+        return ordersRepository.findByCustomer_EmailOrderByOrderDateDesc(email)
+                .stream().map(this::toOrderResponse).toList();
+    }
+
     @GetMapping("/order/{id}")
     public OrderResponse getOrder(@PathVariable String id) {
         return toOrderResponse(ordersRepository.findById(id).orElseThrow());

@@ -8,4 +8,7 @@ import java.util.Optional;
 @Repository
 public interface CustomerRepository extends JpaRepository<Customer,String>{
     Optional<Customer> findByEmail(String email);
+
+    // Email is not unique in the seed data, so take the first match for guest checkout.
+    Optional<Customer> findFirstByEmail(String email);
 }
