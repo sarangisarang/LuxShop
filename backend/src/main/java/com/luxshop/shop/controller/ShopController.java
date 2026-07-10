@@ -10,11 +10,13 @@ import com.luxshop.shop.service.*;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import java.math.BigDecimal;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
@@ -106,12 +108,42 @@ public class ShopController{
     @GetMapping("/products")
     public Page<ProductResponse> getAllProduct(
             @RequestParam(required = false) String q,
+            @RequestParam(required = false) String sort,
             @PageableDefault(size = 12, sort = "id") Pageable pageable){
-        Page<Product> page = (q == null || q.isBlank())
-                ? productRepository.findAll(pageable)
-                : productRepository.findByProductNameContainingIgnoreCaseOrProductDescContainingIgnoreCase(
-                        q.trim(), q.trim(), pageable);
-        return page.map(ProductResponse::from);
+        Comparator<Product> order = comparatorFor(sort);
+        boolean searching = q != null && !q.isBlank();
+        if (order == null) {
+            // No (known) sort key: let the database sort and page as usual.
+            Page<Product> page = searching
+                    ? productRepository.findByProductNameContainingIgnoreCaseOrProductDescContainingIgnoreCase(
+                            q.trim(), q.trim(), pageable)
+                    : productRepository.findAll(pageable);
+            return page.map(ProductResponse::from);
+        }
+        // Sorted: order the full matching set in memory, then return the requested
+        // page. Sorting by the Price/Stock fields via Spring Sort is unreliable
+        // because their capitalised names don't survive PropertyPath resolution,
+        // so we compare on the Java getters instead.
+        List<Product> all = new java.util.ArrayList<>(searching
+                ? productRepository.findByProductNameContainingIgnoreCaseOrProductDescContainingIgnoreCase(
+                        q.trim(), q.trim(), Pageable.unpaged()).getContent()
+                : productRepository.findAll());
+        all.sort(order);
+        int start = (int) Math.min(pageable.getOffset(), all.size());
+        int end = Math.min(start + pageable.getPageSize(), all.size());
+        List<ProductResponse> content = all.subList(start, end).stream().map(ProductResponse::from).toList();
+        return new PageImpl<>(content, pageable, all.size());
+    }
+
+    // Comparator for a friendly sort key, or null when none/unknown is supplied.
+    private Comparator<Product> comparatorFor(String sort) {
+        return switch (sort == null ? "" : sort) {
+            case "price_asc"  -> Comparator.comparing(Product::getPrice);
+            case "price_desc" -> Comparator.comparing(Product::getPrice).reversed();
+            case "name_asc"   -> Comparator.comparing(Product::getProductName, String.CASE_INSENSITIVE_ORDER);
+            case "name_desc"  -> Comparator.comparing(Product::getProductName, String.CASE_INSENSITIVE_ORDER).reversed();
+            default            -> null;
+        };
     }
 
     @GetMapping("/products/{categoryName}")

@@ -16,6 +16,8 @@ export default function Catalog({ products: initial }: { products: Product[] }) 
   // Search box value; the committed query (debounced) is what actually hits the API.
   const [query, setQuery] = useState(params.get("q") ?? "");
   const [committed, setCommitted] = useState(params.get("q") ?? "");
+  // "" = default order; other values map to the backend's friendly sort keys.
+  const [sort, setSort] = useState("");
   const firstRun = useRef(true);
 
   // Debounce typing so we query the backend at most once the user pauses.
@@ -24,17 +26,17 @@ export default function Catalog({ products: initial }: { products: Product[] }) 
     return () => clearTimeout(id);
   }, [query]);
 
-  // Re-fetch when the language or the committed search term changes. The first
-  // run is skipped only when there is no initial query (server already provided
-  // the unfiltered list).
+  // Re-fetch when the language, committed search term, or sort changes. The first
+  // run is skipped only when there is nothing to change (no query, default sort);
+  // the server already provided the unfiltered list.
   useEffect(() => {
     if (firstRun.current) {
       firstRun.current = false;
-      if (!committed.trim()) return;
+      if (!committed.trim() && !sort) return;
     }
     let cancelled = false;
     api
-      .products(0, 100, committed)
+      .products(0, 100, committed, sort || undefined)
       .then((p) => {
         if (!cancelled) setProducts(p);
       })
@@ -42,7 +44,7 @@ export default function Catalog({ products: initial }: { products: Product[] }) 
     return () => {
       cancelled = true;
     };
-  }, [lang, committed]);
+  }, [lang, committed, sort]);
 
   // Filter by category id (stable across languages); chip labels use the localized name.
   const catList = [
@@ -90,6 +92,18 @@ export default function Catalog({ products: initial }: { products: Product[] }) 
             {c.name}
           </button>
         ))}
+        <select
+          className="sort-select"
+          value={sort}
+          onChange={(e) => setSort(e.target.value)}
+          aria-label={t("sort.label")}
+        >
+          <option value="">{t("sort.default")}</option>
+          <option value="price_asc">{t("sort.priceAsc")}</option>
+          <option value="price_desc">{t("sort.priceDesc")}</option>
+          <option value="name_asc">{t("sort.nameAsc")}</option>
+          <option value="name_desc">{t("sort.nameDesc")}</option>
+        </select>
       </div>
 
       <div className="grid">
