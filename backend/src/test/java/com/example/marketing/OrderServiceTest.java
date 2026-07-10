@@ -6,11 +6,16 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 import java.math.BigInteger;
 import java.time.LocalDate;
 import static org.junit.jupiter.api.Assertions.*;
 
+// Roll back each test so the shared in-memory DB stays clean between methods.
+// This matters now that entities are soft-deleted (rows persist), so reused ids
+// would otherwise collide across tests.
 @SpringBootTest
+@Transactional
 public class OrderServiceTest {
     @Autowired
     private OrdersRepository ordersRepository;
