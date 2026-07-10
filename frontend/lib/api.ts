@@ -19,6 +19,17 @@ export interface Category {
   image?: string;
 }
 
+// Spring Data Page envelope: the list endpoints return this instead of a bare array.
+export interface Page<T> {
+  content: T[];
+  totalElements: number;
+  totalPages: number;
+  number: number; // zero-based current page index
+  size: number;
+  first: boolean;
+  last: boolean;
+}
+
 async function get<T>(path: string): Promise<T> {
   const res = await fetch(`${BASE}${path}`, { cache: "no-store" });
   if (!res.ok) throw new Error(`API ${path} failed: ${res.status}`);
@@ -26,9 +37,16 @@ async function get<T>(path: string): Promise<T> {
 }
 
 export const api = {
-  products: () => get<Product[]>("/shop/products"),
+  // The catalog list endpoints are paginated; expose both the raw page (for
+  // pagination UI) and a convenience unwrap to the content array.
+  productsPage: (page = 0, size = 12) =>
+    get<Page<Product>>(`/shop/products?page=${page}&size=${size}`),
+  products: (page = 0, size = 12) =>
+    api.productsPage(page, size).then((p) => p.content),
   product: (id: string) => get<Product>(`/shop/product/${encodeURIComponent(id)}`),
-  categories: () => get<Category[]>("/shop/categories"),
+  categoriesPage: (page = 0, size = 100) =>
+    get<Page<Category>>(`/shop/categories?page=${page}&size=${size}`),
+  categories: () => api.categoriesPage().then((p) => p.content),
 };
 
 // Demo catalog used when the backend is unreachable, so the storefront still

@@ -6,6 +6,9 @@ import com.example.marketing.shop.dto.CustomerResponse;
 import com.example.marketing.shop.repository.*;
 import com.example.marketing.shop.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import java.math.BigInteger;
@@ -39,8 +42,8 @@ public class ShopController{
     //GetMapping, PostMapping, PutMapping, DeleteMapping.
 
     @GetMapping("/categories")
-    public List<Category> getAllCategories(){
-        return categoryRepository.findAll();
+    public Page<Category> getAllCategories(@PageableDefault(size = 12, sort = "id") Pageable pageable){
+        return categoryRepository.findAll(pageable);
     }
 
     @GetMapping("/category/{id}")
@@ -98,8 +101,8 @@ public class ShopController{
     // GetMapping, PostMapping, PutMapping, DeleteMapping.
 
     @GetMapping("/products")
-    public List<Product> getAllProduct(){
-        return productRepository.findAll();
+    public Page<Product> getAllProduct(@PageableDefault(size = 12, sort = "id") Pageable pageable){
+        return productRepository.findAll(pageable);
     }
 
     @GetMapping("/products/{categoryName}")
