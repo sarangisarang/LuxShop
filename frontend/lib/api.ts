@@ -1,7 +1,14 @@
 // Thin API client for the LuxShop backend.
 // In dev, calls go through Next's /api rewrite to the Spring Boot server.
 
-const BASE = process.env.NEXT_PUBLIC_API_BASE ?? "/api";
+// In the browser, calls go through Next's /api rewrite. On the server (SSR /
+// server components) a relative path can't be fetched, so hit the backend
+// directly via BACKEND_URL (falls back to localhost for `npm run dev`).
+const BASE =
+  process.env.NEXT_PUBLIC_API_BASE ??
+  (typeof window === "undefined"
+    ? process.env.BACKEND_URL ?? "http://localhost:8080"
+    : "/api");
 
 export interface Product {
   id: string;
