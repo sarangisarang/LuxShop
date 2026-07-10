@@ -5,6 +5,7 @@ import com.example.marketing.shop.domain.Product;
 import com.example.marketing.shop.repository.*;
 import com.example.marketing.shop.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import java.math.BigInteger;
 import java.util.List;
@@ -47,9 +48,9 @@ public class ShopController{
     }
 
     @PostMapping("/category")
-    public Category saveOrders(@RequestBody Category category){
-        category.setId(UUID.randomUUID().toString());
-        return categoryRepository.save(category);
+    @ResponseStatus(HttpStatus.CREATED)
+    public Category saveCategory(@RequestBody Category category){
+        return categoryService.createCategory(category);
     }
 
     @PutMapping("/category/{id}") // This is tested, works.
@@ -58,6 +59,7 @@ public class ShopController{
     }
 
     @DeleteMapping("/category/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteCategory(@PathVariable String id) {
         categoryService.deleteCategory(id);
     }
@@ -119,6 +121,7 @@ public class ShopController{
     }
 
     @PostMapping("/product/{categoryId}")
+    @ResponseStatus(HttpStatus.CREATED)
     public Product saveProduct(@RequestBody Product product, @PathVariable String categoryId){
         return productService.createSaveProduct(product,categoryId);
     }
@@ -129,6 +132,7 @@ public class ShopController{
     }
 
     @DeleteMapping("/product/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteProducts(@PathVariable String id) {
         productService.deleteProduct(id);
     }
