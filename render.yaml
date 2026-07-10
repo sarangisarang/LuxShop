@@ -1,0 +1,65 @@
+# Render blueprint — one-click deploy of the full LuxShop stack.
+# Open the repo on https://render.com → "New" → "Blueprint", pick this file.
+# It provisions a managed Postgres and two Docker web services (backend + frontend).
+#
+# Fully automatic EXCEPT one field: after the first deploy, set the frontend's
+# BACKEND_URL to the backend service's public URL (see DEPLOY.md). Next.js bakes
+# the /api proxy target at build time, so that value must be a real https URL.
+
+databases:
+  - name: luxshop-db
+    plan: free
+    databaseName: luxshop
+    user: luxshop
+
+services:
+  # --- Spring Boot API (Docker) ---
+  - type: web
+    name: luxshop-backend
+    runtime: docker
+    plan: free
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    healthCheckPath: /shop/products
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: postgres
+      # DB wiring: Render exposes host/port/name/credentials separately, which the
+      # postgres profile assembles into the JDBC URL (see application-postgres.properties).
+      - key: POSTGRES_HOST
+        fromDatabase:
+          name: luxshop-db
+          property: host
+      - key: POSTGRES_PORT
+        fromDatabase:
+          name: luxshop-db
+          property: port
+      - key: POSTGRES_DB
+        fromDatabase:
+          name: luxshop-db
+          property: database
+      - key: POSTGRES_USER
+        fromDatabase:
+          name: luxshop-db
+          property: user
+      - key: POSTGRES_PASSWORD
+        fromDatabase:
+          name: luxshop-db
+          property: password
+      # A fresh signing secret is generated once and kept stable across deploys.
+      - key: JWT_SECRET
+        generateValue: true
+
+  # --- Next.js storefront (Docker) ---
+  - type: web
+    name: luxshop-frontend
+    runtime: docker
+    plan: free
+    dockerfilePath: ./frontend/Dockerfile
+    dockerContext: ./frontend
+    envVars:
+      # Set this to the backend service's public URL after the first deploy, then
+      # trigger a frontend redeploy so the /api proxy target is baked in. Example:
+      #   https://luxshop-backend.onrender.com
+      - key: BACKEND_URL
+        sync: false
