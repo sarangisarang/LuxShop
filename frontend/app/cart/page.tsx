@@ -5,9 +5,11 @@ import Link from "next/link";
 import { useCart } from "@/lib/cart";
 import { api } from "@/lib/api";
 import { formatGel, GEL } from "@/lib/format";
+import { useTranslation } from "@/lib/dictionary";
 
 export default function CartPage() {
   const { items, total, count, setQty, remove, clear } = useCart();
+  const { t } = useTranslation();
   const [placed, setPlaced] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
@@ -94,7 +96,7 @@ export default function CartPage() {
       <main className="container section">
         <div className="order-confirm">
           <div className="confirm-ico">✓</div>
-          <h1 className="serif">Thank you, {form.firstName || "customer"}!</h1>
+          <h1 className="serif">{t("confirm.thanks", { name: form.firstName || "customer" })}</h1>
           <p>
             Your order <strong>{placed}</strong> has been placed and paid with the card ending in{" "}
             <strong>•• {form.cardNumber.replace(/\D/g, "").slice(-4)}</strong>. A confirmation was sent
@@ -102,10 +104,10 @@ export default function CartPage() {
           </p>
           <div className="cta-row">
             <Link href="/orders" className="btn btn-navy">
-              View my orders
+              {t("confirm.viewOrders")}
             </Link>
             <Link href="/" className="btn btn-gold">
-              Continue shopping
+              {t("confirm.continue")}
             </Link>
           </div>
         </div>
@@ -116,17 +118,17 @@ export default function CartPage() {
   return (
     <main className="container section">
       <h1 className="section-title" style={{ marginBottom: 6 }}>
-        Your Cart
+        {t("cart.title")}
       </h1>
       <div className="section-sub" style={{ marginBottom: 24 }}>
-        {count} item{count === 1 ? "" : "s"}
+        {t("cart.items", { n: count })}
       </div>
 
       {items.length === 0 ? (
         <div className="empty-cart">
-          <p>Your cart is empty.</p>
+          <p>{t("cart.empty")}</p>
           <Link href="/#catalog" className="btn btn-gold">
-            Browse products
+            {t("cart.browse")}
           </Link>
         </div>
       ) : (
@@ -169,55 +171,55 @@ export default function CartPage() {
               </div>
             ))}
             <button className="link-btn" onClick={clear}>
-              Clear cart
+              {t("cart.clear")}
             </button>
           </div>
 
           <form className="checkout" onSubmit={checkout} noValidate>
-            <h3 className="serif">Checkout</h3>
+            <h3 className="serif">{t("checkout.title")}</h3>
             <div className="checkout-row">
               <label>
-                First name
+                {t("checkout.firstName")}
                 <input value={form.firstName} onChange={(e) => update("firstName", e.target.value)} />
                 {errors.firstName && <em>{errors.firstName}</em>}
               </label>
               <label>
-                Last name
+                {t("checkout.lastName")}
                 <input value={form.lastName} onChange={(e) => update("lastName", e.target.value)} />
                 {errors.lastName && <em>{errors.lastName}</em>}
               </label>
             </div>
             <label>
-              Email
+              {t("checkout.email")}
               <input value={form.email} onChange={(e) => update("email", e.target.value)} />
               {errors.email && <em>{errors.email}</em>}
             </label>
             <label>
-              Address
+              {t("checkout.address")}
               <input value={form.address} onChange={(e) => update("address", e.target.value)} />
               {errors.address && <em>{errors.address}</em>}
             </label>
             <label>
-              City
+              {t("checkout.city")}
               <input value={form.city} onChange={(e) => update("city", e.target.value)} />
               {errors.city && <em>{errors.city}</em>}
             </label>
 
             <div className="pay-head">
-              <span>💳 Payment</span>
+              <span>💳 {t("checkout.payment")}</span>
               <span className="pay-brands">VISA · MC · AMEX</span>
             </div>
             <label>
-              Cardholder name
+              {t("checkout.cardName")}
               <input
                 value={form.cardName}
                 onChange={(e) => update("cardName", e.target.value)}
-                placeholder="Name on card"
+                placeholder={t("checkout.cardNamePlaceholder")}
               />
               {errors.cardName && <em>{errors.cardName}</em>}
             </label>
             <label>
-              Card number
+              {t("checkout.cardNumber")}
               <input
                 value={form.cardNumber}
                 onChange={(e) => updateCard("cardNumber", e.target.value)}
@@ -229,7 +231,7 @@ export default function CartPage() {
             </label>
             <div className="checkout-row">
               <label>
-                Expiry
+                {t("checkout.expiry")}
                 <input
                   value={form.expiry}
                   onChange={(e) => updateCard("expiry", e.target.value)}
@@ -240,7 +242,7 @@ export default function CartPage() {
                 {errors.expiry && <em>{errors.expiry}</em>}
               </label>
               <label>
-                CVC
+                {t("checkout.cvc")}
                 <input
                   value={form.cvc}
                   onChange={(e) => updateCard("cvc", e.target.value)}
@@ -253,14 +255,14 @@ export default function CartPage() {
             </div>
 
             <div className="checkout-total">
-              <span>Total</span>
+              <span>{t("checkout.total")}</span>
               <strong>
                 {formatGel(total)} <span className="gel">{GEL}</span>
               </strong>
             </div>
             {submitError && <div className="checkout-error">{submitError}</div>}
             <button type="submit" className="btn btn-gold checkout-btn" disabled={submitting}>
-              {submitting ? "Placing order…" : "Place order"}
+              {submitting ? t("checkout.placing") : t("checkout.place")}
             </button>
           </form>
         </div>

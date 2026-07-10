@@ -5,6 +5,7 @@ import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useCart } from "@/lib/cart";
 import { useLanguage, LANGUAGES, type Lang } from "@/lib/language";
+import { useTranslation } from "@/lib/dictionary";
 
 const CATEGORIES = [
   { glyph: "⌚", label: "Watches" },
@@ -22,6 +23,7 @@ export default function Navbar() {
   const [open, setOpen] = useState(false);
   const { count } = useCart();
   const { lang, setLang } = useLanguage();
+  const { t } = useTranslation();
 
   return (
     <nav className="nav" onMouseLeave={() => setOpen(false)}>
@@ -32,17 +34,17 @@ export default function Navbar() {
 
         <div className="nav-links">
           <Link href="/" className="nav-link">
-            Home
+            {t("nav.home")}
           </Link>
           <span
             className={`nav-link ${open ? "open" : ""}`}
             onMouseEnter={() => setOpen(true)}
             onClick={() => setOpen((v) => !v)}
           >
-            Shop <span className="chev">▾</span>
+            {t("nav.shop")} <span className="chev">▾</span>
           </span>
           <Link href="/#catalog" className="nav-link">
-            Menu
+            {t("nav.menu")}
           </Link>
         </div>
 
@@ -61,7 +63,7 @@ export default function Navbar() {
           </select>
           <span className="nav-divider" />
           <Link href="/orders" className="icon-btn">
-            📦 Orders
+            📦 {t("nav.orders")}
           </Link>
           <span className="nav-divider" />
           <Link href="/cart" className="icon-btn">

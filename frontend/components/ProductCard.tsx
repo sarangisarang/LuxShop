@@ -5,17 +5,19 @@ import { motion } from "framer-motion";
 import type { Product } from "@/lib/api";
 import { formatGel, GEL } from "@/lib/format";
 import { useCart } from "@/lib/cart";
-
-function stockPill(stock: number) {
-  if (stock <= 0) return { cls: "stock-out", text: "Out of stock" };
-  if (stock <= 3) return { cls: "stock-low", text: `Only ${stock} left!` };
-  return { cls: "stock-ok", text: `${stock} in stock` };
-}
+import { useTranslation } from "@/lib/dictionary";
 
 export default function ProductCard({ product, index = 0 }: { product: Product; index?: number }) {
-  const pill = stockPill(Number(product.stock));
   const { add } = useCart();
-  const outOfStock = Number(product.stock) <= 0;
+  const { t } = useTranslation();
+  const stock = Number(product.stock);
+  const outOfStock = stock <= 0;
+  const pill =
+    stock <= 0
+      ? { cls: "stock-out", text: t("stock.out") }
+      : stock <= 3
+        ? { cls: "stock-low", text: t("stock.only", { n: stock }) }
+        : { cls: "stock-ok", text: t("stock.in", { n: stock }) };
 
   return (
     <motion.div
@@ -60,7 +62,7 @@ export default function ProductCard({ product, index = 0 }: { product: Product; 
               add(product);
             }}
           >
-            {outOfStock ? "Out of stock" : "🛍 Add to cart"}
+            {outOfStock ? t("stock.out") : t("card.add")}
           </button>
         </div>
       </Link>
