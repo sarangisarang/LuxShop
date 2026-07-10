@@ -843,3 +843,12 @@ a {
   letter-spacing: 0.06em;
   color: var(--muted);
 }
+
+/* Let checkout inputs shrink inside the two-column rows (grid min-width fix) */
+.checkout label {
+  min-width: 0;
+}
+.checkout input {
+  width: 100%;
+  min-width: 0;
+}
