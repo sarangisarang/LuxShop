@@ -5,11 +5,14 @@ import { motion } from "framer-motion";
 import type { Product } from "@/lib/api";
 import { formatGel, GEL } from "@/lib/format";
 import { useCart } from "@/lib/cart";
+import { useWishlist } from "@/lib/wishlist";
 import { useTranslation } from "@/lib/dictionary";
 
 export default function ProductCard({ product, index = 0 }: { product: Product; index?: number }) {
   const { add } = useCart();
+  const { has, toggle } = useWishlist();
   const { t } = useTranslation();
+  const wished = has(product.id);
   const stock = Number(product.stock);
   const outOfStock = stock <= 0;
   const pill =
@@ -29,6 +32,19 @@ export default function ProductCard({ product, index = 0 }: { product: Product; 
     >
       <Link href={`/product/${product.id}`} className="pcard" style={{ display: "flex" }}>
         <div className="pcard-media">
+          <button
+            className={`fav-btn ${wished ? "on" : ""}`}
+            aria-pressed={wished}
+            aria-label={wished ? t("card.unfav") : t("card.fav")}
+            title={wished ? t("card.unfav") : t("card.fav")}
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              toggle(product.id);
+            }}
+          >
+            {wished ? "♥" : "♡"}
+          </button>
           {product.imageUrl ? (
             <img
               className="pcard-img"

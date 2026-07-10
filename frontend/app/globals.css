@@ -1039,3 +1039,39 @@ a {
   padding: 8px 16px;
   font-size: 0.86rem;
 }
+
+/* Wishlist heart toggle on product cards */
+.fav-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 2;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.85);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+  box-shadow: 0 4px 14px rgba(22, 41, 77, 0.16);
+  color: #b9412f;
+  font-size: 1.15rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+.fav-btn:hover {
+  transform: scale(1.12);
+  background: #fff;
+}
+.fav-btn.on {
+  color: #e0245e;
+}
+.link-gold {
+  color: var(--gold);
+  font-weight: 600;
+  text-decoration: underline;
+}
