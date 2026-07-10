@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useCart } from "@/lib/cart";
+import { useWishlist } from "@/lib/wishlist";
 import { useLanguage, LANGUAGES, type Lang } from "@/lib/language";
 import { useTranslation } from "@/lib/dictionary";
 
@@ -22,6 +23,7 @@ function catHref(label: string) {
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const { count } = useCart();
+  const { count: favCount } = useWishlist();
   const { lang, setLang } = useLanguage();
   const { t } = useTranslation();
 
@@ -64,6 +66,10 @@ export default function Navbar() {
               </option>
             ))}
           </select>
+          <span className="nav-divider" />
+          <Link href="/wishlist" className="icon-btn">
+            ♥ {t("nav.wishlist")} <span className="cart-badge">{favCount}</span>
+          </Link>
           <span className="nav-divider" />
           <Link href="/orders" className="icon-btn">
             📦 {t("nav.orders")}
