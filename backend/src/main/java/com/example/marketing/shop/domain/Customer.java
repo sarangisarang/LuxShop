@@ -1,6 +1,7 @@
 package com.example.marketing.shop.domain;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.Email;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,6 +11,7 @@ import lombok.Setter;
 public class Customer {
     @Id
     private String id;
+    @Email(message = "Invalid email format")
     private String email;
     private String firstName;
     private String lastName;
