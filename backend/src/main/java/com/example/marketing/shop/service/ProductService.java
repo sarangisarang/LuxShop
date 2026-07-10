@@ -70,7 +70,7 @@ public class ProductService {
         if (product.getPrice() == null || product.getPrice().signum() < 0) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Price must be zero or positive");
         }
-        if (product.getStock() == null || product.getStock().signum() < 0) {
+        if (product.getStock() == null || product.getStock() < 0) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Stock must be zero or positive");
         }
     }

@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
-import java.math.BigInteger;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -42,7 +42,7 @@ public class OrderServiceTest {
     public void given_order_with_all_when_has_status_progress_cannot_delete(){
         Orders orders = new Orders();
         orders.setOrderNo(20);
-        orders.setOrderTotal(50);
+        orders.setOrderTotal(BigDecimal.valueOf(50));
         orders.setShippingDate(LocalDate.now());
         orders.setOrderDate(LocalDate.now());
         orders.setIsDelivered("tashipare");
@@ -58,7 +58,7 @@ public class OrderServiceTest {
     public void given_order_with_all_when_has_status_pending_can_delete() throws Exception {
         Orders orders = new Orders();
         orders.setOrderNo(20);
-        orders.setOrderTotal(50);
+        orders.setOrderTotal(BigDecimal.valueOf(50));
         orders.setShippingDate(LocalDate.now());
         orders.setOrderDate(LocalDate.now());
         orders.setIsDelivered("tashipare");
@@ -77,17 +77,17 @@ public class OrderServiceTest {
         product.setProductDesc("Apfel");
         product.setProductName("Iphone");
         product.setId("2345");
-        product.setPrice(BigInteger.valueOf(1234));
+        product.setPrice(BigDecimal.valueOf(1234));
         product.setImage1("204.29.207.217".getBytes());
         product.setImage2("204.29.207.218".getBytes());
         product.setImage3("204.29.207.219".getBytes());
-        product.setStock(BigInteger.valueOf(2000));
+        product.setStock(2000);
         productRepository.save(product);
         OrderDetails orderDetails = new OrderDetails();
         orderDetails.setId("1234");
         orderDetails.setProduct(product);
-        orderDetails.setSubtotal(200);
-        orderDetails.setPrice(200);
+        orderDetails.setSubtotal(BigDecimal.valueOf(200));
+        orderDetails.setPrice(BigDecimal.valueOf(200));
         orderDetails.setQty(200);
         orderDetailsRepository.save(orderDetails);
         Product newproducts = productRepository.findById("2345").orElseThrow();
@@ -101,11 +101,11 @@ public class OrderServiceTest {
         product.setProductDesc("Apfel");
         product.setProductName("Iphone");
         product.setId("2345");
-        product.setPrice(BigInteger.valueOf(1234));
+        product.setPrice(BigDecimal.valueOf(1234));
         product.setImage1("204.29.207.217".getBytes());
         product.setImage2("204.29.207.218".getBytes());
         product.setImage3("204.29.207.219".getBytes());
-        product.setStock(BigInteger.valueOf(2000));
+        product.setStock(2000);
         Assertions.assertNotNull(product);
         Exception exception = assertThrows(Exception.class,()-> productService.deleteProduct(product.getId()));
         assertNotEquals(exception.getMessage(),"order not finde");
@@ -122,11 +122,11 @@ public class OrderServiceTest {
         product.setProductDesc("Apfel");
         product.setProductName("Iphone");
         product.setId("2345");
-        product.setPrice(BigInteger.valueOf(1234));
+        product.setPrice(BigDecimal.valueOf(1234));
         product.setImage1("204.29.207.217".getBytes());
         product.setImage2("204.29.207.218".getBytes());
         product.setImage3("204.29.207.219".getBytes());
-        product.setStock(BigInteger.valueOf(2000));
+        product.setStock(2000);
         product.setCategory(category);
         productRepository.save(product);
         Exception exception = assertThrows(Exception.class,()->categoryService.deleteCategory(category.getId()));
@@ -174,10 +174,10 @@ public class OrderServiceTest {
     @Test
     public void given_orderdetails_with_all(){
         OrderDetails orderDetails = new OrderDetails();
-        orderDetails.setSubtotal(123);
+        orderDetails.setSubtotal(BigDecimal.valueOf(123));
         orderDetails.setQty(3);
         orderDetails.setId("789");
-        orderDetails.setPrice(3000);
+        orderDetails.setPrice(BigDecimal.valueOf(3000));
         orderDetailsRepository.save(orderDetails);
         OrderDetails neworderdetails = orderDetailsRepository.findById("789").orElseThrow();
         Assertions.assertNotNull(neworderdetails);

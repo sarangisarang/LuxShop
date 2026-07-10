@@ -11,7 +11,7 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
-import java.math.BigInteger;
+import java.math.BigDecimal;
 
 
 @Entity
@@ -29,8 +29,8 @@ public class Product {
     private byte[] image1;
     private byte[] image2;
     private byte[] image3;
-    private BigInteger Price;
-    private BigInteger Stock;
+    private BigDecimal Price;
+    private Integer Stock;
     @ManyToOne
     @JoinColumn(name="Category_id")
     private Category category;

@@ -11,7 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import java.math.BigInteger;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
@@ -116,7 +116,7 @@ public class ShopController{
     }
 
     @GetMapping("/products/TotalPrice")
-    public BigInteger getTotalOrderedAmount() {
+    public BigDecimal getTotalOrderedAmount() {
         return orderService.getTotalOrderedAmount();
     }
 

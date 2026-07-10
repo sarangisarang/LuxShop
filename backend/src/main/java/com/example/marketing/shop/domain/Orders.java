@@ -8,6 +8,7 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
@@ -21,7 +22,7 @@ public class Orders {
     private String id;
     private Integer orderNo;
     private LocalDate orderDate;
-    private Integer orderTotal;
+    private BigDecimal orderTotal;
     private LocalDate shippingDate;
     private String isDelivered;
 
