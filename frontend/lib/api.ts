@@ -199,6 +199,12 @@ export interface ProductInput {
   stock: number;
 }
 
+export interface CategoryInput {
+  name: string;
+  description: string;
+  image: string;
+}
+
 export const admin = {
   orders: (token: string) => authGet<Order[]>("/shop/order", token),
   setStatus: (token: string, id: string, action: OrderAction) =>
@@ -209,6 +215,12 @@ export const admin = {
     authJson<Product>("PUT", `/shop/product/${encodeURIComponent(id)}`, token, payload),
   deleteProduct: (token: string, id: string) =>
     authJson<void>("DELETE", `/shop/product/${encodeURIComponent(id)}`, token),
+  createCategory: (token: string, payload: CategoryInput) =>
+    authJson<Category>("POST", "/shop/category", token, payload),
+  updateCategory: (token: string, id: string, payload: CategoryInput) =>
+    authJson<Category>("PUT", `/shop/category/${encodeURIComponent(id)}`, token, payload),
+  deleteCategory: (token: string, id: string) =>
+    authJson<void>("DELETE", `/shop/category/${encodeURIComponent(id)}`, token),
 };
 
 // Demo catalog used when the backend is unreachable, so the storefront still

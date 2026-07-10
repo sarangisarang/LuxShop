@@ -5,6 +5,7 @@ import { admin, type Order, type OrderAction } from "@/lib/api";
 import { useAuth } from "@/lib/auth";
 import { formatGel, GEL } from "@/lib/format";
 import ProductsAdmin from "./ProductsAdmin";
+import CategoriesAdmin from "./CategoriesAdmin";
 
 const STATUS_CLS: Record<string, string> = {
   Pending: "stock-low",
@@ -37,7 +38,8 @@ export default function AdminPage() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState<string | null>(null);
-  const [tab, setTab] = useState<"orders" | "products">("orders");
+  const [tab, setTab] = useState<"orders" | "products" | "categories">("orders");
+  const TITLES = { orders: "Order management", products: "Product management", categories: "Category management" };
 
   const loadOrders = useCallback(async (tk: string) => {
     try {
@@ -110,7 +112,7 @@ export default function AdminPage() {
       <div className="admin-head">
         <div>
           <h1 className="section-title" style={{ marginBottom: 4 }}>
-            {tab === "orders" ? "Order management" : "Product management"}
+            {TITLES[tab]}
           </h1>
           <div className="section-sub">Signed in as {username}</div>
         </div>
@@ -132,10 +134,18 @@ export default function AdminPage() {
         >
           Products
         </button>
+        <button
+          className={`chip ${tab === "categories" ? "active" : ""}`}
+          onClick={() => setTab("categories")}
+        >
+          Categories
+        </button>
       </div>
 
       {tab === "products" ? (
         <ProductsAdmin token={token} />
+      ) : tab === "categories" ? (
+        <CategoriesAdmin token={token} />
       ) : (
         <>
           {error && <div className="checkout-error" style={{ marginBottom: 16 }}>{error}</div>}
