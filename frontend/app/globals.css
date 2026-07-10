@@ -990,3 +990,24 @@ a {
   color: #1f2a44;
   background: #fff;
 }
+
+/* ---- Admin ---- */
+.admin-login {
+  max-width: 420px;
+}
+.admin-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 22px;
+}
+.admin-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.admin-btn {
+  padding: 8px 16px;
+  font-size: 0.86rem;
+}
