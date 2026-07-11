@@ -1,6 +1,7 @@
 services:
   postgres:
-    image: postgres:16-alpine
+    # pgvector image = Postgres 16 + the `vector` extension, for RAG embeddings.
+    image: pgvector/pgvector:pg16
     container_name: luxshop-postgres
     environment:
       POSTGRES_DB: luxshop
