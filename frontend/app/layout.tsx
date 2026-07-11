@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
+import AssistantWidget from "@/components/AssistantWidget";
 import { CartProvider } from "@/lib/cart";
 import { WishlistProvider } from "@/lib/wishlist";
 import { LanguageProvider } from "@/lib/language";
@@ -21,6 +22,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <CartProvider>
                 <Navbar />
                 {children}
+                <AssistantWidget />
                 <footer className="footer">
                   <div className="container">© 2026 LuxShop · Next.js + Spring Boot · Status: OK (JWT Auth)</div>
                 </footer>
