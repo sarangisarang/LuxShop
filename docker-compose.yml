@@ -28,6 +28,9 @@ services:
       POSTGRES_PASSWORD: luxshop
       # Override in production with a real secret.
       JWT_SECRET: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
+      # Gemini API key for Spring AI embeddings, read from the gitignored .env
+      # (falls back to a dummy so the app still boots without a key).
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-dummy-key}
     ports:
       - "8080:8080"
     depends_on:
