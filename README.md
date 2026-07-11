@@ -1,23 +1,53 @@
-# 🛍️ LuxShop
+# 🛍️ LuxShop — Full-Stack E-commerce Platform
 
-Full-stack e-commerce demo — a **Next.js** storefront on top of a **Spring Boot** REST API.
+სრულფასოვანი, **Production-Ready** full-stack e-commerce პლატფორმა: **Next.js** storefront,
+**Spring Boot 3** REST API და **PostgreSQL**. აგებულია JWT-ავტორიზაციით, i18n-ით (18 ენა),
+Docker-ით და GitHub Actions CI/CD-ით.
 
-This repository is the clean, complete rebuild of the earlier `marketing` prototype: same
-business domain (catalog, orders, customers), but with a real frontend and the backend
-business-logic bugs tracked and fixed one by one.
+![PRs](https://img.shields.io/badge/PRs-17_merged-c9a24b)
+![Tests](https://img.shields.io/badge/tests-70%2B-16294d)
+![i18n](https://img.shields.io/badge/i18n-18_languages-1e3a6b)
+![CI](https://img.shields.io/badge/CI-green-2e7d32)
 
-📋 Work is planned on the project board: **[LuxShop – Project #5](https://github.com/users/sarangisarang/projects/5/views/2)**
+📋 დაგეგმვა: **[LuxShop – Project #5](https://github.com/users/sarangisarang/projects/5/views/2)**
 
 ---
 
-## 🏗️ Architecture
+## 🚀 მთავარი ფიჩერები
+
+### 🛒 Storefront (Next.js)
+* **სრული Shopping Flow:** Cart (localStorage), Checkout ფორმა ბარათის ველებით, რეალური Order-ები DB-ში და Order history.
+* **ჭკვიანი კატალოგი:** პროდუქტების ძებნა, სორტირება (ფასი / სახელი / **რეიტინგი**), category ფილტრი.
+* **მომხმარებლის გამოცდილება:** Wishlist (❤), **Reviews & Ratings** სისტემა (ვარსკვლავები პროდუქტ ბარათებზეც).
+* **მარკეტინგი:** ფასდაკლების კუპონები (`WELCOME10` / `LUX20`), "თქვენ შესაძლოა მოგეწონოთ" (Related products), Homepage **Top-Rated** showcase.
+
+### 🛡️ Backend & Admin (Spring Boot 3)
+* **უსაფრთხოება:** **JWT**-ზე დაფუძნებული ავტორიზაცია, BCrypt, Bean Validation, DTO ფენა (0% Entity/Password გაჟონვა).
+* **ბიზნეს ლოგიკა:** მკაცრი Order Lifecycle (**State Machine**), Soft Delete მექანიზმი, Pagination + Sorting.
+* **მონაცემთა ბაზა:** PostgreSQL + **Flyway** მიგრაციები (V1–V12), მონაცემთა ტიპების უნიფიკაცია (`BigDecimal` ფულისთვის).
+* **მრავალენოვნება:** i18n მხარდაჭერა (**18 ენა**) locale-aware კატალოგით (`Accept-Language`).
+* **ხარისხი:** **70+** ავტომატიზებული ტესტი (MockMvc + Unit).
+* **ადმინ პანელი:** სრული CRUD (Categories · Products · Orders), Dashboard ანალიტიკით (Revenue / Orders / Top-rated).
+
+---
+
+## 🛠 ტექნოლოგიური სტეკი
+
+* **Frontend:** Next.js 14 (App Router), React, TypeScript, custom CSS design system
+* **Backend:** Java 17 / 21, Spring Boot 3, Spring Security (JWT)
+* **Database:** PostgreSQL + Flyway  ·  H2 (tests)
+* **DevOps:** Docker, Docker Compose, GitHub Actions (CI/CD), Render blueprint
+
+---
+
+## 🏗️ არქიტექტურა
 
 ```
 luxshop/
-├─ backend/     Spring Boot 3 + JPA/Hibernate + Spring Security (Java 17, Maven)
-│              REST API under /shop, in-memory H2 (seeded from data.sql)
+├─ backend/     Spring Boot 3 + JPA/Hibernate + Spring Security (Java 17/21, Maven)
+│              REST API under /shop · Postgres (Flyway) in prod, H2 (data.sql) in tests
 └─ frontend/    Next.js 14 (App Router, TypeScript) storefront
-               proxies /api/* → backend during dev
+               proxies /api/* → backend; server-side rendering hits the backend directly
 ```
 
 ### Domain model
@@ -25,76 +55,49 @@ luxshop/
 ```
 Category ──1:N──> Product ──N:1──┐
                                  ├──> OrderDetails ──N:1──> Orders ──N:1──> Customer
-                                 │
+Product ──1:N──> Review          │   Product ──1:N──> ProductTranslation
+                                 │   Coupon (checkout discount)
 Order lifecycle: Pending → Processing → shipped → closed
-Auth: ServiceUser ──1:N──> UserRole   (HTTP Basic)
+Auth: ServiceUser ──1:N──> UserRole   (JWT Bearer)
 ```
 
 ---
 
-## 🚀 Getting started
+## 🏃 როგორ გავუშვათ პროექტი (Quickstart)
 
-### Backend (port 8080)
+პროექტი კონფიგურირებულია Docker Compose-ით — ერთი ბრძანება აწყობს Postgres-ს, backend-სა და frontend-ს.
 
-**Default (in-memory H2)** — no database to install; used by tests/CI too:
+1. დარწმუნდი, რომ დაინსტალირებული გაქვს **Docker** და **Docker Compose**.
+2. გადადი პროექტის ფესვში და გაუშვი:
 
-```bash
-cd backend
-./mvnw spring-boot:run
-```
+   ```bash
+   docker compose up -d --build
+   ```
 
-- H2 console: http://localhost:8080/h2-console (JDBC URL `jdbc:h2:mem:testdb`, user `sa`)
-- Swagger UI: http://localhost:8080/swagger-ui.html
-- Seeded admin: `admin` / `1234`
+3. სერვისები ხელმისაწვდომია:
 
-**PostgreSQL (dev/prod)** — schema & seed are managed by Flyway migrations
-(`backend/src/main/resources/db/migration`):
-
-```bash
-docker compose up -d          # starts Postgres on host port 55432
-cd backend
-./mvnw spring-boot:run -Dspring-boot.run.profiles=postgres
-```
-
-Override the connection with `POSTGRES_URL` / `POSTGRES_USER` / `POSTGRES_PASSWORD`
-(defaults: `jdbc:postgresql://127.0.0.1:55432/luxshop`, `luxshop` / `luxshop`).
-Under this profile Hibernate runs in `validate` mode — Flyway owns the schema.
-
-### Frontend (port 3000)
-
-```bash
-cd frontend
-npm install
-npm run dev
-```
-
-Open http://localhost:3000. API calls to `/api/*` are proxied to the backend
-(`BACKEND_URL`, default `http://localhost:8080`).
+   | სერვისი | მისამართი |
+   | --- | --- |
+   | 🛍️ Storefront | `http://localhost:3000` |
+   | 🔐 Admin Panel | `http://localhost:3000/admin` · `admin` / `1234` |
+   | 🔌 API Backend | `http://localhost:8080` |
 
 ---
 
-## 🗺️ Roadmap (see Project #5)
+## ✅ ტესტირება
 
-The backend started as a student prototype with several known issues. They are tracked
-as cards and fixed incrementally:
+```bash
+cd backend && ./mvnw test
+```
 
-- 🔐 **Auth & Security** — working BCrypt login, customer registration, security rules
-- 📦 **Catalog** — Category/Product CRUD, stock management, safe deletes
-- 🛒 **Orders** — status state-machine, correct totals, order updates
-- 🧾 **Order details / cart** — subtotal & stock calculation, typed quantities
-- 📊 **Reporting** — correct order-amount aggregation
-- 🧹 **Quality** — consistent money types, seed fixes, typo cleanup, global error handling
-
-Frontend features (catalog browsing, cart, checkout, account, admin) are built on top of
-each stabilized backend capability.
+70+ ტესტი (MockMvc + Unit) — auth, checkout, order state-machine, i18n, search / sort / reviews / coupons — ყოველ PR-ზე CI-ში 🟢.
 
 ---
 
-## 🧰 Tech stack
+## 🗺️ Roadmap & Next Steps
 
-| Layer     | Tech |
-|-----------|------|
-| Frontend  | Next.js 14, React 18, TypeScript |
-| Backend   | Spring Boot 3.0, Spring Data JPA, Spring Security, Lombok |
-| Database  | H2 (dev) · PostgreSQL-ready |
-| Build     | Maven (backend), npm (frontend) |
+* 🤖 **RAG / AI ასისტენტი** — pgvector + Spring AI ინტეგრაცია ჭკვიანი სემანტიკური ძებნისა და კონსულტანტისთვის.
+* ☁️ **Cloud Deployment** — რეალურ **Render** ღრუბელში ატვირთვა (blueprint მზადაა: [`render.yaml`](render.yaml)).
+* 📧 **Order confirmation email** (SMTP / logging fallback).
+* 👤 **Customer accounts** — storefront login / "My account".
+* 🖼️ **Product image gallery** — რამდენიმე სურათი პროდუქტზე.
