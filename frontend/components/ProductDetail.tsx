@@ -21,7 +21,15 @@ export default function ProductDetail({ product: initial }: { product: Product }
   const [product, setProduct] = useState(initial);
   const [related, setRelated] = useState<Product[]>([]);
   const [added, setAdded] = useState(false);
+  const [activeImg, setActiveImg] = useState(0);
   const firstRun = useRef(true);
+
+  // Gallery: the product's images, or just its primary image as a fallback.
+  const gallery = (product.images && product.images.length > 0
+    ? product.images
+    : [product.imageUrl]
+  ).filter((u): u is string => !!u);
+  const mainImage = gallery[Math.min(activeImg, gallery.length - 1)];
 
   // Remember this product for the "Recently viewed" row.
   useEffect(() => {
@@ -104,15 +112,38 @@ export default function ProductDetail({ product: initial }: { product: Product }
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.6, ease: "easeOut" }}
         >
-          {product.imageUrl ? (
-            <img
-              className="gallery-img"
-              src={product.imageUrl}
-              alt={product.productName}
-              onError={(e) => {
-                (e.currentTarget as HTMLImageElement).src = `https://picsum.photos/seed/${product.id}/900/700`;
-              }}
-            />
+          {mainImage ? (
+            <>
+              <img
+                className="gallery-img"
+                src={mainImage}
+                alt={product.productName}
+                onError={(e) => {
+                  (e.currentTarget as HTMLImageElement).src = `https://picsum.photos/seed/${product.id}/900/700`;
+                }}
+              />
+              {gallery.length > 1 && (
+                <div className="gallery-thumbs">
+                  {gallery.map((url, i) => (
+                    <button
+                      key={i}
+                      type="button"
+                      className={`gallery-thumb ${i === activeImg ? "active" : ""}`}
+                      onClick={() => setActiveImg(i)}
+                      aria-label={`Image ${i + 1}`}
+                    >
+                      <img
+                        src={url}
+                        alt=""
+                        onError={(e) => {
+                          (e.currentTarget as HTMLImageElement).src = `https://picsum.photos/seed/${product.id}-${i}/160/160`;
+                        }}
+                      />
+                    </button>
+                  ))}
+                </div>
+              )}
+            </>
           ) : (
             <motion.span
               className="disc"

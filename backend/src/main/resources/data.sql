@@ -342,3 +342,29 @@ insert into product_review(product_id,author_name,rating,comment,created_at) val
 insert into coupon(code,percent_off,active) values ('WELCOME10',10,true);
 insert into coupon(code,percent_off,active) values ('LUX20',20,true);
 insert into coupon(code,percent_off,active) values ('EXPIRED',15,false);
+
+-- Gallery images (schema auto-created by Hibernate for H2).
+insert into product_image(product_id,url,position) values ('1','https://picsum.photos/seed/lux-1-a/800/600',1);
+insert into product_image(product_id,url,position) values ('1','https://picsum.photos/seed/lux-1-b/800/600',2);
+insert into product_image(product_id,url,position) values ('2','https://picsum.photos/seed/lux-2-a/800/600',1);
+insert into product_image(product_id,url,position) values ('2','https://picsum.photos/seed/lux-2-b/800/600',2);
+insert into product_image(product_id,url,position) values ('3','https://picsum.photos/seed/lux-3-a/800/600',1);
+insert into product_image(product_id,url,position) values ('3','https://picsum.photos/seed/lux-3-b/800/600',2);
+insert into product_image(product_id,url,position) values ('4','https://picsum.photos/seed/lux-4-a/800/600',1);
+insert into product_image(product_id,url,position) values ('4','https://picsum.photos/seed/lux-4-b/800/600',2);
+insert into product_image(product_id,url,position) values ('5','https://picsum.photos/seed/lux-5-a/800/600',1);
+insert into product_image(product_id,url,position) values ('5','https://picsum.photos/seed/lux-5-b/800/600',2);
+insert into product_image(product_id,url,position) values ('6','https://picsum.photos/seed/lux-6-a/800/600',1);
+insert into product_image(product_id,url,position) values ('6','https://picsum.photos/seed/lux-6-b/800/600',2);
+insert into product_image(product_id,url,position) values ('7','https://picsum.photos/seed/lux-7-a/800/600',1);
+insert into product_image(product_id,url,position) values ('7','https://picsum.photos/seed/lux-7-b/800/600',2);
+insert into product_image(product_id,url,position) values ('8','https://picsum.photos/seed/lux-8-a/800/600',1);
+insert into product_image(product_id,url,position) values ('8','https://picsum.photos/seed/lux-8-b/800/600',2);
+insert into product_image(product_id,url,position) values ('9','https://picsum.photos/seed/lux-9-a/800/600',1);
+insert into product_image(product_id,url,position) values ('9','https://picsum.photos/seed/lux-9-b/800/600',2);
+insert into product_image(product_id,url,position) values ('10','https://picsum.photos/seed/lux-10-a/800/600',1);
+insert into product_image(product_id,url,position) values ('10','https://picsum.photos/seed/lux-10-b/800/600',2);
+insert into product_image(product_id,url,position) values ('11','https://picsum.photos/seed/lux-11-a/800/600',1);
+insert into product_image(product_id,url,position) values ('11','https://picsum.photos/seed/lux-11-b/800/600',2);
+insert into product_image(product_id,url,position) values ('12','https://picsum.photos/seed/lux-12-a/800/600',1);
+insert into product_image(product_id,url,position) values ('12','https://picsum.photos/seed/lux-12-b/800/600',2);
