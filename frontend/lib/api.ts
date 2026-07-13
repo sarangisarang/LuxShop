@@ -91,6 +91,10 @@ export interface Coupon {
   code: string;
   percentOff: number;
 }
+export interface AssistantReply {
+  answer: string;
+  products: Product[];
+}
 export interface OrderResult {
   id: string;
   orderNo: number;
@@ -147,6 +151,7 @@ export const api = {
   checkout: (payload: CheckoutPayload) => post<OrderResult>("/shop/checkout", payload),
   coupon: (code: string) => get<Coupon>(`/shop/coupon/${encodeURIComponent(code)}`),
   ordersByEmail: (email: string) => get<Order[]>(`/shop/orders?email=${encodeURIComponent(email)}`),
+  assistant: (message: string) => post<AssistantReply>("/shop/assistant", { message }),
   reviews: (productId: string) =>
     get<Review[]>(`/shop/product/${encodeURIComponent(productId)}/reviews`),
   addReview: (productId: string, payload: NewReview) =>
