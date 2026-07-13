@@ -8,11 +8,9 @@ import com.luxshop.shop.repository.ProductRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Profile;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Locale;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -54,11 +52,12 @@ public class RagChatService {
                         p.getPrice(), p.getProductDesc()))
                 .collect(Collectors.joining("\n"));
 
-        // Reply in the shopper's UI language (resolved from Accept-Language).
-        String language = LocaleContextHolder.getLocale().getDisplayLanguage(Locale.ENGLISH);
+        // Reply in whatever language the shopper actually wrote in, so the answer
+        // always matches the question regardless of the UI language.
         String system = "You are LuxShop's friendly shopping assistant. Recommend ONLY from the "
                 + "catalog products provided. Be concise (2-3 sentences), warm, and explain why the "
-                + "pick fits. If nothing fits, say so honestly. Always reply in " + language + ".";
+                + "pick fits. If nothing fits, say so honestly. Always reply in the exact same "
+                + "language the customer used in their question.";
         String user = "Catalog:\n" + catalog + "\n\nCustomer question: " + message;
 
         // If Gemini is briefly overloaded (503/429) or otherwise unavailable, degrade
