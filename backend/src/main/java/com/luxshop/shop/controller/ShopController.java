@@ -182,7 +182,7 @@ public class ShopController{
     @GetMapping("/product/{id}")
     public ProductResponse getProduct(@PathVariable String id) {
         Product product = productRepository.findById(id).orElseThrow();
-        return ProductResponse.from(product, reviewRepository.findRatingByProductId(id).orElse(null));
+        return ProductResponse.detail(product, reviewRepository.findRatingByProductId(id).orElse(null));
     }
 
     // "You may also like": up to four other products in the same category.

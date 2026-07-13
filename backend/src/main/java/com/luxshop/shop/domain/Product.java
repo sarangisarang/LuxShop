@@ -7,6 +7,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OrderBy;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
@@ -59,6 +60,12 @@ public class Product {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<ProductTranslation> translations = new ArrayList<>();
+
+    // Extra gallery images (position-ordered), shown on the product detail page.
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderBy("position ASC")
+    @JsonIgnore
+    private List<ProductImage> images = new ArrayList<>();
 
     /** Name in the current request locale (Accept-Language), falling back to the base name. */
     public String getLocalizedName() {

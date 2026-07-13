@@ -20,6 +20,7 @@ export interface Product {
   category?: Category | null;
   averageRating?: number | null;
   reviewCount?: number;
+  images?: string[];
 }
 
 export interface Category {
