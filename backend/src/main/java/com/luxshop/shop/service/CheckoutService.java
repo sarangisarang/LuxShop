@@ -29,15 +29,18 @@ public class CheckoutService {
     private final OrdersRepository ordersRepository;
     private final OrderDetailsService orderDetailsService;
     private final CouponRepository couponRepository;
+    private final OrderEmailService orderEmailService;
 
     public CheckoutService(CustomerRepository customerRepository,
                            OrdersRepository ordersRepository,
                            OrderDetailsService orderDetailsService,
-                           CouponRepository couponRepository) {
+                           CouponRepository couponRepository,
+                           OrderEmailService orderEmailService) {
         this.customerRepository = customerRepository;
         this.ordersRepository = ordersRepository;
         this.orderDetailsService = orderDetailsService;
         this.couponRepository = couponRepository;
+        this.orderEmailService = orderEmailService;
     }
 
     @Transactional
@@ -87,6 +90,9 @@ public class CheckoutService {
                         ordersRepository.save(saved);
                     });
         }
+
+        // Fire-and-forget confirmation; never let email trouble fail the order.
+        orderEmailService.sendOrderConfirmation(saved);
         return saved;
     }
 }
