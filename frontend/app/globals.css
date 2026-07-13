@@ -1616,6 +1616,27 @@ a {
   color: var(--gold-deep);
   white-space: nowrap;
 }
+.assist-card-add {
+  flex: 0 0 auto;
+  width: 30px;
+  height: 30px;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(180deg, var(--gold-light), var(--gold));
+  color: #2a1e04;
+  font-size: 0.9rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: transform 0.15s ease, filter 0.15s ease;
+}
+.assist-card-add:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.05);
+}
+.assist-card-add:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
 .assist-input {
   display: flex;
   gap: 8px;
