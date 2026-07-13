@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import type { Product } from "@/lib/api";
-import { formatGel, GEL } from "@/lib/format";
+import { useCurrency } from "@/lib/currency";
 import { useCart } from "@/lib/cart";
 import { useWishlist } from "@/lib/wishlist";
 import { useTranslation } from "@/lib/dictionary";
@@ -12,6 +12,7 @@ export default function ProductCard({ product, index = 0 }: { product: Product; 
   const { add } = useCart();
   const { has, toggle } = useWishlist();
   const { t } = useTranslation();
+  const { format } = useCurrency();
   const wished = has(product.id);
   const stock = Number(product.stock);
   const outOfStock = stock <= 0;
@@ -82,7 +83,7 @@ export default function ProductCard({ product, index = 0 }: { product: Product; 
           <div className="desc">{product.productDesc}</div>
           <div className="row">
             <span className="price">
-              {formatGel(Number(product.price ?? 0))} <span className="gel">{GEL}</span>
+              {format(Number(product.price ?? 0))}
             </span>
             <span className={`stock-pill ${pill.cls}`}>{pill.text}</span>
           </div>

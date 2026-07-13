@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { admin, type Order, type OrderAction } from "@/lib/api";
 import { useAuth } from "@/lib/auth";
-import { formatGel, GEL } from "@/lib/format";
+import { useCurrency } from "@/lib/currency";
 import ProductsAdmin from "./ProductsAdmin";
 import CategoriesAdmin from "./CategoriesAdmin";
 import DashboardAdmin from "./DashboardAdmin";
@@ -34,6 +34,7 @@ function actionsFor(status: string): { action: OrderAction; label: string }[] {
 
 export default function AdminPage() {
   const { token, username, login, logout } = useAuth();
+  const { format } = useCurrency();
   const [form, setForm] = useState({ username: "admin", password: "" });
   const [loginError, setLoginError] = useState<string | null>(null);
   const [orders, setOrders] = useState<Order[]>([]);
@@ -182,7 +183,7 @@ export default function AdminPage() {
                     {d.qty} × {d.productName}
                   </span>
                   <span>
-                    {formatGel(d.subtotal)} {GEL}
+                    {format(d.subtotal)}
                   </span>
                 </div>
               ))}
@@ -204,7 +205,7 @@ export default function AdminPage() {
                 )}
               </div>
               <strong>
-                {formatGel(o.orderTotal)} <span className="gel">{GEL}</span>
+                {format(o.orderTotal)}
               </strong>
             </div>
           </div>

@@ -4,12 +4,13 @@ import { useState } from "react";
 import Link from "next/link";
 import { useCart } from "@/lib/cart";
 import { api, type Coupon } from "@/lib/api";
-import { formatGel, GEL } from "@/lib/format";
+import { useCurrency } from "@/lib/currency";
 import { useTranslation } from "@/lib/dictionary";
 
 export default function CartPage() {
   const { items, total, count, setQty, remove, clear } = useCart();
   const { t } = useTranslation();
+  const { format } = useCurrency();
   const [placed, setPlaced] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
@@ -179,7 +180,7 @@ export default function CartPage() {
                   </Link>
                   <div className="cart-cat">{product.category?.name ?? "Uncategorized"}</div>
                   <div className="cart-price">
-                    {formatGel(Number(product.price ?? 0))} <span className="gel">{GEL}</span>
+                    {format(Number(product.price ?? 0))}
                   </div>
                 </div>
                 <div className="cart-qty">
@@ -192,7 +193,7 @@ export default function CartPage() {
                   </button>
                 </div>
                 <div className="cart-line">
-                  {formatGel(Number(product.price ?? 0) * qty)} <span className="gel">{GEL}</span>
+                  {format(Number(product.price ?? 0) * qty)}
                 </div>
                 <button className="cart-remove" onClick={() => remove(product.id)} aria-label="Remove">
                   ✕
@@ -317,13 +318,13 @@ export default function CartPage() {
                 <div className="checkout-subtotal">
                   <span>{t("checkout.subtotal")}</span>
                   <span>
-                    {formatGel(total)} <span className="gel">{GEL}</span>
+                    {format(total)}
                   </span>
                 </div>
                 <div className="checkout-subtotal discount">
                   <span>{t("coupon.discount", { code: coupon.code })}</span>
                   <span>
-                    −{formatGel(discount)} <span className="gel">{GEL}</span>
+                    −{format(discount)}
                   </span>
                 </div>
               </>
@@ -331,7 +332,7 @@ export default function CartPage() {
             <div className="checkout-total">
               <span>{t("checkout.total")}</span>
               <strong>
-                {formatGel(net)} <span className="gel">{GEL}</span>
+                {format(net)}
               </strong>
             </div>
             {submitError && <div className="checkout-error">{submitError}</div>}
