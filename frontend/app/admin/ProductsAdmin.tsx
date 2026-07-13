@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { admin, api, type Category, type Product, type ProductImageItem, type ProductInput } from "@/lib/api";
-import { formatGel, GEL } from "@/lib/format";
+import { useCurrency } from "@/lib/currency";
 
 const EMPTY = {
   id: "",
@@ -15,6 +15,7 @@ const EMPTY = {
 };
 
 export default function ProductsAdmin({ token }: { token: string }) {
+  const { format } = useCurrency();
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [form, setForm] = useState({ ...EMPTY });
@@ -253,7 +254,7 @@ export default function ProductsAdmin({ token }: { token: string }) {
             <div className="admin-product-info">
               <span className="admin-product-name">{p.productName}</span>
               <span className="section-sub">
-                {p.category?.name ?? "—"} · {formatGel(Number(p.price ?? 0))} {GEL} · stock {p.stock}
+                {p.category?.name ?? "—"} · {format(Number(p.price ?? 0))} · stock {p.stock}
               </span>
             </div>
             <div className="admin-actions">

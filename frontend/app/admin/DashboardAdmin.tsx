@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { admin, api, type Order, type Product } from "@/lib/api";
-import { formatGel, GEL } from "@/lib/format";
+import { useCurrency } from "@/lib/currency";
 
 const STATUS_ORDER = ["Pending", "Processing", "shipped", "closed"];
 const STATUS_CLS: Record<string, string> = {
@@ -13,6 +13,7 @@ const STATUS_CLS: Record<string, string> = {
 };
 
 export default function DashboardAdmin({ token }: { token: string }) {
+  const { format } = useCurrency();
   const [orders, setOrders] = useState<Order[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
   const [catCount, setCatCount] = useState(0);
@@ -76,7 +77,7 @@ export default function DashboardAdmin({ token }: { token: string }) {
   if (error) return <div className="checkout-error">{error}</div>;
 
   const cards = [
-    { label: "Revenue", value: `${formatGel(revenue)} ${GEL}` },
+    { label: "Revenue", value: format(revenue) },
     { label: "Orders", value: String(orders.length) },
     { label: "Products", value: String(products.length) },
     { label: "Categories", value: String(catCount) },

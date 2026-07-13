@@ -96,6 +96,11 @@ export interface AssistantReply {
   answer: string;
   products: Product[];
 }
+export interface Rates {
+  base: string;
+  rates: Record<string, number>;
+  updated: string;
+}
 export interface ProductImageItem {
   id: number;
   url: string;
@@ -153,6 +158,7 @@ export const api = {
   related: (id: string) => get<Product[]>(`/shop/product/${encodeURIComponent(id)}/related`),
   semanticSearch: (q: string, topK = 12) =>
     get<Product[]>(`/shop/search/semantic?q=${encodeURIComponent(q)}&topK=${topK}`),
+  rates: () => get<Rates>("/shop/rates"),
   categoriesPage: (page = 0, size = 100) =>
     get<Page<Category>>(`/shop/categories?page=${page}&size=${size}`),
   categories: () => api.categoriesPage().then((p) => p.content),

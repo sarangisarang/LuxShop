@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { api, type Product } from "@/lib/api";
-import { formatGel, GEL } from "@/lib/format";
+import { useCurrency } from "@/lib/currency";
 import { useCart } from "@/lib/cart";
 import { useTranslation } from "@/lib/dictionary";
 
@@ -31,6 +31,7 @@ function RichText({ text }: { text: string }) {
 export default function AssistantWidget() {
   const { t } = useTranslation();
   const { add } = useCart();
+  const { format } = useCurrency();
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState("");
   const [busy, setBusy] = useState(false);
@@ -100,7 +101,7 @@ export default function AssistantWidget() {
                         />
                         <span className="assist-card-name">{p.productName}</span>
                         <span className="assist-card-price">
-                          {formatGel(Number(p.price ?? 0))} {GEL}
+                          {format(Number(p.price ?? 0))}
                         </span>
                         <button
                           type="button"

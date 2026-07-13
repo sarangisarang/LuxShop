@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { api, type Product } from "@/lib/api";
-import { formatGel, GEL } from "@/lib/format";
+import { useCurrency } from "@/lib/currency";
 import { useCart } from "@/lib/cart";
 import { useLanguage } from "@/lib/language";
 import { useTranslation } from "@/lib/dictionary";
@@ -17,6 +17,7 @@ export default function ProductDetail({ product: initial }: { product: Product }
   const { add } = useCart();
   const { lang } = useLanguage();
   const { t } = useTranslation();
+  const { format } = useCurrency();
   const router = useRouter();
   const [product, setProduct] = useState(initial);
   const [related, setRelated] = useState<Product[]>([]);
@@ -162,7 +163,7 @@ export default function ProductDetail({ product: initial }: { product: Product }
 
           <div className="pdp-price-row">
             <span className="pdp-price">
-              {formatGel(Number(product.price ?? 0))} <span className="gel">{GEL}</span>
+              {format(Number(product.price ?? 0))}
             </span>
             <span className={`stock-pill ${pill.cls}`}>{pill.text}</span>
           </div>

@@ -6,6 +6,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useCart } from "@/lib/cart";
 import { useWishlist } from "@/lib/wishlist";
 import { useLanguage, LANGUAGES, type Lang } from "@/lib/language";
+import { useCurrency, CURRENCIES } from "@/lib/currency";
 import { useTranslation } from "@/lib/dictionary";
 
 const CATEGORIES = [
@@ -25,6 +26,7 @@ export default function Navbar() {
   const { count } = useCart();
   const { count: favCount } = useWishlist();
   const { lang, setLang } = useLanguage();
+  const { currency, setCurrency } = useCurrency();
   const { t } = useTranslation();
 
   return (
@@ -63,6 +65,18 @@ export default function Navbar() {
             {LANGUAGES.map((l) => (
               <option key={l.code} value={l.code}>
                 🌐 {l.label}
+              </option>
+            ))}
+          </select>
+          <select
+            className="lang-select"
+            value={currency}
+            onChange={(e) => setCurrency(e.target.value)}
+            aria-label="Currency"
+          >
+            {CURRENCIES.map((c) => (
+              <option key={c.code} value={c.code}>
+                💱 {c.label}
               </option>
             ))}
           </select>

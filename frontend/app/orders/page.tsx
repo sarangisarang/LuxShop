@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { api, type Order } from "@/lib/api";
-import { formatGel, GEL } from "@/lib/format";
+import { useCurrency } from "@/lib/currency";
 import { useTranslation } from "@/lib/dictionary";
 
 const EMAIL_KEY = "luxshop_email";
@@ -15,6 +15,7 @@ const STATUS_CLS: Record<string, string> = {
 
 export default function OrdersPage() {
   const { t } = useTranslation();
+  const { format } = useCurrency();
   const [email, setEmail] = useState("");
   const [orders, setOrders] = useState<Order[] | null>(null);
   const [loading, setLoading] = useState(false);
@@ -106,7 +107,7 @@ export default function OrdersPage() {
                     {d.qty} × {d.productName}
                   </span>
                   <span>
-                    {formatGel(d.subtotal)} {GEL}
+                    {format(d.subtotal)}
                   </span>
                 </div>
               ))}
@@ -114,7 +115,7 @@ export default function OrdersPage() {
             <div className="order-total">
               <span>{t("orders.total")}</span>
               <strong>
-                {formatGel(o.orderTotal)} <span className="gel">{GEL}</span>
+                {format(o.orderTotal)}
               </strong>
             </div>
           </div>
