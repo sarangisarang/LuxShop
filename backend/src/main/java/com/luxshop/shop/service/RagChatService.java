@@ -5,6 +5,8 @@ import com.luxshop.shop.domain.Product;
 import com.luxshop.shop.dto.AssistantResponse;
 import com.luxshop.shop.dto.ProductResponse;
 import com.luxshop.shop.repository.ProductRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
@@ -24,6 +26,7 @@ import java.util.stream.Collectors;
 @Profile("postgres")
 public class RagChatService {
 
+    private static final Logger log = LoggerFactory.getLogger(RagChatService.class);
     private static final int RETRIEVE = 4;
 
     private final RagService ragService;
@@ -58,7 +61,18 @@ public class RagChatService {
                 + "pick fits. If nothing fits, say so honestly. Always reply in " + language + ".";
         String user = "Catalog:\n" + catalog + "\n\nCustomer question: " + message;
 
-        String answer = chatClient.chat(system, user);
+        // If Gemini is briefly overloaded (503/429) or otherwise unavailable, degrade
+        // gracefully: the vector search already found relevant products, so still return
+        // them with a friendly note instead of failing the whole request.
+        String answer;
+        try {
+            answer = chatClient.chat(system, user);
+        } catch (Exception e) {
+            log.warn("Assistant chat unavailable ({}); returning products without an AI reply.", e.getMessage());
+            answer = products.isEmpty()
+                    ? "Our AI assistant is briefly unavailable — please try again in a moment."
+                    : "Our AI assistant is briefly busy, but here are some products from our catalog that match your request.";
+        }
         if (answer.isBlank()) {
             answer = "Sorry, I couldn't find a good match in our catalog right now.";
         }
