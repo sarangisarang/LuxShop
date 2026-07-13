@@ -170,7 +170,7 @@ export default function ProductsAdmin({ token }: { token: string }) {
             </select>
           </label>
           <label>
-            Price (₾)
+            Price (GEL)
             <input
               type="number"
               step="0.01"
