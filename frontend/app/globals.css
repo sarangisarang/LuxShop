@@ -1347,6 +1347,23 @@ a {
   border-radius: 14px;
   padding: 20px 22px;
 }
+.rag-panel {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
+}
+.rag-panel h4 {
+  margin-bottom: 4px;
+}
+.rag-msg {
+  margin-top: 8px;
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: var(--gold-deep);
+}
 .dash-panel h4 {
   font-size: 1.1rem;
   color: var(--navy-ink);

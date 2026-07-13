@@ -18,6 +18,21 @@ export default function DashboardAdmin({ token }: { token: string }) {
   const [catCount, setCatCount] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [reindexing, setReindexing] = useState(false);
+  const [reindexMsg, setReindexMsg] = useState<string | null>(null);
+
+  async function doReindex() {
+    setReindexing(true);
+    setReindexMsg(null);
+    try {
+      const { indexed } = await admin.reindexRag(token);
+      setReindexMsg(`✓ Re-embedded ${indexed} products into the AI index.`);
+    } catch (e) {
+      setReindexMsg(e instanceof Error ? `Reindex failed: ${e.message}` : "Reindex failed.");
+    } finally {
+      setReindexing(false);
+    }
+  }
 
   useEffect(() => {
     let cancelled = false;
@@ -78,6 +93,20 @@ export default function DashboardAdmin({ token }: { token: string }) {
             <span className="stat-label">{c.label}</span>
           </div>
         ))}
+      </div>
+
+      <div className="dash-panel rag-panel">
+        <div>
+          <h4 className="serif">AI search index</h4>
+          <span className="section-sub">
+            Re-embed the catalog after adding or editing products so semantic search and the
+            assistant stay current.
+          </span>
+          {reindexMsg && <div className="rag-msg">{reindexMsg}</div>}
+        </div>
+        <button className="btn btn-navy admin-btn" onClick={doReindex} disabled={reindexing}>
+          {reindexing ? "Reindexing…" : "Reindex AI"}
+        </button>
       </div>
 
       <div className="dash-cols">
