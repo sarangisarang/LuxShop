@@ -222,6 +222,8 @@ export const admin = {
   orders: (token: string) => authGet<Order[]>("/shop/order", token),
   setStatus: (token: string, id: string, action: OrderAction) =>
     authPut<Order>(`/shop/order/${id}/${action}`, token),
+  reindexRag: (token: string) =>
+    authJson<{ indexed: number }>("POST", "/shop/rag/reindex", token),
   createProduct: (token: string, categoryId: string, payload: ProductInput) =>
     authJson<Product>("POST", `/shop/product/${encodeURIComponent(categoryId)}`, token, payload),
   updateProduct: (token: string, id: string, payload: ProductInput) =>

@@ -7,6 +7,7 @@ import org.springframework.ai.document.Document;
 import org.springframework.ai.vectorstore.SearchRequest;
 import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.context.annotation.Profile;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,9 +26,11 @@ public class RagService {
     private static final Logger log = LoggerFactory.getLogger(RagService.class);
 
     private final VectorStore vectorStore;
+    private final JdbcTemplate jdbcTemplate;
 
-    public RagService(VectorStore vectorStore) {
+    public RagService(VectorStore vectorStore, JdbcTemplate jdbcTemplate) {
         this.vectorStore = vectorStore;
+        this.jdbcTemplate = jdbcTemplate;
     }
 
     /** (Re)index a batch of products — one embedded document each. */
@@ -37,6 +40,13 @@ public class RagService {
             vectorStore.add(docs);
         }
         log.info("Indexed {} products into the vector store", docs.size());
+    }
+
+    /** Clear the vector store and re-embed the given products from scratch. */
+    public int reindexAll(List<Product> products) {
+        jdbcTemplate.update("DELETE FROM vector_store");
+        reindex(products);
+        return products.size();
     }
 
     /** Product ids of the semantically closest matches, best first. */
