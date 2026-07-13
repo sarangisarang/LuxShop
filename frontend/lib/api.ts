@@ -96,6 +96,11 @@ export interface AssistantReply {
   answer: string;
   products: Product[];
 }
+export interface ProductImageItem {
+  id: number;
+  url: string;
+  position: number;
+}
 export interface OrderResult {
   id: string;
   orderNo: number;
@@ -155,6 +160,8 @@ export const api = {
   coupon: (code: string) => get<Coupon>(`/shop/coupon/${encodeURIComponent(code)}`),
   ordersByEmail: (email: string) => get<Order[]>(`/shop/orders?email=${encodeURIComponent(email)}`),
   assistant: (message: string) => post<AssistantReply>("/shop/assistant", { message }),
+  productImages: (productId: string) =>
+    get<ProductImageItem[]>(`/shop/product/${encodeURIComponent(productId)}/images`),
   reviews: (productId: string) =>
     get<Review[]>(`/shop/product/${encodeURIComponent(productId)}/reviews`),
   addReview: (productId: string, payload: NewReview) =>
@@ -232,6 +239,10 @@ export const admin = {
     authPut<Order>(`/shop/order/${id}/${action}`, token),
   reindexRag: (token: string) =>
     authJson<{ indexed: number }>("POST", "/shop/rag/reindex", token),
+  addProductImage: (token: string, productId: string, url: string) =>
+    authJson<ProductImageItem>("POST", `/shop/product/${encodeURIComponent(productId)}/images`, token, { url }),
+  deleteProductImage: (token: string, productId: string, imageId: number) =>
+    authJson<void>("DELETE", `/shop/product/${encodeURIComponent(productId)}/images/${imageId}`, token),
   createProduct: (token: string, categoryId: string, payload: ProductInput) =>
     authJson<Product>("POST", `/shop/product/${encodeURIComponent(categoryId)}`, token, payload),
   updateProduct: (token: string, id: string, payload: ProductInput) =>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { admin, api, type Category, type Product, type ProductInput } from "@/lib/api";
+import { admin, api, type Category, type Product, type ProductImageItem, type ProductInput } from "@/lib/api";
 import { formatGel, GEL } from "@/lib/format";
 
 const EMPTY = {
@@ -21,6 +21,37 @@ export default function ProductsAdmin({ token }: { token: string }) {
   const [editing, setEditing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const [gallery, setGallery] = useState<ProductImageItem[]>([]);
+  const [newImageUrl, setNewImageUrl] = useState("");
+
+  async function loadGallery(productId: string) {
+    try {
+      setGallery(await api.productImages(productId));
+    } catch {
+      setGallery([]);
+    }
+  }
+
+  async function addImage() {
+    const url = newImageUrl.trim();
+    if (!url || !form.id) return;
+    try {
+      await admin.addProductImage(token, form.id, url);
+      setNewImageUrl("");
+      await loadGallery(form.id);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Failed to add image");
+    }
+  }
+
+  async function removeImage(imageId: number) {
+    try {
+      await admin.deleteProductImage(token, form.id, imageId);
+      await loadGallery(form.id);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Failed to remove image");
+    }
+  }
 
   const load = useCallback(async () => {
     try {
@@ -41,6 +72,8 @@ export default function ProductsAdmin({ token }: { token: string }) {
   function reset() {
     setEditing(false);
     setForm({ ...EMPTY, categoryId: categories[0]?.id ?? "" });
+    setGallery([]);
+    setNewImageUrl("");
   }
 
   function startEdit(p: Product) {
@@ -55,6 +88,7 @@ export default function ProductsAdmin({ token }: { token: string }) {
       price: String(p.price ?? ""),
       stock: String(p.stock ?? ""),
     });
+    loadGallery(p.id);
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
@@ -153,6 +187,46 @@ export default function ProductsAdmin({ token }: { token: string }) {
             />
           </label>
         </div>
+
+        {editing && (
+          <div className="gallery-admin">
+            <label>Gallery images</label>
+            <div className="gallery-admin-list">
+              {gallery.map((img) => (
+                <div className="gallery-admin-item" key={img.id}>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={img.url}
+                    alt=""
+                    onError={(e) => {
+                      (e.currentTarget as HTMLImageElement).src = `https://picsum.photos/seed/g${img.id}/80/80`;
+                    }}
+                  />
+                  <button
+                    type="button"
+                    className="gallery-admin-del"
+                    title="Remove image"
+                    onClick={() => removeImage(img.id)}
+                  >
+                    ✕
+                  </button>
+                </div>
+              ))}
+              {gallery.length === 0 && <span className="section-sub">No extra images.</span>}
+            </div>
+            <div className="gallery-admin-add">
+              <input
+                value={newImageUrl}
+                onChange={(e) => setNewImageUrl(e.target.value)}
+                placeholder="https://image-url…"
+              />
+              <button type="button" className="btn btn-navy admin-btn" onClick={addImage}>
+                Add image
+              </button>
+            </div>
+          </div>
+        )}
+
         <div className="admin-actions">
           <button type="submit" className="btn btn-gold" disabled={busy}>
             {busy ? "Saving…" : editing ? "Save changes" : "Add product"}
