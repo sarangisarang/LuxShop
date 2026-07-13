@@ -1,11 +1,14 @@
 package com.luxshop.shop.config;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
+import org.springframework.web.client.RestClientResponseException;
 
 import java.util.List;
 import java.util.Map;
@@ -20,6 +23,10 @@ import java.util.Map;
 @Component
 @Profile("postgres")
 public class GeminiChatClient {
+
+    private static final Logger log = LoggerFactory.getLogger(GeminiChatClient.class);
+    private static final int MAX_ATTEMPTS = 3;
+    private static final long BASE_BACKOFF_MS = 500L;
 
     private final RestClient client;
     private final String model;
@@ -38,8 +45,30 @@ public class GeminiChatClient {
         this.maxTokens = maxTokens;
     }
 
-    /** One-shot completion; returns the assistant text (never null). */
+    /**
+     * One-shot completion; returns the assistant text (never null). Retries a few
+     * times with backoff on transient upstream errors (503 overload, 429 rate
+     * limit), which Gemini emits under load; other errors propagate immediately.
+     */
     public String chat(String systemPrompt, String userPrompt) {
+        RestClientResponseException last = null;
+        for (int attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
+            try {
+                return callOnce(systemPrompt, userPrompt);
+            } catch (RestClientResponseException e) {
+                int code = e.getStatusCode().value();
+                if ((code != 503 && code != 429) || attempt == MAX_ATTEMPTS) {
+                    throw e;
+                }
+                last = e;
+                log.warn("Gemini chat transient {} (attempt {}/{}); retrying.", code, attempt, MAX_ATTEMPTS);
+                sleep(BASE_BACKOFF_MS * attempt);
+            }
+        }
+        throw last; // unreachable: the loop either returns or throws above
+    }
+
+    private String callOnce(String systemPrompt, String userPrompt) {
         ChatResponse resp = client.post()
                 .uri("/chat/completions")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -57,6 +86,14 @@ public class GeminiChatClient {
         }
         String content = resp.choices().get(0).message().content();
         return content != null ? content.strip() : "";
+    }
+
+    private static void sleep(long ms) {
+        try {
+            Thread.sleep(ms);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
