@@ -18,6 +18,8 @@ export default function Catalog({ products: initial }: { products: Product[] }) 
   const [committed, setCommitted] = useState(params.get("q") ?? "");
   // "" = default order; other values map to the backend's friendly sort keys.
   const [sort, setSort] = useState("");
+  // When on, the query runs through the RAG semantic endpoint instead of keyword.
+  const [aiMode, setAiMode] = useState(false);
   const firstRun = useRef(true);
 
   // Debounce typing so we query the backend at most once the user pauses.
@@ -32,11 +34,17 @@ export default function Catalog({ products: initial }: { products: Product[] }) 
   useEffect(() => {
     if (firstRun.current) {
       firstRun.current = false;
-      if (!committed.trim() && !sort) return;
+      if (!committed.trim() && !sort && !aiMode) return;
     }
     let cancelled = false;
-    api
-      .products(0, 100, committed, sort || undefined)
+    const q = committed.trim();
+    // AI mode runs the query through semantic (vector) search; if that endpoint
+    // is unavailable it falls back to keyword search so results still appear.
+    const result =
+      aiMode && q
+        ? api.semanticSearch(q).catch(() => api.products(0, 100, q))
+        : api.products(0, 100, committed, sort || undefined);
+    result
       .then((p) => {
         if (!cancelled) setProducts(p);
       })
@@ -44,7 +52,7 @@ export default function Catalog({ products: initial }: { products: Product[] }) 
     return () => {
       cancelled = true;
     };
-  }, [lang, committed, sort]);
+  }, [lang, committed, sort, aiMode]);
 
   // Filter by category id (stable across languages); chip labels use the localized name.
   const catList = [
@@ -69,16 +77,27 @@ export default function Catalog({ products: initial }: { products: Product[] }) 
           <h2 className="section-title">{t("catalog.title")}</h2>
           <div className="section-sub">{t("catalog.subtitle")}</div>
         </div>
-        <div className="search-box">
-          <span className="search-icon" aria-hidden>🔎</span>
-          <input
-            className="search-input"
-            type="search"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder={t("catalog.search")}
-            aria-label={t("catalog.search")}
-          />
+        <div className="search-controls">
+          <div className="search-box">
+            <span className="search-icon" aria-hidden>🔎</span>
+            <input
+              className="search-input"
+              type="search"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder={t("catalog.search")}
+              aria-label={t("catalog.search")}
+            />
+          </div>
+          <button
+            type="button"
+            className={`ai-toggle ${aiMode ? "on" : ""}`}
+            aria-pressed={aiMode}
+            title={t("catalog.aiSearch")}
+            onClick={() => setAiMode((v) => !v)}
+          >
+            ✨ AI
+          </button>
         </div>
       </div>
 
