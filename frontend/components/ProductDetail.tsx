@@ -9,6 +9,7 @@ import { formatGel, GEL } from "@/lib/format";
 import { useCart } from "@/lib/cart";
 import { useLanguage } from "@/lib/language";
 import { useTranslation } from "@/lib/dictionary";
+import { recordView } from "@/lib/recentlyViewed";
 import Reviews from "./Reviews";
 import ProductCard from "./ProductCard";
 
@@ -21,6 +22,11 @@ export default function ProductDetail({ product: initial }: { product: Product }
   const [related, setRelated] = useState<Product[]>([]);
   const [added, setAdded] = useState(false);
   const firstRun = useRef(true);
+
+  // Remember this product for the "Recently viewed" row.
+  useEffect(() => {
+    recordView(initial.id);
+  }, [initial.id]);
 
   // Fetch "you may also like" products (localized), refreshing on language change.
   useEffect(() => {

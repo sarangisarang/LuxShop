@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import Hero from "@/components/Hero";
 import Catalog from "@/components/Catalog";
 import TopRated from "@/components/TopRated";
+import RecentlyViewed from "@/components/RecentlyViewed";
 import { loadProducts } from "@/lib/api";
 
 export default async function Home() {
@@ -25,6 +26,8 @@ export default async function Home() {
           <Catalog products={products} />
         </Suspense>
       </section>
+
+      <RecentlyViewed />
     </main>
   );
 }
