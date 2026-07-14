@@ -169,7 +169,13 @@ export default function CartPage() {
                 <div className="cart-thumb">
                   {product.imageUrl ? (
                     // eslint-disable-next-line @next/next/no-img-element
-                    <img src={product.imageUrl} alt={product.productName} />
+                    <img
+                      src={product.imageUrl}
+                      alt={product.productName}
+                      onError={(e) => {
+                        (e.currentTarget as HTMLImageElement).src = `https://picsum.photos/seed/${product.id}/160/160`;
+                      }}
+                    />
                   ) : (
                     <span className="disc" />
                   )}
