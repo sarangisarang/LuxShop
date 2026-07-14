@@ -17,7 +17,6 @@ export default function Hero() {
           {t("hero.title1")} <span className="accent">{t("hero.titleAccent")}</span>,
           <br /> {t("hero.title2")}
         </h1>
-        <p>{t("hero.subtitle")}</p>
         <a className="btn btn-gold" href="#catalog">
           {t("hero.cta")}
         </a>
