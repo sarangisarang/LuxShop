@@ -13,8 +13,6 @@ const en: Dict = {
   "hero.title1": "Timeless",
   "hero.titleAccent": "Elegance",
   "hero.title2": "delivered.",
-  "hero.subtitle":
-    "A curated selection of watches, laptops, phones and more — crafted shopping, powered by a Next.js storefront and a Spring Boot API.",
   "hero.cta": "Shop Now →",
   "hero.featured": "FEATURED",
   "catalog.title": "Featured products", "home.recentlyViewed": "Recently viewed", "home.topRated": "Top rated", "home.topRatedSub": "Highest-rated picks from our shoppers",
@@ -80,8 +78,6 @@ const ka: Dict = {
   "hero.title1": "დროის მიღმა",
   "hero.titleAccent": "ელეგანტურობა",
   "hero.title2": "მიწოდებული.",
-  "hero.subtitle":
-    "შერჩეული საათები, ლეპტოპები, ტელეფონები და სხვა — დახვეწილი შოპინგი Next.js-სა და Spring Boot-ზე.",
   "hero.cta": "იყიდე ახლა →",
   "hero.featured": "რჩეული",
   "catalog.title": "რჩეული პროდუქტები", "home.recentlyViewed": "ბოლოს ნანახი", "home.topRated": "საუკეთესოდ შეფასებული", "home.topRatedSub": "ჩვენი მომხმარებლების საუკეთესოდ შეფასებული არჩევანი",
@@ -141,7 +137,6 @@ const ka: Dict = {
 const ru: Dict = {
   "nav.home": "Главная", "nav.shop": "Магазин", "nav.menu": "Меню", "nav.orders": "Заказы",
   "hero.eyebrow": "LuxShop · Премиум-магазин", "hero.title1": "Вне времени", "hero.titleAccent": "Элегантность", "hero.title2": "с доставкой.",
-  "hero.subtitle": "Тщательно подобранная коллекция часов, ноутбуков, телефонов и не только — изысканный шопинг на витрине Next.js и API Spring Boot.",
   "hero.cta": "За покупками →", "hero.featured": "РЕКОМЕНДУЕМ",
   "catalog.title": "Рекомендуемые товары", "home.recentlyViewed": "Недавно просмотренные", "home.topRated": "Лучшие по рейтингу", "home.topRatedSub": "Товары с самым высоким рейтингом от наших покупателей", "catalog.subtitle": "Отобрано из каталога LuxShop", "catalog.all": "Все", "catalog.empty": "В этой категории пока нет товаров.", "catalog.search": "Поиск товаров…", "catalog.aiSearch": "Умный поиск на базе ИИ", "sort.label": "Сортировка", "sort.default": "По умолчанию", "sort.rating": "С высоким рейтингом", "sort.priceAsc": "Цена: по возрастанию", "sort.priceDesc": "Цена: по убыванию", "sort.nameAsc": "Название: А–Я", "sort.nameDesc": "Название: Я–А", "catalog.noResults": "Нет товаров по запросу «{q}».",
   "card.add": "🛍 В корзину", "nav.wishlist": "Избранное", "wishlist.title": "Избранное", "wishlist.subtitle": "Товары, сохранённые на потом", "wishlist.empty": "Ваш список избранного пуст.", "wishlist.browse": "Смотреть товары", "wishlist.clear": "Очистить всё", "card.fav": "В избранное", "card.unfav": "Убрать из избранного", "stock.out": "Нет в наличии", "stock.only": "Осталось всего {n}!", "stock.in": "В наличии: {n}",
@@ -159,7 +154,6 @@ const ru: Dict = {
 const de: Dict = {
   "nav.home": "Startseite", "nav.shop": "Shop", "nav.menu": "Menü", "nav.orders": "Bestellungen",
   "hero.eyebrow": "LuxShop · Premium-Shop", "hero.title1": "Zeitlose", "hero.titleAccent": "Eleganz", "hero.title2": "geliefert.",
-  "hero.subtitle": "Eine kuratierte Auswahl an Uhren, Laptops, Telefonen und mehr — edles Einkaufen mit einem Next.js-Storefront und einer Spring-Boot-API.",
   "hero.cta": "Jetzt einkaufen →", "hero.featured": "EMPFOHLEN",
   "catalog.title": "Empfohlene Produkte", "home.recentlyViewed": "Zuletzt angesehen", "home.topRated": "Bestbewertet", "home.topRatedSub": "Die bestbewerteten Auswahlen unserer Kunden", "catalog.subtitle": "Handverlesen aus dem LuxShop-Katalog", "catalog.all": "Alle", "catalog.empty": "Noch keine Produkte in dieser Kategorie.", "catalog.search": "Produkte suchen…", "catalog.aiSearch": "KI-gestützte intelligente Suche", "sort.label": "Sortieren", "sort.default": "Empfohlen", "sort.rating": "Am besten bewertet", "sort.priceAsc": "Preis: aufsteigend", "sort.priceDesc": "Preis: absteigend", "sort.nameAsc": "Name: A–Z", "sort.nameDesc": "Name: Z–A", "catalog.noResults": "Keine Produkte für „{q}“.",
   "card.add": "🛍 In den Warenkorb", "nav.wishlist": "Merkliste", "wishlist.title": "Ihre Merkliste", "wishlist.subtitle": "Produkte, die Sie sich gemerkt haben", "wishlist.empty": "Ihre Merkliste ist leer.", "wishlist.browse": "Produkte ansehen", "wishlist.clear": "Alle entfernen", "card.fav": "Zur Merkliste", "card.unfav": "Von Merkliste entfernen", "stock.out": "Nicht auf Lager", "stock.only": "Nur noch {n}!", "stock.in": "{n} auf Lager",
@@ -177,7 +171,6 @@ const de: Dict = {
 const fr: Dict = {
   "nav.home": "Accueil", "nav.shop": "Boutique", "nav.menu": "Menu", "nav.orders": "Commandes",
   "hero.eyebrow": "LuxShop · Boutique premium", "hero.title1": "Élégance", "hero.titleAccent": "intemporelle", "hero.title2": "livrée.",
-  "hero.subtitle": "Une sélection soignée de montres, ordinateurs portables, téléphones et plus — un shopping raffiné, propulsé par une vitrine Next.js et une API Spring Boot.",
   "hero.cta": "Acheter →", "hero.featured": "EN VEDETTE",
   "catalog.title": "Produits en vedette", "home.recentlyViewed": "Vus récemment", "home.topRated": "Les mieux notés", "home.topRatedSub": "Les sélections les mieux notées par nos clients", "catalog.subtitle": "Sélectionnés dans le catalogue LuxShop", "catalog.all": "Tous", "catalog.empty": "Aucun produit dans cette catégorie pour le moment.", "catalog.search": "Rechercher des produits…", "catalog.aiSearch": "Recherche intelligente par IA", "sort.label": "Trier", "sort.default": "En vedette", "sort.rating": "Les mieux notés", "sort.priceAsc": "Prix : croissant", "sort.priceDesc": "Prix : décroissant", "sort.nameAsc": "Nom : A–Z", "sort.nameDesc": "Nom : Z–A", "catalog.noResults": "Aucun produit ne correspond à « {q} ».",
   "card.add": "🛍 Ajouter au panier", "nav.wishlist": "Favoris", "wishlist.title": "Vos favoris", "wishlist.subtitle": "Produits enregistrés pour plus tard", "wishlist.empty": "Votre liste de favoris est vide.", "wishlist.browse": "Voir les produits", "wishlist.clear": "Tout effacer", "card.fav": "Ajouter aux favoris", "card.unfav": "Retirer des favoris", "stock.out": "Rupture de stock", "stock.only": "Plus que {n} !", "stock.in": "{n} en stock",
@@ -195,7 +188,6 @@ const fr: Dict = {
 const es: Dict = {
   "nav.home": "Inicio", "nav.shop": "Tienda", "nav.menu": "Menú", "nav.orders": "Pedidos",
   "hero.eyebrow": "LuxShop · Tienda premium", "hero.title1": "Elegancia", "hero.titleAccent": "atemporal", "hero.title2": "entregada.",
-  "hero.subtitle": "Una selección curada de relojes, portátiles, teléfonos y más — compras refinadas, impulsadas por una tienda Next.js y una API de Spring Boot.",
   "hero.cta": "Comprar ahora →", "hero.featured": "DESTACADO",
   "catalog.title": "Productos destacados", "home.recentlyViewed": "Vistos recientemente", "home.topRated": "Mejor valorados", "home.topRatedSub": "Las selecciones mejor valoradas por nuestros clientes", "catalog.subtitle": "Seleccionados del catálogo de LuxShop", "catalog.all": "Todos", "catalog.empty": "Aún no hay productos en esta categoría.", "catalog.search": "Buscar productos…", "catalog.aiSearch": "Búsqueda inteligente con IA", "sort.label": "Ordenar", "sort.default": "Destacados", "sort.rating": "Mejor valorados", "sort.priceAsc": "Precio: de menor a mayor", "sort.priceDesc": "Precio: de mayor a menor", "sort.nameAsc": "Nombre: A–Z", "sort.nameDesc": "Nombre: Z–A", "catalog.noResults": "Ningún producto coincide con «{q}».",
   "card.add": "🛍 Añadir al carrito", "nav.wishlist": "Favoritos", "wishlist.title": "Tus favoritos", "wishlist.subtitle": "Productos que guardaste para después", "wishlist.empty": "Tu lista de favoritos está vacía.", "wishlist.browse": "Ver productos", "wishlist.clear": "Borrar todo", "card.fav": "Añadir a favoritos", "card.unfav": "Quitar de favoritos", "stock.out": "Agotado", "stock.only": "¡Solo quedan {n}!", "stock.in": "{n} en stock",
@@ -213,7 +205,6 @@ const es: Dict = {
 const it: Dict = {
   "nav.home": "Home", "nav.shop": "Negozio", "nav.menu": "Menu", "nav.orders": "Ordini",
   "hero.eyebrow": "LuxShop · Negozio premium", "hero.title1": "Eleganza", "hero.titleAccent": "senza tempo", "hero.title2": "consegnata.",
-  "hero.subtitle": "Una selezione curata di orologi, laptop, telefoni e altro — shopping raffinato, con una vetrina Next.js e un'API Spring Boot.",
   "hero.cta": "Acquista ora →", "hero.featured": "IN EVIDENZA",
   "catalog.title": "Prodotti in evidenza", "home.recentlyViewed": "Visti di recente", "home.topRated": "Più votati", "home.topRatedSub": "Le scelte più votate dai nostri clienti", "catalog.subtitle": "Selezionati dal catalogo LuxShop", "catalog.all": "Tutti", "catalog.empty": "Nessun prodotto in questa categoria per ora.", "catalog.search": "Cerca prodotti…", "catalog.aiSearch": "Ricerca intelligente con IA", "sort.label": "Ordina", "sort.default": "In evidenza", "sort.rating": "Più votati", "sort.priceAsc": "Prezzo: crescente", "sort.priceDesc": "Prezzo: decrescente", "sort.nameAsc": "Nome: A–Z", "sort.nameDesc": "Nome: Z–A", "catalog.noResults": "Nessun prodotto corrisponde a «{q}».",
   "card.add": "🛍 Aggiungi al carrello", "nav.wishlist": "Preferiti", "wishlist.title": "I tuoi preferiti", "wishlist.subtitle": "Prodotti salvati per dopo", "wishlist.empty": "La tua lista dei preferiti è vuota.", "wishlist.browse": "Sfoglia i prodotti", "wishlist.clear": "Cancella tutto", "card.fav": "Aggiungi ai preferiti", "card.unfav": "Rimuovi dai preferiti", "stock.out": "Esaurito", "stock.only": "Solo {n} rimasti!", "stock.in": "{n} disponibili",
@@ -231,7 +222,6 @@ const it: Dict = {
 const pt: Dict = {
   "nav.home": "Início", "nav.shop": "Loja", "nav.menu": "Menu", "nav.orders": "Pedidos",
   "hero.eyebrow": "LuxShop · Loja premium", "hero.title1": "Elegância", "hero.titleAccent": "atemporal", "hero.title2": "entregue.",
-  "hero.subtitle": "Uma seleção curada de relógios, notebooks, telefones e mais — compras refinadas, com uma vitrine Next.js e uma API Spring Boot.",
   "hero.cta": "Comprar agora →", "hero.featured": "DESTAQUE",
   "catalog.title": "Produtos em destaque", "home.recentlyViewed": "Vistos recentemente", "home.topRated": "Mais bem avaliados", "home.topRatedSub": "As escolhas mais bem avaliadas pelos nossos clientes", "catalog.subtitle": "Selecionados do catálogo LuxShop", "catalog.all": "Todos", "catalog.empty": "Ainda não há produtos nesta categoria.", "catalog.search": "Buscar produtos…", "catalog.aiSearch": "Busca inteligente com IA", "sort.label": "Ordenar", "sort.default": "Destaques", "sort.rating": "Mais bem avaliados", "sort.priceAsc": "Preço: do menor ao maior", "sort.priceDesc": "Preço: do maior ao menor", "sort.nameAsc": "Nome: A–Z", "sort.nameDesc": "Nome: Z–A", "catalog.noResults": "Nenhum produto corresponde a “{q}”.",
   "card.add": "🛍 Adicionar ao carrinho", "nav.wishlist": "Favoritos", "wishlist.title": "Seus favoritos", "wishlist.subtitle": "Produtos que você salvou para depois", "wishlist.empty": "Sua lista de favoritos está vazia.", "wishlist.browse": "Ver produtos", "wishlist.clear": "Limpar tudo", "card.fav": "Adicionar aos favoritos", "card.unfav": "Remover dos favoritos", "stock.out": "Esgotado", "stock.only": "Apenas {n} restantes!", "stock.in": "{n} em estoque",
@@ -249,7 +239,6 @@ const pt: Dict = {
 const tr: Dict = {
   "nav.home": "Ana Sayfa", "nav.shop": "Mağaza", "nav.menu": "Menü", "nav.orders": "Siparişler",
   "hero.eyebrow": "LuxShop · Premium Mağaza", "hero.title1": "Zamansız", "hero.titleAccent": "Zarafet", "hero.title2": "kapınızda.",
-  "hero.subtitle": "Saatler, dizüstü bilgisayarlar, telefonlar ve daha fazlasından özenle seçilmiş bir koleksiyon — Next.js vitrini ve Spring Boot API'si ile şık alışveriş.",
   "hero.cta": "Hemen Alışveriş →", "hero.featured": "ÖNE ÇIKAN",
   "catalog.title": "Öne çıkan ürünler", "home.recentlyViewed": "Son görüntülenenler", "home.topRated": "En yüksek puanlılar", "home.topRatedSub": "Müşterilerimizin en yüksek puanlı seçimleri", "catalog.subtitle": "LuxShop kataloğundan seçildi", "catalog.all": "Tümü", "catalog.empty": "Bu kategoride henüz ürün yok.", "catalog.search": "Ürün ara…", "catalog.aiSearch": "Yapay zeka destekli akıllı arama", "sort.label": "Sırala", "sort.default": "Öne çıkanlar", "sort.rating": "En yüksek puanlı", "sort.priceAsc": "Fiyat: artan", "sort.priceDesc": "Fiyat: azalan", "sort.nameAsc": "Ad: A–Z", "sort.nameDesc": "Ad: Z–A", "catalog.noResults": "“{q}” ile eşleşen ürün yok.",
   "card.add": "🛍 Sepete ekle", "nav.wishlist": "Favoriler", "wishlist.title": "Favorileriniz", "wishlist.subtitle": "Sonrası için kaydettiğiniz ürünler", "wishlist.empty": "Favori listeniz boş.", "wishlist.browse": "Ürünlere göz at", "wishlist.clear": "Tümünü temizle", "card.fav": "Favorilere ekle", "card.unfav": "Favorilerden çıkar", "stock.out": "Stokta yok", "stock.only": "Sadece {n} kaldı!", "stock.in": "{n} stokta",
@@ -267,7 +256,6 @@ const tr: Dict = {
 const az: Dict = {
   "nav.home": "Ana səhifə", "nav.shop": "Mağaza", "nav.menu": "Menyu", "nav.orders": "Sifarişlər",
   "hero.eyebrow": "LuxShop · Premium Mağaza", "hero.title1": "Zamansız", "hero.titleAccent": "Zəriflik", "hero.title2": "çatdırılır.",
-  "hero.subtitle": "Saatlar, noutbuklar, telefonlar və daha çoxundan seçilmiş kolleksiya — Next.js vitrini və Spring Boot API ilə zərif alış-veriş.",
   "hero.cta": "İndi al →", "hero.featured": "SEÇİLMİŞ",
   "catalog.title": "Seçilmiş məhsullar", "home.recentlyViewed": "Son baxılanlar", "home.topRated": "Ən yüksək reytinqli", "home.topRatedSub": "Müştərilərimizin ən yüksək reytinqli seçimləri", "catalog.subtitle": "LuxShop kataloqundan seçilmişdir", "catalog.all": "Hamısı", "catalog.empty": "Bu kateqoriyada hələ məhsul yoxdur.", "catalog.search": "Məhsul axtar…", "catalog.aiSearch": "Süni intellektlə ağıllı axtarış", "sort.label": "Sırala", "sort.default": "Seçilmiş", "sort.rating": "Ən yüksək reytinqli", "sort.priceAsc": "Qiymət: artan", "sort.priceDesc": "Qiymət: azalan", "sort.nameAsc": "Ad: A–Z", "sort.nameDesc": "Ad: Z–A", "catalog.noResults": "“{q}” üzrə məhsul tapılmadı.",
   "card.add": "🛍 Səbətə əlavə et", "nav.wishlist": "Sevimlilər", "wishlist.title": "Sevimliləriniz", "wishlist.subtitle": "Sonra üçün saxladığınız məhsullar", "wishlist.empty": "Sevimlilər siyahınız boşdur.", "wishlist.browse": "Məhsullara bax", "wishlist.clear": "Hamısını təmizlə", "card.fav": "Sevimlilərə əlavə et", "card.unfav": "Sevimlilərdən çıxar", "stock.out": "Stokda yoxdur", "stock.only": "Yalnız {n} qaldı!", "stock.in": "{n} stokda",
@@ -285,7 +273,6 @@ const az: Dict = {
 const uk: Dict = {
   "nav.home": "Головна", "nav.shop": "Магазин", "nav.menu": "Меню", "nav.orders": "Замовлення",
   "hero.eyebrow": "LuxShop · Преміум-магазин", "hero.title1": "Позачасова", "hero.titleAccent": "елегантність", "hero.title2": "з доставкою.",
-  "hero.subtitle": "Ретельно підібрана колекція годинників, ноутбуків, телефонів та іншого — вишуканий шопінг на вітрині Next.js та API Spring Boot.",
   "hero.cta": "За покупками →", "hero.featured": "РЕКОМЕНДОВАНО",
   "catalog.title": "Рекомендовані товари", "home.recentlyViewed": "Нещодавно переглянуті", "home.topRated": "Найкращі за рейтингом", "home.topRatedSub": "Найвище оцінені товари від наших покупців", "catalog.subtitle": "Відібрано з каталогу LuxShop", "catalog.all": "Усі", "catalog.empty": "У цій категорії поки немає товарів.", "catalog.search": "Пошук товарів…", "catalog.aiSearch": "Розумний пошук на базі ШІ", "sort.label": "Сортування", "sort.default": "Рекомендовані", "sort.rating": "З найвищим рейтингом", "sort.priceAsc": "Ціна: за зростанням", "sort.priceDesc": "Ціна: за спаданням", "sort.nameAsc": "Назва: А–Я", "sort.nameDesc": "Назва: Я–А", "catalog.noResults": "Немає товарів за запитом «{q}».",
   "card.add": "🛍 До кошика", "nav.wishlist": "Обране", "wishlist.title": "Ваше обране", "wishlist.subtitle": "Товари, збережені на потім", "wishlist.empty": "Ваш список обраного порожній.", "wishlist.browse": "Переглянути товари", "wishlist.clear": "Очистити все", "card.fav": "До обраного", "card.unfav": "Прибрати з обраного", "stock.out": "Немає в наявності", "stock.only": "Залишилось лише {n}!", "stock.in": "{n} в наявності",
@@ -303,7 +290,6 @@ const uk: Dict = {
 const pl: Dict = {
   "nav.home": "Strona główna", "nav.shop": "Sklep", "nav.menu": "Menu", "nav.orders": "Zamówienia",
   "hero.eyebrow": "LuxShop · Sklep premium", "hero.title1": "Ponadczasowa", "hero.titleAccent": "elegancja", "hero.title2": "z dostawą.",
-  "hero.subtitle": "Starannie dobrana kolekcja zegarków, laptopów, telefonów i nie tylko — wyrafinowane zakupy na witrynie Next.js i API Spring Boot.",
   "hero.cta": "Kup teraz →", "hero.featured": "POLECANE",
   "catalog.title": "Polecane produkty", "home.recentlyViewed": "Ostatnio oglądane", "home.topRated": "Najwyżej oceniane", "home.topRatedSub": "Najwyżej oceniane wybory naszych klientów", "catalog.subtitle": "Wybrane z katalogu LuxShop", "catalog.all": "Wszystkie", "catalog.empty": "Brak produktów w tej kategorii.", "catalog.search": "Szukaj produktów…", "catalog.aiSearch": "Inteligentne wyszukiwanie AI", "sort.label": "Sortuj", "sort.default": "Polecane", "sort.rating": "Najwyżej oceniane", "sort.priceAsc": "Cena: rosnąco", "sort.priceDesc": "Cena: malejąco", "sort.nameAsc": "Nazwa: A–Z", "sort.nameDesc": "Nazwa: Z–A", "catalog.noResults": "Brak produktów dla „{q}”.",
   "card.add": "🛍 Do koszyka", "nav.wishlist": "Ulubione", "wishlist.title": "Twoje ulubione", "wishlist.subtitle": "Produkty zapisane na później", "wishlist.empty": "Twoja lista ulubionych jest pusta.", "wishlist.browse": "Przeglądaj produkty", "wishlist.clear": "Wyczyść wszystko", "card.fav": "Dodaj do ulubionych", "card.unfav": "Usuń z ulubionych", "stock.out": "Brak w magazynie", "stock.only": "Zostało tylko {n}!", "stock.in": "{n} w magazynie",
@@ -321,7 +307,6 @@ const pl: Dict = {
 const nl: Dict = {
   "nav.home": "Home", "nav.shop": "Winkel", "nav.menu": "Menu", "nav.orders": "Bestellingen",
   "hero.eyebrow": "LuxShop · Premium winkel", "hero.title1": "Tijdloze", "hero.titleAccent": "elegantie", "hero.title2": "bezorgd.",
-  "hero.subtitle": "Een zorgvuldig samengestelde selectie van horloges, laptops, telefoons en meer — verfijnd winkelen met een Next.js-storefront en een Spring Boot-API.",
   "hero.cta": "Nu winkelen →", "hero.featured": "UITGELICHT",
   "catalog.title": "Uitgelichte producten", "home.recentlyViewed": "Recent bekeken", "home.topRated": "Best beoordeeld", "home.topRatedSub": "De best beoordeelde keuzes van onze klanten", "catalog.subtitle": "Geselecteerd uit de LuxShop-catalogus", "catalog.all": "Alle", "catalog.empty": "Nog geen producten in deze categorie.", "catalog.search": "Producten zoeken…", "catalog.aiSearch": "AI-slim zoeken", "sort.label": "Sorteren", "sort.default": "Uitgelicht", "sort.rating": "Best beoordeeld", "sort.priceAsc": "Prijs: laag naar hoog", "sort.priceDesc": "Prijs: hoog naar laag", "sort.nameAsc": "Naam: A–Z", "sort.nameDesc": "Naam: Z–A", "catalog.noResults": "Geen producten gevonden voor “{q}”.",
   "card.add": "🛍 In winkelwagen", "nav.wishlist": "Verlanglijst", "wishlist.title": "Je verlanglijst", "wishlist.subtitle": "Producten die je hebt bewaard", "wishlist.empty": "Je verlanglijst is leeg.", "wishlist.browse": "Producten bekijken", "wishlist.clear": "Alles wissen", "card.fav": "Toevoegen aan verlanglijst", "card.unfav": "Verwijderen uit verlanglijst", "stock.out": "Uitverkocht", "stock.only": "Nog maar {n}!", "stock.in": "{n} op voorraad",
@@ -339,7 +324,6 @@ const nl: Dict = {
 const ar: Dict = {
   "nav.home": "الرئيسية", "nav.shop": "المتجر", "nav.menu": "القائمة", "nav.orders": "الطلبات",
   "hero.eyebrow": "LuxShop · متجر فاخر", "hero.title1": "أناقة", "hero.titleAccent": "خالدة", "hero.title2": "تُوصَّل إليك.",
-  "hero.subtitle": "تشكيلة منتقاة من الساعات والحواسيب المحمولة والهواتف والمزيد — تسوق راقٍ مدعوم بواجهة Next.js وواجهة برمجة Spring Boot.",
   "hero.cta": "تسوق الآن →", "hero.featured": "مميز",
   "catalog.title": "منتجات مميزة", "home.recentlyViewed": "شوهدت مؤخرًا", "home.topRated": "الأعلى تقييمًا", "home.topRatedSub": "أعلى الاختيارات تقييمًا من عملائنا", "catalog.subtitle": "مختارة من كتالوج LuxShop", "catalog.all": "الكل", "catalog.empty": "لا توجد منتجات في هذه الفئة بعد.", "catalog.search": "البحث عن المنتجات…", "catalog.aiSearch": "بحث ذكي مدعوم بالذكاء الاصطناعي", "sort.label": "ترتيب", "sort.default": "المميزة", "sort.rating": "الأعلى تقييمًا", "sort.priceAsc": "السعر: من الأقل إلى الأعلى", "sort.priceDesc": "السعر: من الأعلى إلى الأقل", "sort.nameAsc": "الاسم: أ–ي", "sort.nameDesc": "الاسم: ي–أ", "catalog.noResults": "لا توجد منتجات تطابق ”{q}“.",
   "card.add": "🛍 أضف إلى السلة", "nav.wishlist": "المفضلة", "wishlist.title": "قائمة أمنياتك", "wishlist.subtitle": "المنتجات التي حفظتها لوقت لاحق", "wishlist.empty": "قائمة أمنياتك فارغة.", "wishlist.browse": "تصفح المنتجات", "wishlist.clear": "مسح الكل", "card.fav": "أضف إلى المفضلة", "card.unfav": "إزالة من المفضلة", "stock.out": "غير متوفر", "stock.only": "بقي {n} فقط!", "stock.in": "{n} متوفر",
@@ -357,7 +341,6 @@ const ar: Dict = {
 const zh: Dict = {
   "nav.home": "首页", "nav.shop": "商店", "nav.menu": "菜单", "nav.orders": "订单",
   "hero.eyebrow": "LuxShop · 高级商店", "hero.title1": "永恒", "hero.titleAccent": "优雅", "hero.title2": "送达。",
-  "hero.subtitle": "精选的手表、笔记本电脑、手机等——由 Next.js 店面和 Spring Boot API 驱动的精致购物。",
   "hero.cta": "立即购买 →", "hero.featured": "精选",
   "catalog.title": "精选产品", "home.recentlyViewed": "最近浏览", "home.topRated": "评分最高", "home.topRatedSub": "顾客评分最高的精选", "catalog.subtitle": "精选自 LuxShop 目录", "catalog.all": "全部", "catalog.empty": "此分类暂无产品。", "catalog.search": "搜索产品…", "catalog.aiSearch": "AI 智能搜索", "sort.label": "排序", "sort.default": "推荐", "sort.rating": "评分最高", "sort.priceAsc": "价格：从低到高", "sort.priceDesc": "价格：从高到低", "sort.nameAsc": "名称：A–Z", "sort.nameDesc": "名称：Z–A", "catalog.noResults": "没有与“{q}”匹配的产品。",
   "card.add": "🛍 加入购物车", "nav.wishlist": "心愿单", "wishlist.title": "您的心愿单", "wishlist.subtitle": "您稍后保存的产品", "wishlist.empty": "您的心愿单是空的。", "wishlist.browse": "浏览产品", "wishlist.clear": "全部清除", "card.fav": "加入心愿单", "card.unfav": "从心愿单移除", "stock.out": "缺货", "stock.only": "仅剩 {n} 件！", "stock.in": "库存 {n} 件",
@@ -375,7 +358,6 @@ const zh: Dict = {
 const ja: Dict = {
   "nav.home": "ホーム", "nav.shop": "ショップ", "nav.menu": "メニュー", "nav.orders": "注文",
   "hero.eyebrow": "LuxShop · プレミアムストア", "hero.title1": "時を超えた", "hero.titleAccent": "エレガンス", "hero.title2": "をお届け。",
-  "hero.subtitle": "時計、ノートパソコン、スマートフォンなどの厳選コレクション — Next.js ストアフロントと Spring Boot API による洗練されたショッピング。",
   "hero.cta": "今すぐ購入 →", "hero.featured": "注目",
   "catalog.title": "注目の商品", "home.recentlyViewed": "最近見た商品", "home.topRated": "高評価", "home.topRatedSub": "お客様の高評価セレクション", "catalog.subtitle": "LuxShop カタログから厳選", "catalog.all": "すべて", "catalog.empty": "このカテゴリにはまだ商品がありません。", "catalog.search": "商品を検索…", "catalog.aiSearch": "AIによるスマート検索", "sort.label": "並べ替え", "sort.default": "おすすめ", "sort.rating": "高評価順", "sort.priceAsc": "価格：安い順", "sort.priceDesc": "価格：高い順", "sort.nameAsc": "名前：A–Z", "sort.nameDesc": "名前：Z–A", "catalog.noResults": "「{q}」に一致する商品はありません。",
   "card.add": "🛍 カートに追加", "nav.wishlist": "お気に入り", "wishlist.title": "お気に入り", "wishlist.subtitle": "後で見るために保存した商品", "wishlist.empty": "お気に入りは空です。", "wishlist.browse": "商品を見る", "wishlist.clear": "すべて削除", "card.fav": "お気に入りに追加", "card.unfav": "お気に入りから削除", "stock.out": "在庫切れ", "stock.only": "残り {n} 点！", "stock.in": "在庫 {n} 点",
@@ -393,7 +375,6 @@ const ja: Dict = {
 const ko: Dict = {
   "nav.home": "홈", "nav.shop": "쇼핑", "nav.menu": "메뉴", "nav.orders": "주문",
   "hero.eyebrow": "LuxShop · 프리미엄 스토어", "hero.title1": "시대를 초월한", "hero.titleAccent": "우아함", "hero.title2": "을 배송합니다.",
-  "hero.subtitle": "시계, 노트북, 스마트폰 등 엄선된 컬렉션 — Next.js 스토어프론트와 Spring Boot API로 구현한 세련된 쇼핑.",
   "hero.cta": "지금 쇼핑하기 →", "hero.featured": "추천",
   "catalog.title": "추천 상품", "home.recentlyViewed": "최근 본 상품", "home.topRated": "최고 평점", "home.topRatedSub": "고객이 뽑은 최고 평점 상품", "catalog.subtitle": "LuxShop 카탈로그에서 엄선", "catalog.all": "전체", "catalog.empty": "이 카테고리에는 아직 상품이 없습니다.", "catalog.search": "상품 검색…", "catalog.aiSearch": "AI 스마트 검색", "sort.label": "정렬", "sort.default": "추천", "sort.rating": "평점 높은 순", "sort.priceAsc": "가격: 낮은 순", "sort.priceDesc": "가격: 높은 순", "sort.nameAsc": "이름: A–Z", "sort.nameDesc": "이름: Z–A", "catalog.noResults": "“{q}”와 일치하는 상품이 없습니다.",
   "card.add": "🛍 장바구니에 담기", "nav.wishlist": "위시리스트", "wishlist.title": "위시리스트", "wishlist.subtitle": "나중을 위해 저장한 상품", "wishlist.empty": "위시리스트가 비어 있습니다.", "wishlist.browse": "상품 둘러보기", "wishlist.clear": "모두 지우기", "card.fav": "위시리스트에 추가", "card.unfav": "위시리스트에서 제거", "stock.out": "품절", "stock.only": "{n}개 남음!", "stock.in": "재고 {n}개",
@@ -411,7 +392,6 @@ const ko: Dict = {
 const hi: Dict = {
   "nav.home": "होम", "nav.shop": "दुकान", "nav.menu": "मेन्यू", "nav.orders": "ऑर्डर",
   "hero.eyebrow": "LuxShop · प्रीमियम स्टोर", "hero.title1": "कालातीत", "hero.titleAccent": "शालीनता", "hero.title2": "वितरित।",
-  "hero.subtitle": "घड़ियों, लैपटॉप, फोन और अधिक का चयनित संग्रह — Next.js स्टोरफ्रंट और Spring Boot API द्वारा संचालित परिष्कृत खरीदारी।",
   "hero.cta": "अभी खरीदें →", "hero.featured": "विशेष",
   "catalog.title": "विशेष उत्पाद", "home.recentlyViewed": "हाल ही में देखे गए", "home.topRated": "शीर्ष रेटेड", "home.topRatedSub": "हमारे ग्राहकों द्वारा सर्वोच्च रेटेड चयन", "catalog.subtitle": "LuxShop कैटलॉग से चुना गया", "catalog.all": "सभी", "catalog.empty": "इस श्रेणी में अभी कोई उत्पाद नहीं है।", "catalog.search": "उत्पाद खोजें…", "catalog.aiSearch": "AI-संचालित स्मार्ट खोज", "sort.label": "क्रमबद्ध करें", "sort.default": "विशेष", "sort.rating": "सर्वोच्च रेटेड", "sort.priceAsc": "मूल्य: कम से अधिक", "sort.priceDesc": "मूल्य: अधिक से कम", "sort.nameAsc": "नाम: A–Z", "sort.nameDesc": "नाम: Z–A", "catalog.noResults": "“{q}” से मेल खाने वाला कोई उत्पाद नहीं।",
   "card.add": "🛍 कार्ट में जोड़ें", "nav.wishlist": "इच्छा-सूची", "wishlist.title": "आपकी इच्छा-सूची", "wishlist.subtitle": "बाद के लिए सहेजे गए उत्पाद", "wishlist.empty": "आपकी इच्छा-सूची खाली है।", "wishlist.browse": "उत्पाद देखें", "wishlist.clear": "सभी हटाएं", "card.fav": "इच्छा-सूची में जोड़ें", "card.unfav": "इच्छा-सूची से हटाएं", "stock.out": "स्टॉक में नहीं", "stock.only": "केवल {n} बचे!", "stock.in": "{n} स्टॉक में",
