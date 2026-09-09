@@ -26,8 +26,10 @@ services:
       POSTGRES_URL: jdbc:postgresql://postgres:5432/luxshop
       POSTGRES_USER: luxshop
       POSTGRES_PASSWORD: luxshop
-      # Override in production with a real secret.
-      JWT_SECRET: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
+      # Local dev key from the gitignored .env, with a public fallback so
+      # `docker compose up` works out of the box. NEVER use the fallback in
+      # production — generate one with `openssl rand -base64 48`.
+      JWT_SECRET: ${JWT_SECRET:-dEa6Bfb/L1QL0rJA+VnmBj8xEkruanNZlCg25PjmE+T9SMdVkp8bYIY2lhSeTlcM}
       # Gemini API key for Spring AI embeddings, read from the gitignored .env
       # (falls back to a dummy so the app still boots without a key).
       GEMINI_API_KEY: ${GEMINI_API_KEY:-dummy-key}
