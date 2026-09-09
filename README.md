@@ -6,7 +6,7 @@ A production-shaped e-commerce platform: **Next.js 14** storefront, **Spring Boo
 Built solo, shipped through pull requests, tested in CI.
 
 ![PRs](https://img.shields.io/badge/pull_requests-69_merged-c9a24b)
-![Tests](https://img.shields.io/badge/tests-84_automated-16294d)
+![Tests](https://img.shields.io/badge/tests-90_automated-16294d)
 ![Java](https://img.shields.io/badge/Java-21-e76f00)
 ![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.3.5-6db33f)
 ![i18n](https://img.shields.io/badge/i18n-18_languages-1e3a6b)
@@ -136,6 +136,11 @@ the public storefront surface — read-only catalog, guest checkout, guest revie
 assistant endpoint, and the OpenAPI docs. Entities never cross the wire; every response goes through a
 DTO, so no password hash or lazy-loaded relation can leak.
 
+The signing secret is validated at startup: blank or under 256 bits and the application refuses to
+boot. Production (the `postgres` profile) has no default for it at all, so a deploy that forgets
+`JWT_SECRET` fails loudly instead of quietly signing tokens with a key that is public in this
+repository.
+
 → [`CustomWebSecurityConfiguration.java`](https://github.com/sarangisarang/LuxShop/blob/main/backend/src/main/java/com/luxshop/shop/config/CustomWebSecurityConfiguration.java)
 · [`security/`](https://github.com/sarangisarang/LuxShop/tree/main/backend/src/main/java/com/luxshop/shop/security)
 
@@ -166,7 +171,7 @@ Vector store:     product embeddings in pgvector (V13 migration)
 ```
 
 The whole RAG stack sits behind `@Profile("postgres")`, so the H2 test profile never instantiates a
-vector store or reaches for an API key — the 84 tests run offline, with no credentials.
+vector store or reaches for an API key — the 90 tests run offline, with no credentials.
 
 ---
 
@@ -192,9 +197,9 @@ Deployment blueprint: [`render.yaml`](render.yaml) · notes in [`DEPLOY.md`](DEP
 cd backend && ./mvnw test
 ```
 
-84 tests across 19 classes — MockMvc integration tests for auth, checkout, the order state machine,
+90 tests across 20 classes — MockMvc integration tests for auth, checkout, the order state machine,
 i18n and locale resolution, search, sorting, reviews, coupons and the admin gallery; unit tests for
-order logic, translation storage and the assistant's answer assembly. Both backend and frontend build
+order logic, translation storage, JWT secret validation and the assistant's answer assembly. Both backend and frontend build
 on every pull request via [GitHub Actions](.github/workflows/ci.yml).
 
 ---
