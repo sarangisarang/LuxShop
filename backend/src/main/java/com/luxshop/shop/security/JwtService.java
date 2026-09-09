@@ -3,7 +3,6 @@ package com.luxshop.shop.security;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -27,7 +26,8 @@ public class JwtService {
 
     public JwtService(@Value("${jwt.secret}") String secret,
                       @Value("${jwt.expiration-ms:86400000}") long expirationMs) {
-        this.signingKey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret));
+        // Fail fast on a missing or weak secret rather than signing forgeable tokens.
+        this.signingKey = Keys.hmacShaKeyFor(JwtSecretValidator.validate(secret));
         this.expirationMs = expirationMs;
     }
 
