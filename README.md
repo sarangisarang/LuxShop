@@ -5,13 +5,6 @@ A production-shaped e-commerce platform: **Next.js 14** storefront, **Spring Boo
 
 Built solo, shipped through pull requests, tested in CI.
 
-![PRs](https://img.shields.io/badge/pull_requests-69_merged-c9a24b)
-![Tests](https://img.shields.io/badge/tests-90_automated-16294d)
-![Java](https://img.shields.io/badge/Java-21-e76f00)
-![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.3.5-6db33f)
-![i18n](https://img.shields.io/badge/i18n-18_languages-1e3a6b)
-![CI](https://img.shields.io/badge/CI-passing-2e7d32)
-
 📋 Planning board: **[LuxShop – Project #5](https://github.com/users/sarangisarang/projects/5/views/2)**
 
 ---
